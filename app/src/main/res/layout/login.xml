@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/yellow"
+    android:weightSum="1">
+
+    <Button
+        android:layout_width="170dp"
+        android:layout_height="50dp"
+        android:layout_marginBottom="200dp"
+        android:text="Log in"
+        android:id="@+id/log_in_green_button"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="5dp"
+        android:background="@drawable/rounded_green_button"
+        android:textColor="@color/white" />
+
+    <Button
+        android:layout_width="170dp"
+        android:layout_height="50dp"
+        android:layout_marginBottom="200dp"
+        android:text="Sign up"
+        android:id="@+id/sign_up_gray_button"
+        android:layout_alignTop="@+id/log_in_green_button"
+        android:layout_marginRight="5dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:background="@drawable/rounded_gray_button"
+        android:textColor="@color/white"
+        android:onClick="signupButtonCallback"/>
+
+    <EditText
+        android:layout_width="250dp"
+        android:layout_height="40dp"
+        android:id="@+id/username_login"
+        android:layout_marginTop="70dp"
+        android:hint="Username"
+        android:background="@drawable/rounded_edittext"
+        android:layout_alignTop="@+id/log_in_green_button"
+        android:layout_centerHorizontal="true"
+        android:textColor="@color/lightGray"
+        android:singleLine="true"/>
+
+    <EditText
+        android:layout_width="250dp"
+        android:layout_height="40dp"
+        android:id="@+id/password_login"
+        android:hint="Password"
+        android:background="@drawable/rounded_edittext"
+        android:layout_below="@+id/username_login"
+        android:layout_alignLeft="@+id/username_login"
+        android:layout_alignStart="@+id/username_login"
+        android:layout_marginTop="10dp"
+        android:textColor="@color/lightGray"
+        android:singleLine="true"/>
+
+    <Button
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:text="Log In"
+        android:id="@+id/log_in_home_button"
+        android:background="@drawable/rounded_green_button"
+        android:textColor="@color/white"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="15dp"
+        android:onClick="loginHomeButtonCallback" />
+
+    <ImageView
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        android:id="@+id/blitz_login"
+        android:background="@mipmap/ic_blitz"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+</RelativeLayout>
