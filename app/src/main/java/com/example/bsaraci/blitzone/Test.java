@@ -1,4 +1,4 @@
 package com.example.bsaraci.blitzone;
 
-public class Test {
+public class Test{
 }
