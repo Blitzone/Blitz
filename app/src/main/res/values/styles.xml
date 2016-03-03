@@ -3,14 +3,14 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/yellow</item>
+        <item name="colorPrimary">@color/orange</item>
         <item name="colorPrimaryDark">@color/boldGray</item>
         <item name="colorAccent">@color/green</item>
         <item name="android:textColorPrimary">@android:color/white</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
-        <item name="colorPrimaryDark">@color/yellow</item>
+        <item name="colorPrimaryDark">@color/orange</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
@@ -18,7 +18,7 @@
     <style name="Divider">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">1dp</item>
-        <item name="android:background">@color/lightGray</item>
+        <item name="android:background">@color/boldGray</item>
     </style>
 
 </resources>

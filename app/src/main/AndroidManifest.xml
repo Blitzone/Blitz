@@ -62,7 +62,6 @@
         <activity
 
             android:name=".Notifications">
-
         </activity>
 
     </application>

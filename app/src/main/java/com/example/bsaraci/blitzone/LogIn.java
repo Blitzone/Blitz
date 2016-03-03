@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
+
 public class  LogIn  extends AppCompatActivity {
 
     protected void onCreate(Bundle savedInstanceState)

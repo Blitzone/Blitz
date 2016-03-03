@@ -32,9 +32,7 @@ public class SignUp extends AppCompatActivity {
 
     public void loginButtonCallback(View view)
     {
-        Intent intent = new Intent(this, LogIn.class);
-
-        startActivity(intent);
+        finish();
     }
 
 

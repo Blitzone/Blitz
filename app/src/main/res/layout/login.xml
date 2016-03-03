@@ -3,7 +3,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/yellow"
+    android:background="@color/orange"
     android:weightSum="1">
 
     <Button
@@ -29,7 +29,7 @@
         android:layout_marginRight="5dp"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:background="@drawable/rounded_gray_button"
+        android:background="@drawable/rounded_lightgreen_button"
         android:textColor="@color/white"
         android:onClick="signupButtonCallback"/>
 

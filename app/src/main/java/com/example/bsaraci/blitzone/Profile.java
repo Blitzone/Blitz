@@ -6,17 +6,47 @@ import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.Toast;
+
+import com.example.bsaraci.blitzone.HLV.HLVAdapter;
+import com.example.bsaraci.blitzone.HLV.HorizontalListView;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+
 
 public class Profile extends AppCompatActivity
 {
     public static final int CAMERA_REQUEST = 10;
     Toolbar profileToolbar ;
+    private HorizontalListView hlv;
+    private HLVAdapter hlvAdapter;
+
+    ArrayList<String> alName;
+    ArrayList<Integer> alImage;
 
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.profile_main);
         profileToolbar = (Toolbar) findViewById(R.id.toolbar_of_profile);
+
+        alName = new ArrayList<>(Arrays.asList("1", "2", "3", "4"));
+//        Take your won images for your app and give drawable path as below to arraylist
+        alImage = new ArrayList<>(Arrays.asList(R.mipmap.ic_app_icon, R.mipmap.ic_app_icon, R.mipmap.ic_app_icon, R.mipmap.ic_app_icon));
+
+        hlv = (HorizontalListView) findViewById(R.id.hlvProfile);
+        hlvAdapter = new HLVAdapter(Profile.this, alName, alImage);
+        hlv.setAdapter(hlvAdapter);
+
+        hlv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                Toast.makeText(Profile.this, "You clicked on : " + alName.get(position).toString(), Toast.LENGTH_LONG).show();
+            }
+        });
 
     }
 
@@ -46,7 +76,6 @@ public class Profile extends AppCompatActivity
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
-
-
     }
 }
+
