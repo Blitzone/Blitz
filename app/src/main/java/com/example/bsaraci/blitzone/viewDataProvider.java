@@ -1,17 +1,21 @@
 package com.example.bsaraci.blitzone;
 
-public class ListDataProvider {
+public class viewDataProvider {
 
     private int profilePicture;
     private String username;
     private String points;
     private int blitz;
+    private String challengeOfTheDay;
+    private String hour;
 
-    public ListDataProvider(int profilePicture, String username, String points, int blitz) {
+    public viewDataProvider(int profilePicture, String username, String points, int blitz, String challengeOfTheDay, String hour) {
         this.setProfilePicture(profilePicture);
         this.setUsername(username);
         this.setPoints(points);
         this.setBlitz(blitz);
+        this.setChallengeOfTheDay(challengeOfTheDay);
+        this.setHour(hour);
     }
 
     public int getProfilePicture() {
@@ -30,6 +34,10 @@ public class ListDataProvider {
         return blitz;
     }
 
+    public String getChallengeOfTheDay() { return challengeOfTheDay; }
+
+    public String getHour() { return hour; }
+
     public void setProfilePicture(int profilePicture) {
         this.profilePicture = profilePicture;
     }
@@ -45,4 +53,8 @@ public class ListDataProvider {
     public void setPoints(String points) {
         this.points = points;
     }
+
+    public void setChallengeOfTheDay(String challengeOfTheDay) { this.challengeOfTheDay = challengeOfTheDay; }
+
+    public void setHour(String hour) { this.hour = hour; }
 }

@@ -1,51 +1,71 @@
 package com.example.bsaraci.blitzone;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.ListFragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class BestTabFragment extends Fragment {
 
-    ListView listView;
+    private List<rowDataProvider> list = new ArrayList<>();
+    private RecyclerView recyclerView;
+    private recycleviewAdapter mAdapter;
 
-    int [] profilePictures = {R.mipmap.ic_yellow_profile,R.mipmap.ic_yellow_profile,R.mipmap.ic_yellow_profile,
-            R.mipmap.ic_yellow_profile,R.mipmap.ic_yellow_profile,R.mipmap.ic_yellow_profile,
-            R.mipmap.ic_yellow_profile,R.mipmap.ic_yellow_profile,R.mipmap.ic_yellow_profile};
+    /*int [] profilePictures = {R.mipmap.ic_orange_profile,R.mipmap.ic_orange_profile,R.mipmap.ic_orange_profile,
+            R.mipmap.ic_orange_profile,R.mipmap.ic_orange_profile,R.mipmap.ic_orange_profile,
+            R.mipmap.ic_orange_profile,R.mipmap.ic_orange_profile,R.mipmap.ic_orange_profile};
     String [] usernames = {"teasaraci","mikelv92","sarasaraci","jonagolemi","ergysmati","enderballa","ilirpirani","sidritdritorja","jv21"};
     String [] points = {"500","117","110","90","57","50","34","31","10"};
-    int [] blitz = {R.mipmap.ic_yellow_blitz,R.mipmap.ic_yellow_blitz,R.mipmap.ic_yellow_blitz,
-            R.mipmap.ic_yellow_blitz,R.mipmap.ic_yellow_blitz,R.mipmap.ic_yellow_blitz,
-            R.mipmap.ic_yellow_blitz,R.mipmap.ic_yellow_blitz,R.mipmap.ic_yellow_blitz};
+    int [] blitz = {R.mipmap.ic_orange_blitz,R.mipmap.ic_orange_blitz,R.mipmap.ic_orange_blitz,
+            R.mipmap.ic_orange_blitz,R.mipmap.ic_orange_blitz,R.mipmap.ic_orange_blitz,
+            R.mipmap.ic_orange_blitz,R.mipmap.ic_orange_blitz,R.mipmap.ic_orange_blitz};*/
 
-    ListAdapter listAdapter;
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.best_tab_content, container, false);
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        listView=(ListView)view.findViewById(R.id.bestList);
+        RecyclerView rv = (RecyclerView) inflater.inflate(R.layout.best_tab_content, container, false);
 
-        int i=0;
-        listAdapter=new ListAdapter(getActivity(),R.layout.blitzone_row_content);
-        listView.setAdapter(listAdapter);
-        for (String name :usernames) {
-            ListDataProvider dataProvider=new ListDataProvider(profilePictures[i],name,points[i],blitz[i]);
-            listAdapter.add(dataProvider);
-            i++;
+        rv.setLayoutManager(new LinearLayoutManager(rv.getContext()));
 
-        }
-        /*listView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+        RecyclerView recyclerView = (RecyclerView) rv.findViewById(R.id.bestList);
+        recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), LinearLayoutManager.VERTICAL));
 
-            public void onItemClick(AdapterView<?>parent, View view, int position, long id){
-                Toast.makeText(getBaseContext(), position + "is selected", Toast.LENGTH_SHORT).show();
-                Intent myIntent = new Intent(view.getContext(), second_class.class);
-                startActivity(myIntent);
-            }
-        });*/
+        rv.setAdapter(new recyclerowAdapter(list));
 
-        return view;
+        prepareData();
+
+        return rv;
+
+    }
+    public void prepareData (){
+        rowDataProvider l =new rowDataProvider( R.mipmap.ic_orange_profile,"sarasaraci" ,"200" ,R.mipmap.ic_orange_blitz);
+        list.add(l);
+        l =new rowDataProvider( R.mipmap.ic_orange_profile,"teasaraci" ,"150" ,0);
+        list.add(l);
+        l =new rowDataProvider( R.mipmap.ic_orange_profile,"enderballa" ,"100" ,R.mipmap.ic_orange_blitz);
+        list.add(l);
+        l =new rowDataProvider( R.mipmap.ic_orange_profile,"mikelv92" ,"100" ,0);
+        list.add(l);
+        l =new rowDataProvider( R.mipmap.ic_orange_profile,"jonagolemi" ,"30" ,R.mipmap.ic_orange_blitz);
+        list.add(l);
+        l =new rowDataProvider( R.mipmap.ic_orange_profile,"jv21" ,"15" ,0);
+        list.add(l);
+        l =new rowDataProvider( R.mipmap.ic_orange_profile,"ergysmati" ,"10" ,R.mipmap.ic_orange_blitz);
+        list.add(l);
+        l =new rowDataProvider( R.mipmap.ic_orange_profile,"sidritdritorja" ,"10" ,R.mipmap.ic_orange_blitz);
+        list.add(l);
+        l =new rowDataProvider( R.mipmap.ic_orange_profile,"ilirpirani" ,"1" ,R.mipmap.ic_orange_blitz);
+        list.add(l);
+        l =new rowDataProvider( R.mipmap.ic_orange_profile,"arditmeti" ,"0" ,R.mipmap.ic_orange_blitz);
+        list.add(l);
+
+
     }
 }

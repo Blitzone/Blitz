@@ -1,57 +1,64 @@
 package com.example.bsaraci.blitzone;
 
-import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.ListFragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ListView;
-import android.widget.Toast;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class DailyTabFragment extends Fragment {
 
-    ListView listView;
-
-    int [] profilePictures = {R.mipmap.ic_yellow_profile,R.mipmap.ic_yellow_profile,R.mipmap.ic_yellow_profile,
-            R.mipmap.ic_yellow_profile,R.mipmap.ic_yellow_profile,R.mipmap.ic_yellow_profile,
-            R.mipmap.ic_yellow_profile,R.mipmap.ic_yellow_profile,R.mipmap.ic_yellow_profile};
-    String [] usernames = {"mikelv92","jv21","enderballa","sidritdritorja","teasaraci","sarasaraci","ergysmati","ilirpirani","jonagolemi"};
-    String [] points = {"117","10","50","31","500","110","57","34","90"};
-    int [] blitz = {R.mipmap.ic_yellow_blitz,R.mipmap.ic_yellow_blitz,R.mipmap.ic_yellow_blitz,
-            R.mipmap.ic_yellow_blitz,R.mipmap.ic_yellow_blitz,R.mipmap.ic_yellow_blitz,
-            R.mipmap.ic_yellow_blitz,R.mipmap.ic_yellow_blitz,R.mipmap.ic_yellow_blitz};
-
-    ListAdapter listAdapter;
-
+    private List<viewDataProvider> list = new ArrayList<>();
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.daily_tab_content, container, false);
+        RecyclerView rv = (RecyclerView) inflater.inflate(R.layout.daily_tab_content, container, false);
 
-        listView=(ListView)view.findViewById(R.id.dailyList);
+        rv.setLayoutManager(new LinearLayoutManager(rv.getContext()));
 
-        int i=0;
-        listAdapter=new ListAdapter(getActivity(),R.layout.blitzone_row_content);
-        listView.setAdapter(listAdapter);
-        for (String name :usernames) {
-            ListDataProvider dataProvider=new ListDataProvider(profilePictures[i],name,points[i],blitz[i]);
-            listAdapter.add(dataProvider);
-            i++;
+        RecyclerView recyclerView = (RecyclerView) rv.findViewById(R.id.dailyList);
+        //recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), LinearLayoutManager.VERTICAL)); //For the divider
 
-        }
-        /*listView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+        rv.setAdapter(new recycleviewAdapter(list));
 
-            public void onItemClick(AdapterView<?>parent, View view, int position, long id){
-                Toast.makeText(getBaseContext(), position + "is selected", Toast.LENGTH_SHORT).show();
-                Intent myIntent = new Intent(view.getContext(), second_class.class);
-                startActivity(myIntent);
-            }
-        });*/
+        prepareData();
 
-        return view;
+        return rv;
+
+    }
+    public void prepareData (){
+        viewDataProvider l =new viewDataProvider( R.mipmap.ic_orange_profile,"jv21" ,"15" ,R.mipmap.ic_orange_blitz,"Old travel throwback", "2 seconds ago");
+        list.add(l);
+        l =new viewDataProvider( R.mipmap.ic_orange_profile,"teasaraci" ,"150" ,0,"Tickets to a new adventure", "4 minutes ago");
+        list.add(l);
+        l =new viewDataProvider( R.mipmap.ic_orange_profile,"sarasaraci" ,"200" ,R.mipmap.ic_orange_blitz,"Your travelmate", "10 minutes ago");
+        list.add(l);
+        l =new viewDataProvider( R.mipmap.ic_orange_profile,"jv21" ,"15" ,0,"Old travel throwback", "16 minutes ago");
+        list.add(l);
+        l =new viewDataProvider( R.mipmap.ic_orange_profile,"enderballa" ,"100" ,R.mipmap.ic_orange_blitz,"Old travel throwback", "25 minutes ago");
+        list.add(l);
+        l =new viewDataProvider( R.mipmap.ic_orange_profile,"ergysmati" ,"10" ,R.mipmap.ic_orange_blitz,"Tickets to a new adventure", "34 minutes ago");
+        list.add(l);
+        l =new viewDataProvider( R.mipmap.ic_orange_profile,"sidritdritorja" ,"10" ,R.mipmap.ic_orange_blitz,"Your travelmate", "50 minutes ago");
+        list.add(l);
+        l =new viewDataProvider( R.mipmap.ic_orange_profile,"jonagolemi" ,"30" ,0,"Tickets to a new adventure", "55 minutes ago");
+        list.add(l);
+        l =new viewDataProvider( R.mipmap.ic_orange_profile,"ilirpirani" ,"1" ,R.mipmap.ic_orange_blitz,"Old travel throwback", "1 hour ago");
+        list.add(l);
+        l =new viewDataProvider( R.mipmap.ic_orange_profile,"arditmeti" ,"0" ,R.mipmap.ic_orange_blitz,"Your travelmate", "2 hours ago");
+        list.add(l);
+        l =new viewDataProvider( R.mipmap.ic_orange_profile,"mikelv92" ,"100" ,0,"Tickets to a new adventure", "6 hours ago");
+        list.add(l);
+
+
+
+
     }
 }

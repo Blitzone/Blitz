@@ -42,7 +42,7 @@
         android:background="@drawable/rounded_edittext"
         android:layout_alignTop="@+id/log_in_green_button"
         android:layout_centerHorizontal="true"
-        android:textColor="@color/lightGray"
+        android:textColor="@color/boldGray"
         android:singleLine="true"/>
 
     <EditText
@@ -55,7 +55,7 @@
         android:layout_alignLeft="@+id/username_login"
         android:layout_alignStart="@+id/username_login"
         android:layout_marginTop="10dp"
-        android:textColor="@color/lightGray"
+        android:textColor="@color/boldGray"
         android:singleLine="true"/>
 
     <Button

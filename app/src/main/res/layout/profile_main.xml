@@ -16,6 +16,7 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="brajansaraci"
+        android:textSize="25sp"
         android:id="@+id/profile_toolbar_title"
         android:textColor="@color/white"
         android:layout_alignParentTop="true"
@@ -73,7 +74,7 @@
     <ImageView
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:background="@mipmap/ic_yellow_blitz"
+        android:background="@mipmap/ic_orange_blitz"
         android:id="@+id/blitz_won"
         android:layout_alignTop="@+id/profile_picture"
         android:layout_toLeftOf="@+id/take_photo"
@@ -82,7 +83,7 @@
     <ImageView
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:background="@mipmap/ic_yellow_profile"
+        android:background="@mipmap/ic_orange_profile"
         android:id="@+id/followers"
         android:layout_alignTop="@+id/blitz_won"
         android:layout_toRightOf="@+id/blitz_won"

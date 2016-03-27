@@ -2,6 +2,7 @@ package com.example.bsaraci.blitzone;
 
 import android.app.Fragment;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Build;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
@@ -11,14 +12,19 @@ import android.os.Bundle;
 import android.view.View;
 import android.support.v7.widget.Toolbar;
 import android.support.design.widget.TabLayout;
+import android.widget.TextView;
 
 public class Blitzone extends AppCompatActivity
 {
 
     Toolbar blitzoneToolbar;
-    private TabLayout tabLayout;
+    private SlidingTabLayout tabLayout;
     private ViewPager viewPager;
     private BlitzoneViewPagerAdapter viewPagerAdapter;
+    TextView toolbarTitle;
+    Typeface titleFont;
+    CharSequence titles[]={"Daily","Best"};
+    int numbOfTabs =2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -26,56 +32,26 @@ public class Blitzone extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.blitzone_main);
         blitzoneToolbar = (Toolbar) findViewById(R.id.toolbar_of_blitzone);
-        tabLayout = (TabLayout) findViewById(R.id.tabs);
+        toolbarTitle = (TextView)findViewById(R.id.blitzone_toolbar_title);
+        titleFont=Typeface.createFromAsset(getAssets(),"fonts/AnkePrint.ttf");
+        toolbarTitle.setTypeface(titleFont);
+
+        tabLayout = (SlidingTabLayout) findViewById(R.id.tabs);
         viewPager = (ViewPager) findViewById(R.id.viewpager);
 
-        viewPagerAdapter = new BlitzoneViewPagerAdapter(getSupportFragmentManager());
+        viewPagerAdapter = new BlitzoneViewPagerAdapter(getSupportFragmentManager(), titles, numbOfTabs);
         viewPager.setAdapter(viewPagerAdapter);
 
-        /*
-        TabLayout.newTab() method creates a tab view, Now a Tab view is not the view
-        which is below the tabs, its the tab itself.
-         */
+        tabLayout.setDistributeEvenly(true); // To make the Tabs Fixed set this true, This makes the tabs Space Evenly in Available width
 
-        final TabLayout.Tab daily = tabLayout.newTab();
-        final TabLayout.Tab blitzone = tabLayout.newTab();
-        final TabLayout.Tab best = tabLayout.newTab();
+        tabLayout.setCustomTabColorizer(new SlidingTabLayout.TabColorizer() {
+            @Override
+            public int getIndicatorColor(int position) {
+                return getResources().getColor(R.color.indicator);
+            }
+        });
 
-        /*
-        Setting Title text for our tabs respectively
-         */
-
-        daily.setText("Daily");
-        blitzone.setText("Blitzone");
-        best.setText("Best");
-
-        /*
-        Adding the tab view to our tablayout at appropriate positions
-        As I want home at first position I am passing home and 0 as argument to
-        the tablayout and like wise for other tabs as well
-         */
-        tabLayout.addTab(daily, 0);
-        tabLayout.addTab(blitzone, 1);
-        tabLayout.addTab(best, 2);
-
-        /*
-        TabTextColor sets the color for the title of the tabs, passing a ColorStateList here makes
-        tab change colors in different situations such as selected, active, inactive etc
-
-        TabIndicatorColor sets the color for the indiactor below the tabs
-         */
-
-        tabLayout.setTabTextColors(ContextCompat.getColorStateList(this, R.color.tab_selector));
-        tabLayout.setSelectedTabIndicatorColor(ContextCompat.getColor(this, R.color.indicator));
-
-        /*
-        Adding a onPageChangeListener to the viewPager
-        1st we add the PageChangeListener and pass a TabLayoutPageChangeListener so that Tabs Selection
-        changes when a viewpager page changes.
-         */
-
-        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
-
+        tabLayout.setViewPager(viewPager);
 
     }
 

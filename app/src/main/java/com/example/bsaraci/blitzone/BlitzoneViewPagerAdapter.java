@@ -6,24 +6,36 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 
 public class BlitzoneViewPagerAdapter extends FragmentStatePagerAdapter {
 
-    public BlitzoneViewPagerAdapter(FragmentManager fm) {
+    CharSequence Titles[]; // This will Store the Titles of the Tabs which are Going to be passed when ViewPagerAdapter is created
+    int NumbOfTabs; // Store the number of tabs, this will also be passed when the ViewPagerAdapter is created
+
+    public BlitzoneViewPagerAdapter(FragmentManager fm, CharSequence mTitles[], int mNumbOfTabsumb) {
         super(fm);
+
+        this.Titles = mTitles;
+        this.NumbOfTabs = mNumbOfTabsumb;
     }
 
     @Override
     public Fragment getItem(int position) {
-        switch (position){
-
-            case 0: return new DailyTabFragment();
-            case 1: return new BlitzoneTabFragment();
-            case 2: return new BestTabFragment();
-            default : return null;
+        if(position==0){
+            DailyTabFragment dailyTabFragment = new DailyTabFragment();
+            return dailyTabFragment;
         }
+
+        else{
+            BestTabFragment bestTabFragment = new BestTabFragment();
+            return bestTabFragment;
+        }
+    }
+
+    public CharSequence getPageTitle(int position){
+        return Titles[position];
     }
 
     @Override
     public int getCount() {
-        return 3;           // As there are only 3 Tabs
+        return NumbOfTabs;
     }
 
 }

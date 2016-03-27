@@ -1,12 +1,14 @@
 package com.example.bsaraci.blitzone;
 
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.bsaraci.blitzone.HLV.HLVAdapter;
@@ -25,12 +27,17 @@ public class Profile extends AppCompatActivity
 
     ArrayList<String> alName;
     ArrayList<Integer> alImage;
+    TextView toolbarTitle;
+    Typeface titleFont;
 
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.profile_main);
         profileToolbar = (Toolbar) findViewById(R.id.toolbar_of_profile);
+        toolbarTitle = (TextView)findViewById(R.id.profile_toolbar_title);
+        titleFont= Typeface.createFromAsset(getAssets(), "fonts/AnkePrint.ttf");
+        toolbarTitle.setTypeface(titleFont);
 
         alName = new ArrayList<>(Arrays.asList("1", "2", "3", "4"));
 //        Take your won images for your app and give drawable path as below to arraylist
