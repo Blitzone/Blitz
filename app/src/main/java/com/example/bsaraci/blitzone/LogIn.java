@@ -3,9 +3,25 @@ package com.example.bsaraci.blitzone;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.EditText;
+
+import com.android.volley.Response;
+import com.android.volley.Response.Listener;
+import com.android.volley.Response.ErrorListener;
+import com.android.volley.VolleyError;
+import com.example.bsaraci.blitzone.ServerComm.MRequest;
+import com.example.bsaraci.blitzone.ServerComm.RequestQueueSingleton;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.net.HttpURLConnection;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class  LogIn  extends AppCompatActivity {
@@ -23,12 +39,68 @@ public class  LogIn  extends AppCompatActivity {
 
     public void loginHomeButtonCallback(View view)
     {
-        Intent intent = new Intent(this, Blitzone.class);
+        final Intent intent = new Intent(this, Blitzone.class);
 
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
 
-        startActivity(intent);
+
+        //Build the request
+
+        //Url
+        String url = "/accounts/login/";
+
+        //Function onResponse is executed after the server responds to the requests.
+        Listener<JSONObject> listener = new Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response)
+            {
+                Log.i("Response", response.toString());
+                try {
+                    if (response.get("statusCode").equals(HttpURLConnection.HTTP_OK))
+                    {
+                        startActivity(intent);
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+
+        //Function to be executed in case of an error
+        ErrorListener errorListener = new ErrorListener()
+        {
+
+            @Override
+            public void onErrorResponse(VolleyError error)
+            {
+                Log.e("Error:", "error " + error.toString());
+
+            }
+        };
+
+        //Put everything in the request
+        MRequest mRequest = new MRequest(
+                url,
+                null, //Headers of the request. Leave null for now.
+                getLoginParams(), //Put the parameters of the request here (JSONObject format)
+                listener,
+                errorListener
+        );
+
+        //Send the request to execute
+        RequestQueueSingleton.getInstance(this).addToRequestQueue(mRequest);
+
+    }
+
+    private JSONObject getLoginParams()
+    {
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("username", ((EditText) findViewById(R.id.username_login)).getText().toString());
+        params.put("password", ((EditText) findViewById(R.id.password_login)).getText().toString());
+
+        return new JSONObject(params);
     }
 
     public void signupButtonCallback(View view)
