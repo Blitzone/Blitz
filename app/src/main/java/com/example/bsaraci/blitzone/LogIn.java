@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.Response.Listener;
@@ -49,48 +50,57 @@ public class  LogIn  extends AppCompatActivity {
 
         //Url
         String url = "/accounts/login/";
+        EditText username = (EditText)findViewById(R.id.username_login);
+        EditText pass = (EditText)findViewById(R.id.password_login);
 
-        //Function onResponse is executed after the server responds to the requests.
-        Listener<JSONObject> listener = new Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response)
-            {
-                Log.i("Response", response.toString());
-                try {
-                    if (response.get("statusCode").equals(HttpURLConnection.HTTP_OK))
-                    {
-                        startActivity(intent);
-                    }
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        };
-
-        //Function to be executed in case of an error
-        ErrorListener errorListener = new ErrorListener()
+        if (username.getText().toString().trim().length()==0 | pass.getText().toString().trim().length()==0)
         {
+            Toast.makeText(getApplicationContext(), "Fill in the blank spaces", Toast.LENGTH_LONG).show();
+        }
+        else {
 
-            @Override
-            public void onErrorResponse(VolleyError error)
+            //Function onResponse is executed after the server responds to the requests.
+            Listener<JSONObject> listener = new Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response)
+                {
+                    Log.i("Response", response.toString());
+                    try {
+                        if (response.get("statusCode").equals(HttpURLConnection.HTTP_OK))
+                        {
+                            startActivity(intent);
+                        }
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            };
+
+            //Function to be executed in case of an error
+            ErrorListener errorListener = new ErrorListener()
             {
-                Log.e("Error:", "error " + error.toString());
 
-            }
-        };
+                @Override
+                public void onErrorResponse(VolleyError error)
+                {
+                    Log.e("Error:", "error " + error.toString());
 
-        //Put everything in the request
-        MRequest mRequest = new MRequest(
-                url,
-                null, //Headers of the request. Leave null for now.
-                getLoginParams(), //Put the parameters of the request here (JSONObject format)
-                listener,
-                errorListener
-        );
+                }
+            };
 
-        //Send the request to execute
-        RequestQueueSingleton.getInstance(this).addToRequestQueue(mRequest);
+            //Put everything in the request
+            MRequest mRequest = new MRequest(
+                    url,
+                    null, //Headers of the request. Leave null for now.
+                    getLoginParams(), //Put the parameters of the request here (JSONObject format)
+                    listener,
+                    errorListener
+            );
+
+            //Send the request to execute
+            RequestQueueSingleton.getInstance(this).addToRequestQueue(mRequest);
+        }
 
     }
 
