@@ -50,6 +50,7 @@
         android:layout_height="40dp"
         android:id="@+id/password_login"
         android:hint="Password"
+        android:inputType="textPassword"
         android:background="@drawable/rounded_edittext"
         android:layout_below="@+id/username_login"
         android:layout_alignLeft="@+id/username_login"
@@ -71,11 +72,12 @@
         android:onClick="loginHomeButtonCallback" />
 
     <ImageView
-        android:layout_width="250dp"
-        android:layout_height="250dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:id="@+id/blitz_login"
         android:background="@mipmap/ic_blitz"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
+
 
 </RelativeLayout>
