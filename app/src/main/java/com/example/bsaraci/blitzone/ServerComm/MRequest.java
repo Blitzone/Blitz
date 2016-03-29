@@ -1,5 +1,7 @@
 package com.example.bsaraci.blitzone.ServerComm;
 
+import android.util.Log;
+
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;
 import com.android.volley.ParseError;
@@ -38,13 +40,11 @@ public class MRequest extends JsonObjectRequest {
 
     @Override
     protected Response<JSONObject> parseNetworkResponse(NetworkResponse response) {
-        int statusCode = response.statusCode;
         JSONObject jsonObject = new JSONObject();
         try
         {
             String json = new String(response.data, HttpHeaderParser.parseCharset(response.headers));
             jsonObject = new JSONObject(json);
-            jsonObject.put("statusCode", statusCode);
         }
 
         catch (UnsupportedEncodingException e)

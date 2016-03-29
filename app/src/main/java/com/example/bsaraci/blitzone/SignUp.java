@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Response;
@@ -18,7 +17,6 @@ import com.example.bsaraci.blitzone.ServerComm.RequestQueueSingleton;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.net.HttpURLConnection;
 import java.util.HashMap;
@@ -41,48 +39,30 @@ public class SignUp extends AppCompatActivity {
 
     public void signupHomeButtonCallback(View view)
     {
-        final Intent intent = new Intent(this, Blitzone.class);
+        if (_signUpCheck()){
+            final Intent intent = new Intent(this, Blitzone.class);
 
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
 
-        //Build the request
+            //Build the request
 
-        //Url
-        String url = "/accounts/register/";
+            //Url
+            String url = "/accounts/register/";
 
-        EditText username = (EditText)findViewById(R.id.username_signup);
-        EditText pass = (EditText)findViewById(R.id.password_signup);
-        EditText pass1 = (EditText)findViewById(R.id.password_again_signup);
-        EditText eMail = (EditText)findViewById(R.id.email);
-
-        if(username.getText().toString().trim().length()==0 | pass.getText().toString().trim().length()==0 | pass1.getText().toString().trim().length()==0 | eMail.getText().toString().trim().length()==0 )
-        {
-            Toast.makeText(getApplicationContext(),"Fill in the blank spaces", Toast.LENGTH_LONG).show();
-        }
-        if(!pass.getText().toString().equals(pass1.getText().toString()))
-        {
-            Toast.makeText(getApplicationContext(),"Verify if your passwords match", Toast.LENGTH_LONG).show();
-        }
-        else if (!isEmailValid(eMail.getText().toString()))
-        {
-            Toast.makeText(getApplicationContext(),"Verify your email", Toast.LENGTH_LONG).show();
-        }
-        else if (pass.getText().toString().length()<=6)
-        {
-            Toast.makeText(getApplicationContext(),"Password is too short", Toast.LENGTH_LONG).show();
-        }
-        else{
 
             Response.Listener<JSONObject> listener = new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response)
                 {
-                    Log.i("Response", response.toString());
                     try {
                         if (response.get("statusCode").equals(HttpURLConnection.HTTP_CREATED))
                         {
                             startActivity(intent);
+                        }
+                        else if (response.get("statusCode").equals(HttpURLConnection.HTTP_INTERNAL_ERROR))
+                        {
+                            Toast.makeText(getApplicationContext(),response.get("details").toString(), Toast.LENGTH_LONG).show();
                         }
 
                     } catch (JSONException e) {
@@ -98,8 +78,7 @@ public class SignUp extends AppCompatActivity {
                 @Override
                 public void onErrorResponse(VolleyError error)
                 {
-                    Log.e("Error:", "error " + error.toString());
-
+                        Log.e("Error", error.toString());
                 }
             };
 
@@ -107,7 +86,7 @@ public class SignUp extends AppCompatActivity {
             MRequest mRequest = new MRequest(
                     url,
                     null, //Headers of the request. Leave null for now.
-                    getSignupParams(), //Put the parameters of the request here (JSONObject format)
+                    getSignUpParams(), //Put the parameters of the request here (JSONObject format)
                     listener,
                     errorListener
             );
@@ -118,7 +97,7 @@ public class SignUp extends AppCompatActivity {
         }
     }
 
-    private JSONObject getSignupParams()
+    private JSONObject getSignUpParams()
     {
         Map<String, String> params = new HashMap<String, String>();
         params.put("username", ((EditText) findViewById(R.id.username_signup)).getText().toString());
@@ -126,6 +105,40 @@ public class SignUp extends AppCompatActivity {
         params.put("email", ((EditText) findViewById(R.id.email)).getText().toString());
 
         return new JSONObject(params);
+    }
+
+    private boolean _signUpCheck()
+    {
+        EditText username = (EditText)findViewById(R.id.username_signup);
+        EditText pass = (EditText)findViewById(R.id.password_signup);
+        EditText pass1 = (EditText)findViewById(R.id.password_again_signup);
+        EditText eMail = (EditText)findViewById(R.id.email);
+
+        if(username.getText().toString().trim().length()==0 |
+                pass.getText().toString().trim().length()==0 |
+                pass1.getText().toString().trim().length()==0 |
+                eMail.getText().toString().trim().length()==0 )
+        {
+            Toast.makeText(getApplicationContext(),"Fill in the blank spaces", Toast.LENGTH_LONG).show();
+            return false;
+        }
+        else if(!pass.getText().toString().equals(pass1.getText().toString()))
+        {
+            Toast.makeText(getApplicationContext(),"Verify if your passwords match", Toast.LENGTH_LONG).show();
+            return false;
+        }
+        else if (!isEmailValid(eMail.getText().toString()))
+        {
+            Toast.makeText(getApplicationContext(),"Verify your email", Toast.LENGTH_LONG).show();
+            return false;
+        }
+        else if (pass.getText().toString().length()<=6)
+        {
+            Toast.makeText(getApplicationContext(),"Password is too short", Toast.LENGTH_LONG).show();
+            return false;
+        }
+        else
+            return true;
     }
 
     public void loginButtonCallback(View view)

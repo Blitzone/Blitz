@@ -40,39 +40,26 @@ public class  LogIn  extends AppCompatActivity {
 
     public void loginHomeButtonCallback(View view)
     {
-        final Intent intent = new Intent(this, Blitzone.class);
-
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-
-
-        //Build the request
-
-        //Url
-        String url = "/accounts/login/";
-        EditText username = (EditText)findViewById(R.id.username_login);
-        EditText pass = (EditText)findViewById(R.id.password_login);
-
-        if (username.getText().toString().trim().length()==0 | pass.getText().toString().trim().length()==0)
+        if (_loginCheck())
         {
-            Toast.makeText(getApplicationContext(), "Fill in the blank spaces", Toast.LENGTH_LONG).show();
-        }
-        else {
+            final Intent intent = new Intent(this, Blitzone.class);
+
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
+            //Build the request
+
+            //Url
+            String url = "/accounts/login/";
 
             //Function onResponse is executed after the server responds to the requests.
             Listener<JSONObject> listener = new Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response)
                 {
-                    Log.i("Response", response.toString());
-                    try {
-                        if (response.get("statusCode").equals(HttpURLConnection.HTTP_OK))
-                        {
-                            startActivity(intent);
-                        }
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+                    if (response.has("token"))
+                    {
+                        startActivity(intent);
                     }
                 }
             };
@@ -84,8 +71,10 @@ public class  LogIn  extends AppCompatActivity {
                 @Override
                 public void onErrorResponse(VolleyError error)
                 {
-                    Log.e("Error:", "error " + error.toString());
-
+                    if (error.networkResponse.statusCode == HttpURLConnection.HTTP_BAD_REQUEST)
+                        Toast.makeText(getApplicationContext(), "Username or password incorrect.", Toast.LENGTH_LONG).show();
+                    else
+                        Log.e("Error", error.toString());
                 }
             };
 
@@ -111,6 +100,20 @@ public class  LogIn  extends AppCompatActivity {
         params.put("password", ((EditText) findViewById(R.id.password_login)).getText().toString());
 
         return new JSONObject(params);
+    }
+
+    private boolean _loginCheck()
+    {
+        EditText username = (EditText)findViewById(R.id.username_login);
+        EditText pass = (EditText)findViewById(R.id.password_login);
+
+        if (username.getText().toString().trim().length()==0 | pass.getText().toString().trim().length()==0)
+        {
+            Toast.makeText(getApplicationContext(), "Fill in the blank spaces", Toast.LENGTH_LONG).show();
+            return false;
+        }
+        else
+            return true;
     }
 
     public void signupButtonCallback(View view)
