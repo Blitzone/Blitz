@@ -107,7 +107,7 @@ public class SignUp extends AppCompatActivity {
             MRequest mRequest = new MRequest(
                     url,
                     null, //Headers of the request. Leave null for now.
-                    getLoginParams(), //Put the parameters of the request here (JSONObject format)
+                    getSignupParams(), //Put the parameters of the request here (JSONObject format)
                     listener,
                     errorListener
             );
@@ -118,7 +118,7 @@ public class SignUp extends AppCompatActivity {
         }
     }
 
-    private JSONObject getLoginParams()
+    private JSONObject getSignupParams()
     {
         Map<String, String> params = new HashMap<String, String>();
         params.put("username", ((EditText) findViewById(R.id.username_signup)).getText().toString());
