@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.example.bsaraci.blitzone.HLV.HLVAdapter;
 import com.example.bsaraci.blitzone.HLV.HorizontalListView;
+import com.example.bsaraci.blitzone.ServerComm.JWTManager;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -82,6 +83,10 @@ public class Profile extends AppCompatActivity
         Intent intent = new Intent(this, LogIn.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
+        JWTManager jwtManager = new JWTManager(getApplicationContext());
+        jwtManager.delToken();
+
         startActivity(intent);
     }
 }
