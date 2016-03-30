@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.example.bsaraci.blitzone.ServerComm.JWTManager;
 import com.example.bsaraci.blitzone.ServerComm.MRequest;
 import com.example.bsaraci.blitzone.ServerComm.RequestQueueSingleton;
 
@@ -58,6 +59,18 @@ public class SignUp extends AppCompatActivity {
                     try {
                         if (response.get("statusCode").equals(HttpURLConnection.HTTP_CREATED))
                         {
+
+                            try
+                            {
+                                JWTManager jwtManager = new JWTManager(getApplicationContext());
+                                jwtManager.setToken(response.getString("token"));
+                                startActivity(intent);
+                            }
+                            catch (JSONException e)
+                            {
+                                e.printStackTrace();
+                            }
+
                             startActivity(intent);
                         }
                         else if (response.get("statusCode").equals(HttpURLConnection.HTTP_INTERNAL_ERROR))
@@ -78,7 +91,7 @@ public class SignUp extends AppCompatActivity {
                 @Override
                 public void onErrorResponse(VolleyError error)
                 {
-                        Log.e("Error", error.toString());
+                    Log.e("Error", error.toString());
                 }
             };
 

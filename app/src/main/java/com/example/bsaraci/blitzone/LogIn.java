@@ -1,6 +1,9 @@
 package com.example.bsaraci.blitzone;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.content.Intent;
+import android.media.session.MediaSession;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -14,6 +17,7 @@ import com.android.volley.Response;
 import com.android.volley.Response.Listener;
 import com.android.volley.Response.ErrorListener;
 import com.android.volley.VolleyError;
+import com.example.bsaraci.blitzone.ServerComm.JWTManager;
 import com.example.bsaraci.blitzone.ServerComm.MRequest;
 import com.example.bsaraci.blitzone.ServerComm.RequestQueueSingleton;
 
@@ -23,6 +27,7 @@ import org.json.JSONObject;
 import java.net.HttpURLConnection;
 import java.util.HashMap;
 import java.util.Map;
+import android.media.session.MediaSession.Token;
 
 
 public class  LogIn  extends AppCompatActivity {
@@ -59,7 +64,16 @@ public class  LogIn  extends AppCompatActivity {
                 {
                     if (response.has("token"))
                     {
-                        startActivity(intent);
+                        try
+                        {
+                            JWTManager jwtManager = new JWTManager(getApplicationContext());
+                            jwtManager.setToken(response.getString("token"));
+                            startActivity(intent);
+                        }
+                        catch (JSONException e)
+                        {
+                            e.printStackTrace();
+                        }
                     }
                 }
             };
