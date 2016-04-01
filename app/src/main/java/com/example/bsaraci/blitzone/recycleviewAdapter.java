@@ -70,5 +70,21 @@ public class recycleviewAdapter extends  RecyclerView.Adapter<recycleviewAdapter
     public int getItemCount() {
         return list.size();
     }
+
+    public void clear() {
+
+        list.clear();
+
+        notifyDataSetChanged();
+
+    }
+
+    public void addAll(List<viewDataProvider> items) {
+
+        list.addAll(items);
+
+        notifyDataSetChanged();
+
+    }
 }
 
