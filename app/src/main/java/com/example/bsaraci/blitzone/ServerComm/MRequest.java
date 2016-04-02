@@ -24,7 +24,7 @@ import org.json.JSONObject;
  */
 public class MRequest extends JsonObjectRequest {
     private final Map<String, String> headers;
-    private final static String IP_ADDRESS = "http://10.0.2.2:8000";
+    private final static String IP_ADDRESS = "http://146.148.30.95:8000";
 
     public MRequest(String url, Map<String, String> headers, JSONObject body, Listener listener, ErrorListener errorListener)
     {
