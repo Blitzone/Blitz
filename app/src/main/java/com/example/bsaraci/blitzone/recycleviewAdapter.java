@@ -13,6 +13,7 @@ import java.util.List;
 
 public class recycleviewAdapter extends  RecyclerView.Adapter<recycleviewAdapter.ViewHolder> {
 
+
     List<viewDataProvider> list;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -69,6 +70,9 @@ public class recycleviewAdapter extends  RecyclerView.Adapter<recycleviewAdapter
     @Override
     public int getItemCount() {
         return list.size();
+    }
+    public List<viewDataProvider> getItems() {
+        return list;
     }
 
     public void clear() {

@@ -60,7 +60,7 @@
             </RelativeLayout>
         </android.support.v7.widget.Toolbar>
 
-        <com.example.bsaraci.blitzone.SlidingTabLayout
+        <com.example.bsaraci.blitzone.Tabs.SlidingTabLayout
             android:id="@+id/tabs"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

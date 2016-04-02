@@ -1,18 +1,15 @@
 package com.example.bsaraci.blitzone;
 
-import android.app.Fragment;
 import android.content.Intent;
 import android.graphics.Typeface;
-import android.os.Build;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.support.v7.widget.Toolbar;
-import android.support.design.widget.TabLayout;
 import android.widget.TextView;
+
+import com.example.bsaraci.blitzone.Tabs.SlidingTabLayout;
 
 public class Blitzone extends AppCompatActivity
 {

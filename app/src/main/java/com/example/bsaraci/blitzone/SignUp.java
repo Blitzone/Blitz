@@ -40,7 +40,7 @@ public class SignUp extends AppCompatActivity {
 
     public void signupHomeButtonCallback(View view)
     {
-        //if (_signUpCheck()){
+        if (_signUpCheck()){
             final Intent intent = new Intent(this, Blitzone.class);
 
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -50,7 +50,7 @@ public class SignUp extends AppCompatActivity {
 
             //Build the request
 
-            /*//Url
+            //Url
             String url = "/accounts/register/";
 
 
@@ -153,7 +153,7 @@ public class SignUp extends AppCompatActivity {
             return false;
         }
         else
-            return true;*/
+            return true;
     }
 
     public void loginButtonCallback(View view)

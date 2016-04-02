@@ -1,4 +1,4 @@
-package com.example.bsaraci.blitzone;
+package com.example.bsaraci.blitzone.Tabs;
 
 import android.content.Context;
 import android.graphics.Typeface;
@@ -14,6 +14,8 @@ import android.view.ViewGroup;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.example.bsaraci.blitzone.R;
 
 /**
  * To be used with ViewPager to provide a tab indicator component which give constant feedback as to

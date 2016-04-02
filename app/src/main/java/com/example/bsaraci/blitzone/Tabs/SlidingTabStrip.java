@@ -1,4 +1,4 @@
-package com.example.bsaraci.blitzone;
+package com.example.bsaraci.blitzone.Tabs;
 
 import android.content.Context;
 import android.graphics.Canvas;
