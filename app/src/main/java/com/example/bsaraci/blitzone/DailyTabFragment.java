@@ -33,6 +33,9 @@ public class DailyTabFragment extends Fragment implements SwipeRefreshLayout.OnR
     private TextView tvEmptyView;
     protected Handler handler;
 
+    //TODO TESTING ONLY
+    private Integer teaCount = 0;
+
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
@@ -71,7 +74,9 @@ public class DailyTabFragment extends Fragment implements SwipeRefreshLayout.OnR
                         int end = start + 2;
 
                         for (int i = start + 1; i <= end; i++) {
-                            list.add(new viewDataProvider(R.mipmap.ic_orange_profile,"teasaraci","200",0,"Old travel throwback","6 minutes ago"));
+                            //TODO COUNTING VIEWS FOR TESTING. REMOVE WHEN YOU DEPLOY
+                            teaCount++;
+                            list.add(new viewDataProvider(R.mipmap.ic_orange_profile,"teasaraci" + teaCount.toString(),"200",0,"Old travel throwback","6 minutes ago"));
                             adap.notifyItemInserted(list.size());
                         }
                         adap.setLoaded();
@@ -107,7 +112,7 @@ public class DailyTabFragment extends Fragment implements SwipeRefreshLayout.OnR
 
     public void prepareData (){
 
-        for(int i =0;i<2; i++){
+        for(int i =0;i<10; i++){
             usernames.add(i,"jv21");
             points.add(i,"15");
             description.add(i,"Tickets to a new adventure");
