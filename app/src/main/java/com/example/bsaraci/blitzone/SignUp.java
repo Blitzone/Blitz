@@ -64,7 +64,6 @@ public class SignUp extends AppCompatActivity {
                             {
                                 JWTManager jwtManager = new JWTManager(getApplicationContext());
                                 jwtManager.setToken(response.getString("token"));
-                                startActivity(intent);
                             }
                             catch (JSONException e)
                             {
