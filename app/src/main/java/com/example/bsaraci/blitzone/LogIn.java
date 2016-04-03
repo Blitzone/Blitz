@@ -2,6 +2,7 @@ package com.example.bsaraci.blitzone;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.media.session.MediaSession;
 import android.os.Bundle;
@@ -65,6 +66,7 @@ public class  LogIn  extends AppCompatActivity {
                         {
                             JWTManager jwtManager = new JWTManager(getApplicationContext());
                             jwtManager.setToken(response.getString("token"));
+
                             startActivity(intent);
                         }
                         catch (JSONException e)
