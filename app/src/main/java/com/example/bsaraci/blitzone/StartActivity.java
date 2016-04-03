@@ -30,7 +30,11 @@ public class StartActivity extends AppCompatActivity {
     {
         super.onCreate(savedInstanceState);
         final Intent blitzoneIntent = new Intent(this, Blitzone.class);
+        blitzoneIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        blitzoneIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         final Intent loginIntent = new Intent(this, LogIn.class);
+        loginIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        loginIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
 
 
         Response.Listener<JSONObject> listener = new Response.Listener<JSONObject>() {
