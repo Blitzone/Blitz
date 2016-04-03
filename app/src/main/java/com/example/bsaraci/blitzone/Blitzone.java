@@ -66,4 +66,5 @@ public class Blitzone extends AppCompatActivity
 
         startActivity(intent);
     }
+
 }
