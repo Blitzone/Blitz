@@ -16,13 +16,14 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:text="Register"
+        android:text="Don't have an account ? Sign up"
         android:id="@+id/sign_up_gray_button"
         android:background="@drawable/rectangular_green_button"
         android:textColor="@color/white"
         android:onClick="signupButtonCallback"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:textSize="10sp"/>
 
     <EditText
         android:layout_width="300dp"

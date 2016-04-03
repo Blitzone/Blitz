@@ -10,13 +10,14 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:text="Log in"
+        android:text="Already have an account ? Log in"
         android:id="@+id/log_in_gray_button"
         android:background="@drawable/rectangular_green_button"
         android:textColor="@color/white"
         android:onClick="loginButtonCallback"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:textSize="10sp"/>
 
 
     <EditText
