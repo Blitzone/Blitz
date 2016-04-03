@@ -24,7 +24,7 @@ import java.util.Map;
  * Created by bsaraci on 4/3/2016.
  */
 public class StartActivity extends AppCompatActivity {
-    private final String verifyTokenUrl = "/accounts/verifyToken";
+    private final String verifyTokenUrl = "/accounts/verifyToken/";
 
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -43,6 +43,7 @@ public class StartActivity extends AppCompatActivity {
                     {
                         JWTManager jwtManager = new JWTManager(getApplicationContext());
                         jwtManager.setToken(response.getString("token"));
+
                         startActivity(blitzoneIntent);
                     }
                     catch (JSONException e)
@@ -65,13 +66,6 @@ public class StartActivity extends AppCompatActivity {
         };
 
         JWTManager jwtManager = new JWTManager(getApplicationContext());
-        String token;
-        if (jwtManager._hasToken())
-            token = jwtManager.getToken();
-        else
-            token = null;
-
-        Log.i("Token", token);
 
         MRequest mRequest = new MRequest(
                 verifyTokenUrl,
