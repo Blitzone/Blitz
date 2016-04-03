@@ -13,6 +13,7 @@ import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.Response.Listener;
 import com.android.volley.Response.ErrorListener;
@@ -31,6 +32,7 @@ import android.media.session.MediaSession.Token;
 
 
 public class  LogIn  extends AppCompatActivity {
+    private final String loginUrl = "/accounts/login/";
 
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -51,7 +53,6 @@ public class  LogIn  extends AppCompatActivity {
             //Build the request
 
             //Url
-            String url = "/accounts/login/";
 
             //Function onResponse is executed after the server responds to the requests.
             Listener<JSONObject> listener = new Listener<JSONObject>() {
@@ -88,13 +89,16 @@ public class  LogIn  extends AppCompatActivity {
                 }
             };
 
+            JWTManager jwtManager = new JWTManager(getApplicationContext());
+
             //Put everything in the request
             MRequest mRequest = new MRequest(
-                    url,
-                    null, //Headers of the request. Leave null for now.
+                    loginUrl,
+                    Request.Method.POST,
                     getLoginParams(), //Put the parameters of the request here (JSONObject format)
                     listener,
-                    errorListener
+                    errorListener,
+                    jwtManager
             );
 
             //Send the request to execute

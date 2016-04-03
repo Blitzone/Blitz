@@ -10,6 +10,7 @@ import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.example.bsaraci.blitzone.ServerComm.JWTManager;
@@ -90,13 +91,15 @@ public class SignUp extends AppCompatActivity {
                 }
             };
 
+            JWTManager jwtManager = new JWTManager(getApplicationContext());
             //Put everything in the request
             MRequest mRequest = new MRequest(
                     url,
-                    null, //Headers of the request. Leave null for now.
+                    Request.Method.POST,
                     getSignUpParams(), //Put the parameters of the request here (JSONObject format)
                     listener,
-                    errorListener
+                    errorListener,
+                    jwtManager
             );
 
             //Send the request to execute

@@ -1,5 +1,6 @@
 package com.example.bsaraci.blitzone.ServerComm;
 
+import android.content.Context;
 import android.util.Log;
 
 import com.android.volley.AuthFailureError;
@@ -12,6 +13,7 @@ import com.android.volley.Response.Listener;
 import com.android.volley.toolbox.HttpHeaderParser;
 
 import java.io.UnsupportedEncodingException;
+import java.util.HashMap;
 import java.util.Map;
 
 import com.android.volley.Response.ErrorListener;
@@ -23,14 +25,21 @@ import org.json.JSONObject;
  * Created by mikel on 3/28/16.
  */
 public class MRequest extends JsonObjectRequest {
-    private final Map<String, String> headers;
+    private Map<String, String> headers = new HashMap<String, String>();
     private final static String IP_ADDRESS = "http://146.148.30.95";
 
-    public MRequest(String url, Map<String, String> headers, JSONObject body, Listener listener, ErrorListener errorListener)
+    public MRequest(String url, int method, JSONObject body, Listener listener, ErrorListener errorListener, JWTManager jwtManager)
     {
-        super(Request.Method.POST, IP_ADDRESS + url, body, listener, errorListener);
-        this.headers = headers;
+        super(method, IP_ADDRESS + url, body, listener, errorListener);
+
+        headers.put("Content-Type", "application/json");
+
+        if (jwtManager._hasToken())
+        {
+            headers.put("Authorization", "JWT " + jwtManager.getToken());
+        }
     }
+
 
     @Override
     public Map<String, String> getHeaders() throws AuthFailureError
