@@ -6,6 +6,8 @@
     <color name="lightGray">#e0e0e0</color>
     <color name="lightGreen">#9caf67</color>
     <color name="green">#3d9f3d</color>
+    <color name="transparentGreen">#203d9f3d</color>
     <color name="white">#ffffff</color>
     <color name="indicator">#ffffff</color>
+
 </resources>

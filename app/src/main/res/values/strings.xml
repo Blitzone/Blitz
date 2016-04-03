@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Blitzone</string>
     <string name="blitzone_toolbar_name">blitzone</string>
+    <string name="log_in_home_button">Log in</string>
 </resources>

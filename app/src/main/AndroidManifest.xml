@@ -32,15 +32,30 @@
         </activity>
         <activity
             android:name=".LogIn"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustPan">
         </activity>
         <activity
             android:name=".SignUp"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
-        <activity android:name=".Blitzone"></activity>
-        <activity android:name=".Search"></activity>
-        <activity android:name=".Profile"></activity>
-        <activity android:name=".Notifications"></activity>
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustPan">
+
+        </activity>
+        <activity
+            android:name=".Blitzone">
+        </activity>
+
+        <activity
+            android:name=".Search">
+        </activity>
+
+        <activity
+            android:name=".Profile">
+        </activity>
+
+        <activity
+            android:name=".Notifications">
+        </activity>
 
     </application>
 
