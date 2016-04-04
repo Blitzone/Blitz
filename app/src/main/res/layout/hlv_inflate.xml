@@ -37,9 +37,9 @@
                 android:gravity="center_horizontal"
                 android:paddingLeft="5dp"
                 android:paddingRight="2dp"
-                android:text="Test"
+                android:text="@string/textBelow_hlv"
                 android:textColor="#fff"
-                android:textSize="20dp"
+                android:textSize="20sp"
                 android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true" />
 

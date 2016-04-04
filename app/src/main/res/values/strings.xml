@@ -1,5 +1,53 @@
 <resources>
+
+    <!-- APP NAME -->
     <string name="app_name">Blitzone</string>
-    <string name="blitzone_toolbar_name">blitzone</string>
+    <!--*****************************************************************************-->
+
+    <!-- LOG IN -->
+    <string name="SignUp_fromLogin_button">Don\'t have an account ? Sign up</string>
+    <string name="usernameHint_login">Username</string>
+    <string name="passwordHint_login">Password</string>
+    <string name="forgotLoginDetails_login">Forgot your login details ?</string>
     <string name="log_in_home_button">Log in</string>
+    <!--*****************************************************************************-->
+
+    <!-- SIGN UP -->
+    <string name="LogIn_fromSignup_button">Already have an account ? Log in</string>
+    <string name="usernameHint_signup">Username</string>
+    <string name="passwordHint_signup">Password</string>
+    <string name="passwordAgainHint_signup">Password again</string>
+    <string name="emailHint_signup">E-mail</string>
+    <string name="register_home_button">Register</string>
+    <!--*****************************************************************************-->
+
+    <!-- BLITZONE -->
+    <string name="blitzone_toolbar_title">blitzone</string>
+    <string name="name_blitzone_row_content">mikelv92</string>
+    <string name="points_blitzone_row_content">117</string>
+    <string name="name_blitzone_view_content">mikelv92</string>
+    <string name="points_blitzone_view_content">117</string>
+    <string name="chapter_blitzone_view_content">ABC</string>
+    <string name="timePublished_blitzone_view_content">6 minutes ago</string>
+    <string name="noRecords_daily_tab_content">No Records</string>
+    <!--*****************************************************************************-->
+
+    <!-- PROFILE -->
+    <string name="toolbar_title_profile">brajansaraci</string>
+    <string name="points_profile">0</string>
+    <string name="followers_profile">50</string>
+    <string name="textBelow_hlv">Test</string>
+    <string name="theBigChapter_profile">Travel Frenzy</string>
+    <string name="dayChapter_profile">Travel friend</string>
+    <!--*****************************************************************************-->
+
+    <!-- NOTIFICATIONS -->
+    <string name="toolbar_title_notifications">notifications</string>
+    <!--*****************************************************************************-->
+
+    <!-- SEARCH -->
+    <string name="toolbar_title_search">search</string>
+    <string name="searchHint_search">Search</string>
+    <!--*****************************************************************************-->
+
 </resources>
