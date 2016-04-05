@@ -46,14 +46,12 @@ public class  LogIn  extends AppCompatActivity {
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
-        spinner=(ProgressBar)findViewById(R.id.progressBar);
-        spinner.setVisibility(View.GONE);
         loginEnabled();
     }
 
     public void loginHomeButtonCallback(View view)
     {
-        spinner.setVisibility(View.VISIBLE);
+        spinnerTurning();
             final Intent intent = new Intent(this, Blitzone.class);
 
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -92,7 +90,7 @@ public class  LogIn  extends AppCompatActivity {
                 @Override
                 public void onErrorResponse(VolleyError error)
                 {
-                    spinner.setVisibility(View.GONE);
+                    spinnerStop();
                     if (error.networkResponse.statusCode == HttpURLConnection.HTTP_BAD_REQUEST)
                         Toast.makeText(getApplicationContext(), "Username or password incorrect.", Toast.LENGTH_LONG).show();
                     else
@@ -173,5 +171,14 @@ public class  LogIn  extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void spinnerTurning (){
+        spinner=(ProgressBar)findViewById(R.id.progressBar);
+        spinner.setVisibility(View.VISIBLE);
+    }
+
+    public void spinnerStop (){
+        spinner=(ProgressBar)findViewById(R.id.progressBar);
+        spinner.setVisibility(View.GONE);
+    }
 
 }

@@ -87,6 +87,7 @@
         android:layout_width="30dp"
         android:layout_gravity="center_horizontal"
         android:layout_height="30dp"
+        android:visibility="gone"
         android:background ="@xml/progress"
         android:layout_alignTop="@+id/log_in_home_button"
         android:layout_alignRight="@+id/log_in_home_button"

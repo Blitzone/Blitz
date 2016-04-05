@@ -1,6 +1,8 @@
 package com.example.bsaraci.blitzone;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
@@ -42,17 +44,14 @@ public class SignUp extends AppCompatActivity {
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.signup);
-        spinner=(ProgressBar)findViewById(R.id.progressBar);
-        spinner.setVisibility(View.GONE);
         signUpEnabled();
-
     }
 
     public void signupHomeButtonCallback(View view)
     {
+        spinnerRotating();
         if(_signUpCheck()){
-            spinner.setVisibility(View.VISIBLE);
-            
+
         final Intent intent = new Intent(this, Blitzone.class);
 
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -68,6 +67,7 @@ public class SignUp extends AppCompatActivity {
                 @Override
                 public void onResponse(JSONObject response)
                 {
+                    spinnerStop();
                     try {
                         if (response.get("statusCode").equals(HttpURLConnection.HTTP_CREATED))
                         {
@@ -87,6 +87,7 @@ public class SignUp extends AppCompatActivity {
                         else if (response.get("statusCode").equals(HttpURLConnection.HTTP_INTERNAL_ERROR))
                         {
                             Toast.makeText(getApplicationContext(),response.get("details").toString(), Toast.LENGTH_LONG).show();
+                            spinner.setVisibility(View.GONE);
                         }
 
                     } catch (JSONException e) {
@@ -229,4 +230,44 @@ public class SignUp extends AppCompatActivity {
         return isValid;
     }
 
+    public void spinnerRotating(){
+
+        spinner=(ProgressBar)findViewById(R.id.progressBar);
+
+        AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
+
+            @Override
+            protected void onPreExecute() {
+                spinner.setIndeterminate(true);
+                spinner.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            protected Void doInBackground(Void... arg0) {
+                try {
+                    Thread.sleep(300);
+                } catch (InterruptedException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void result) {
+                if (spinner!=null) {
+                    spinner.setVisibility(View.GONE);
+                }
+            }
+
+        };
+        task.execute((Void[])null);
+
+    }
+
+    public void spinnerStop(){
+        spinner=(ProgressBar)findViewById(R.id.progressBar);
+        spinner.setVisibility(View.GONE);
+
+    }
 }
