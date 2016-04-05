@@ -3,11 +3,15 @@ package com.example.bsaraci.blitzone;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -28,17 +32,28 @@ import java.util.regex.Pattern;
 
 public class SignUp extends AppCompatActivity {
 
+    private EditText username;
+    private EditText pass;
+    private EditText pass1;
+    private EditText eMail;
+    private ProgressBar spinner;
+
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.signup);
+        spinner=(ProgressBar)findViewById(R.id.progressBar);
+        spinner.setVisibility(View.GONE);
+        signUpEnabled();
 
     }
 
     public void signupHomeButtonCallback(View view)
     {
-        if (_signUpCheck()){
-            final Intent intent = new Intent(this, Blitzone.class);
+        if(_signUpCheck()){
+            spinner.setVisibility(View.VISIBLE);
+            
+        final Intent intent = new Intent(this, Blitzone.class);
 
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -87,6 +102,7 @@ public class SignUp extends AppCompatActivity {
                 @Override
                 public void onErrorResponse(VolleyError error)
                 {
+                    spinner.setVisibility(View.GONE);
                     Log.e("Error", error.toString());
                 }
             };
@@ -120,20 +136,12 @@ public class SignUp extends AppCompatActivity {
 
     private boolean _signUpCheck()
     {
-        EditText username = (EditText)findViewById(R.id.username_signup);
-        EditText pass = (EditText)findViewById(R.id.password_signup);
-        EditText pass1 = (EditText)findViewById(R.id.password_again_signup);
-        EditText eMail = (EditText)findViewById(R.id.email);
+        username = (EditText)findViewById(R.id.username_signup);
+        pass = (EditText)findViewById(R.id.password_signup);
+        pass1 = (EditText)findViewById(R.id.password_again_signup);
+        eMail = (EditText)findViewById(R.id.email);
 
-        if(username.getText().toString().trim().length()==0 |
-                pass.getText().toString().trim().length()==0 |
-                pass1.getText().toString().trim().length()==0 |
-                eMail.getText().toString().trim().length()==0 )
-        {
-            Toast.makeText(getApplicationContext(),"Fill in the blank spaces", Toast.LENGTH_LONG).show();
-            return false;
-        }
-        else if(!pass.getText().toString().equals(pass1.getText().toString()))
+        if(!pass.getText().toString().equals(pass1.getText().toString()))
         {
             Toast.makeText(getApplicationContext(),"Verify if your passwords match", Toast.LENGTH_LONG).show();
             return false;
@@ -148,8 +156,52 @@ public class SignUp extends AppCompatActivity {
             Toast.makeText(getApplicationContext(),"Password is too short", Toast.LENGTH_LONG).show();
             return false;
         }
-        else
+        else {
             return true;
+        }
+    }
+
+    public void blankFieldsCheck (){
+        Button b = (Button)findViewById(R.id.signup_home_button);
+        if(username.getText().toString().trim().length()>0 &&
+                pass.getText().toString().trim().length()>0 &&
+                pass1.getText().toString().trim().length()>0 &&
+                eMail.getText().toString().trim().length()>0 )
+        {
+            b.setEnabled(true);
+        }
+        else{
+            b.setEnabled(false);
+        }
+    }
+
+    public void signUpEnabled(){
+
+        TextWatcher textWatcher = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+                blankFieldsCheck();
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+            }
+        };
+
+        username = (EditText)findViewById(R.id.username_signup);
+        pass = (EditText)findViewById(R.id.password_signup);
+        pass1 = (EditText)findViewById(R.id.password_again_signup);
+        eMail = (EditText)findViewById(R.id.email);
+
+        username.addTextChangedListener(textWatcher);
+        pass.addTextChangedListener(textWatcher);
+        pass1.addTextChangedListener(textWatcher);
+        eMail.addTextChangedListener(textWatcher);
     }
 
     public void loginButtonCallback(View view)

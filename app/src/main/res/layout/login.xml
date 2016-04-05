@@ -11,7 +11,7 @@
         android:layout_height="50dp"
         android:text="@string/SignUp_fromLogin_button"
         android:id="@+id/sign_up_gray_button"
-        android:background="@drawable/rectangular_green_button"
+        android:background="@drawable/rectangular_filled_green_button"
         android:textColor="@color/white"
         android:onClick="signupButtonCallback"
         android:layout_alignParentBottom="true"
@@ -54,7 +54,8 @@
         android:layout_height="40dp"
         android:text="@string/log_in_home_button"
         android:id="@+id/log_in_home_button"
-        android:background="@drawable/rounded_green_button"
+        android:background="@drawable/login_signup_button_selector"
+        android:enabled="false"
         android:textColor="@color/white"
         android:textSize="12sp"
         android:onClick="loginHomeButtonCallback"
@@ -80,5 +81,16 @@
         android:textColor="@color/white"
         android:textSize="12sp"
         android:layout_marginTop="10dp"/>
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="30dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_height="30dp"
+        android:background ="@xml/progress"
+        android:layout_alignTop="@+id/log_in_home_button"
+        android:layout_alignRight="@+id/log_in_home_button"
+        android:layout_alignEnd="@+id/log_in_home_button"
+        android:layout_marginTop="5dp"/>
 
 </RelativeLayout>

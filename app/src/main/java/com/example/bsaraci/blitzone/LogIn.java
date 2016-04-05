@@ -7,11 +7,15 @@ import android.content.Intent;
 import android.media.session.MediaSession;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -34,18 +38,22 @@ import android.media.session.MediaSession.Token;
 
 public class  LogIn  extends AppCompatActivity {
     private final String loginUrl = "/accounts/login/";
+    private EditText username;
+    private EditText pass;
+    private ProgressBar spinner;
 
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
-
+        spinner=(ProgressBar)findViewById(R.id.progressBar);
+        spinner.setVisibility(View.GONE);
+        loginEnabled();
     }
 
     public void loginHomeButtonCallback(View view)
     {
-        if (_loginCheck())
-        {
+        spinner.setVisibility(View.VISIBLE);
             final Intent intent = new Intent(this, Blitzone.class);
 
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -84,10 +92,11 @@ public class  LogIn  extends AppCompatActivity {
                 @Override
                 public void onErrorResponse(VolleyError error)
                 {
+                    spinner.setVisibility(View.GONE);
                     if (error.networkResponse.statusCode == HttpURLConnection.HTTP_BAD_REQUEST)
                         Toast.makeText(getApplicationContext(), "Username or password incorrect.", Toast.LENGTH_LONG).show();
                     else
-                        Log.e("Error", error.toString());
+                    Log.e("Error", error.toString());
                 }
             };
 
@@ -107,7 +116,6 @@ public class  LogIn  extends AppCompatActivity {
             RequestQueueSingleton.getInstance(this).addToRequestQueue(mRequest);
         }
 
-    }
 
     private JSONObject getLoginParams()
     {
@@ -118,18 +126,44 @@ public class  LogIn  extends AppCompatActivity {
         return new JSONObject(params);
     }
 
-    private boolean _loginCheck()
+    private void loginCheck()
     {
-        EditText username = (EditText)findViewById(R.id.username_login);
-        EditText pass = (EditText)findViewById(R.id.password_login);
+        Button b = (Button)findViewById(R.id.log_in_home_button);
 
-        if (username.getText().toString().trim().length()==0 | pass.getText().toString().trim().length()==0)
+        if (username.getText().toString().trim().length()>0 && pass.getText().toString().trim().length()>0)
         {
-            Toast.makeText(getApplicationContext(), "Fill in the blank spaces", Toast.LENGTH_LONG).show();
-            return false;
+            b.setEnabled(true);
         }
-        else
-            return true;
+        else{
+            b.setEnabled(false);
+        }
+
+    }
+
+    private void loginEnabled(){
+        TextWatcher textWatcher = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+                loginCheck();
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+            }
+        };
+
+        username = (EditText)findViewById(R.id.username_login);
+        pass = (EditText)findViewById(R.id.password_login);
+
+        username.addTextChangedListener(textWatcher);
+        pass.addTextChangedListener(textWatcher);
+
+
     }
 
     public void signupButtonCallback(View view)
