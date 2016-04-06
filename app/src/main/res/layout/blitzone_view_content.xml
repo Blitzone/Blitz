@@ -8,7 +8,7 @@
         android:layout_width="60dp"
         android:layout_height="60dp"
 
-        android:src="@mipmap/ic_orange_profile"
+        android:src="@mipmap/ic_profile_avatar"
         android:scaleType="fitXY"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
@@ -67,16 +67,17 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:id="@+id/blitzButton"
-        android:background="@mipmap/ic_orange_blitz"
+        android:background="@drawable/blitz_button_selector"
         android:layout_below="@+id/chapterOfTheDay"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="5dp"/>
+        android:layout_marginTop="5dp"
+        android:onClick="sendBlitzCallback"/>
 
     <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/like"
-        android:background="@mipmap/ic_like"
+        android:background="@drawable/like_button_selector"
         android:layout_below="@+id/chapterOfTheDay"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
@@ -85,7 +86,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/dislike"
-        android:background="@mipmap/ic_dislike"
+        android:background="@drawable/dislike_button_selector"
         android:layout_below="@+id/chapterOfTheDay"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />

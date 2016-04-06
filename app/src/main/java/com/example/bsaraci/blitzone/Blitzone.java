@@ -67,4 +67,8 @@ public class Blitzone extends AppCompatActivity
         startActivity(intent);
     }
 
+    public void sendBlitzCallback(View view){
+
+    }
+
 }

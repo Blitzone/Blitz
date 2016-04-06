@@ -18,11 +18,11 @@
         <RelativeLayout
             android:id="@+id/top_layout"
             android:layout_width="match_parent"
-            android:layout_height="300dp">
+            android:layout_height="350dp">
 
             <ImageView
                 android:id="@+id/img_thumbnail"
-                android:layout_width="300dp"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_above="@+id/photo_chapter"
                 android:layout_centerHorizontal="true"

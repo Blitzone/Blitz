@@ -45,25 +45,25 @@ public class BestTabFragment extends Fragment {
 
     }
     public void prepareData (){
-        rowDataProvider l =new rowDataProvider( R.mipmap.ic_orange_profile,"sarasaraci" ,"200" ,R.mipmap.ic_orange_blitz);
+        rowDataProvider l =new rowDataProvider( R.mipmap.ic_profile_avatar,"sarasaraci" ,"200" ,R.mipmap.ic_orange_blitz);
         list.add(l);
-        l =new rowDataProvider( R.mipmap.ic_orange_profile,"teasaraci" ,"150" ,0);
+        l =new rowDataProvider( R.mipmap.ic_profile_avatar,"teasaraci" ,"150" ,0);
         list.add(l);
-        l =new rowDataProvider( R.mipmap.ic_orange_profile,"enderballa" ,"100" ,R.mipmap.ic_orange_blitz);
+        l =new rowDataProvider( R.mipmap.ic_profile_avatar,"enderballa" ,"100" ,R.mipmap.ic_orange_blitz);
         list.add(l);
-        l =new rowDataProvider( R.mipmap.ic_orange_profile,"mikelv92" ,"100" ,0);
+        l =new rowDataProvider( R.mipmap.ic_profile_avatar,"mikelv92" ,"100" ,0);
         list.add(l);
-        l =new rowDataProvider( R.mipmap.ic_orange_profile,"jonagolemi" ,"30" ,R.mipmap.ic_orange_blitz);
+        l =new rowDataProvider( R.mipmap.ic_profile_avatar,"jonagolemi" ,"30" ,R.mipmap.ic_orange_blitz);
         list.add(l);
-        l =new rowDataProvider( R.mipmap.ic_orange_profile,"jv21" ,"15" ,0);
+        l =new rowDataProvider( R.mipmap.ic_profile_avatar,"jv21" ,"15" ,0);
         list.add(l);
-        l =new rowDataProvider( R.mipmap.ic_orange_profile,"ergysmati" ,"10" ,R.mipmap.ic_orange_blitz);
+        l =new rowDataProvider( R.mipmap.ic_profile_avatar,"ergysmati" ,"10" ,R.mipmap.ic_orange_blitz);
         list.add(l);
-        l =new rowDataProvider( R.mipmap.ic_orange_profile,"sidritdritorja" ,"10" ,R.mipmap.ic_orange_blitz);
+        l =new rowDataProvider( R.mipmap.ic_profile_avatar,"sidritdritorja" ,"10" ,R.mipmap.ic_orange_blitz);
         list.add(l);
-        l =new rowDataProvider( R.mipmap.ic_orange_profile,"ilirpirani" ,"1" ,R.mipmap.ic_orange_blitz);
+        l =new rowDataProvider( R.mipmap.ic_profile_avatar,"ilirpirani" ,"1" ,R.mipmap.ic_orange_blitz);
         list.add(l);
-        l =new rowDataProvider( R.mipmap.ic_orange_profile,"arditmeti" ,"0" ,R.mipmap.ic_orange_blitz);
+        l =new rowDataProvider( R.mipmap.ic_profile_avatar,"arditmeti" ,"0" ,R.mipmap.ic_orange_blitz);
         list.add(l);
 
 

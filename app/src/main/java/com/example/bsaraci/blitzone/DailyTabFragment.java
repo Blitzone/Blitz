@@ -76,7 +76,7 @@ public class DailyTabFragment extends Fragment implements SwipeRefreshLayout.OnR
                         for (int i = start + 1; i <= end; i++) {
                             //TODO COUNTING VIEWS FOR TESTING. REMOVE WHEN YOU DEPLOY
                             teaCount++;
-                            list.add(new viewDataProvider(R.mipmap.ic_orange_profile,"teasaraci" + teaCount.toString(),"200",0,"Old travel throwback","6 minutes ago"));
+                            list.add(new viewDataProvider(R.mipmap.ic_profile_avatar,"teasaraci" + teaCount.toString(),"200",0,"Old travel throwback","6 minutes ago"));
                             adap.notifyItemInserted(list.size());
                         }
                         adap.setLoaded();
@@ -117,7 +117,7 @@ public class DailyTabFragment extends Fragment implements SwipeRefreshLayout.OnR
             points.add(i,"15");
             description.add(i,"Tickets to a new adventure");
             time.add(i,"6 minutes ago");
-            profilePictures.add(i,R.mipmap.ic_orange_profile);
+            profilePictures.add(i,R.mipmap.ic_profile_avatar);
             blitz.add(i,R.mipmap.ic_orange_blitz);
 
             viewDataProvider l =new viewDataProvider( profilePictures.get(i),usernames.get(i) ,points.get(i) ,blitz.get(i),description.get(i), time.get(i));
