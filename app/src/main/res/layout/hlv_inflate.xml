@@ -18,28 +18,28 @@
         <RelativeLayout
             android:id="@+id/top_layout"
             android:layout_width="match_parent"
-            android:layout_height="160dp">
+            android:layout_height="300dp">
 
             <ImageView
                 android:id="@+id/img_thumbnail"
-                android:layout_width="150dp"
+                android:layout_width="300dp"
                 android:layout_height="match_parent"
-                android:layout_above="@+id/photo_indicator"
+                android:layout_above="@+id/photo_chapter"
                 android:layout_centerHorizontal="true"
-                android:scaleType="fitXY" />
+                android:scaleType="fitXY"
+                android:src="@color/lightGray"/>
 
             <TextView
-                android:id="@+id/photo_indicator"
-                android:layout_width="50dp"
-                android:layout_height="40dp"
+                android:id="@+id/photo_chapter"
+                android:layout_width="300dp"
+                android:layout_height="30dp"
                 android:layout_gravity="center|bottom"
-                android:background="@color/lightGray"
-                android:gravity="center_horizontal"
+                android:gravity="center"
                 android:paddingLeft="5dp"
                 android:paddingRight="2dp"
                 android:text="@string/textBelow_hlv"
-                android:textColor="#fff"
-                android:textSize="20sp"
+                android:textColor="@color/boldGray"
+                android:textSize="15sp"
                 android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true" />
 

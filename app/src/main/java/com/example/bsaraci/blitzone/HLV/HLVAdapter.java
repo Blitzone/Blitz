@@ -51,7 +51,7 @@ public class HLVAdapter extends BaseAdapter {
             view = mInflater.inflate(R.layout.hlv_inflate, parent, false);
             holder = new ViewHolder();
             holder.imgThumbnail = (ImageView) view.findViewById(R.id.img_thumbnail);
-            holder.tvSpecies = (TextView) view.findViewById(R.id.photo_indicator);
+            holder.tvSpecies = (TextView) view.findViewById(R.id.photo_chapter);
             view.setTag(holder);
         } else {
             view = convertView;

@@ -40,9 +40,9 @@ public class Profile extends AppCompatActivity
         titleFont= Typeface.createFromAsset(getAssets(), "fonts/AnkePrint.ttf");
         toolbarTitle.setTypeface(titleFont);
 
-        alName = new ArrayList<>(Arrays.asList("1", "2", "3", "4"));
-//        Take your won images for your app and give drawable path as below to arraylist
-        alImage = new ArrayList<>(Arrays.asList(R.mipmap.ic_app_icon, R.mipmap.ic_app_icon, R.mipmap.ic_app_icon, R.mipmap.ic_app_icon));
+        alName = new ArrayList<>(Arrays.asList("Old travel throwback", "Travel friend", "Tickets to new adventure"));
+//      Take your won images for your app and give drawable path as below to arraylist
+        alImage = new ArrayList<>(Arrays.asList(R.color.lightGray, R.color.lightGray, R.color.lightGray));
 
         hlv = (HorizontalListView) findViewById(R.id.hlvProfile);
         hlvAdapter = new HLVAdapter(Profile.this, alName, alImage);
@@ -68,13 +68,6 @@ public class Profile extends AppCompatActivity
         Intent intent = new Intent(this, Notifications.class);
 
         startActivity(intent);
-    }
-
-    public void takePhotoCallback (View view)
-    {
-        Intent cameraIntent = new Intent (MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivityForResult(cameraIntent, CAMERA_REQUEST);
-
     }
 
     public void disconnectCallback (View view)
