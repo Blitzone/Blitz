@@ -47,22 +47,24 @@
         android:scaleType="center"
         android:layout_margin="10dp"/>
 
-    <ImageButton
+    <ImageView
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:id="@+id/profile_picture"
         android:background="@drawable/rounded_lightgray_button"
         android:layout_below="@+id/notifications_from_profile"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:scaleType="center"
+        android:onClick="profilePictureCallback"/>
 
     <ImageView
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:background="@mipmap/ic_orange_blitz"
         android:id="@+id/blitz_won"
-        android:layout_above="@+id/divider1"
-        android:layout_alignLeft="@+id/followers"
-        android:layout_alignStart="@+id/followers" />
+        android:layout_alignTop="@+id/followers"
+        android:layout_toRightOf="@+id/blitzone_from_profile"
+        android:layout_toEndOf="@+id/blitzone_from_profile" />
 
     <ImageView
         android:layout_width="40dp"
@@ -81,10 +83,9 @@
         android:id="@+id/number_of_blitz"
         android:textSize="15sp"
         android:gravity="center"
-        android:layout_alignBottom="@+id/profile_picture"
-        android:layout_alignLeft="@+id/number_of_followers"
-        android:layout_alignStart="@+id/number_of_followers"
-        android:layout_marginBottom="10dp"/>
+        android:layout_below="@+id/blitz_won"
+        android:layout_alignLeft="@+id/blitz_won"
+        android:layout_alignStart="@+id/blitz_won" />
 
     <TextView
         android:layout_width="40dp"
@@ -94,10 +95,9 @@
         android:id="@+id/number_of_followers"
         android:textSize="15sp"
         android:gravity="center"
-        android:layout_alignBottom="@+id/followers"
-        android:layout_toRightOf="@+id/followers"
-        android:layout_toEndOf="@+id/followers"
-        android:layout_marginBottom="10dp"/>
+        android:layout_alignTop="@+id/number_of_blitz"
+        android:layout_alignLeft="@+id/followers"
+        android:layout_alignStart="@+id/followers" />
 
     <ImageButton
         android:layout_width="40dp"
@@ -105,7 +105,7 @@
         android:background="@mipmap/ic_disconnect"
         android:id="@+id/disconnect"
         android:onClick="disconnectCallback"
-        android:layout_below="@+id/notifications_from_profile"
+        android:layout_alignTop="@+id/profile_picture"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
 

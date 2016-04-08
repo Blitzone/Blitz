@@ -7,6 +7,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.support.v7.widget.Toolbar;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.example.bsaraci.blitzone.Tabs.SlidingTabLayout;
@@ -49,7 +51,6 @@ public class Blitzone extends AppCompatActivity
         });
 
         tabLayout.setViewPager(viewPager);
-
     }
 
 
@@ -67,8 +68,16 @@ public class Blitzone extends AppCompatActivity
         startActivity(intent);
     }
 
-    public void sendBlitzCallback(View view){
-
+    public void sendBlitzCallback(View view)
+    {
+        enableBlitz();
     }
+
+    public void enableBlitz()
+    {
+        ImageButton button = (ImageButton)findViewById(R.id.blitzButton);
+        button.setFocusable(true);
+    }
+
 
 }

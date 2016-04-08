@@ -1,7 +1,7 @@
 <resources>
 
     <!-- APP NAME -->
-    <string name="app_name">Blitzone</string>
+    <string name="app_name">Blitzmade</string>
     <!--*****************************************************************************-->
 
     <!-- LOG IN -->
@@ -22,7 +22,7 @@
     <!--*****************************************************************************-->
 
     <!-- BLITZONE -->
-    <string name="blitzone_toolbar_title">blitzone</string>
+    <string name="blitzone_toolbar_title">blitzmade</string>
     <string name="name_blitzone_row_content">mikelv92</string>
     <string name="points_blitzone_row_content">117</string>
     <string name="name_blitzone_view_content">mikelv92</string>
