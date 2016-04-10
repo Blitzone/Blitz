@@ -19,9 +19,8 @@
         android:textSize="25sp"
         android:id="@+id/profile_toolbar_title"
         android:textColor="@color/white"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="15dp"/>
+        android:layout_alignTop="@+id/blitzone_from_profile"
+        android:layout_centerHorizontal="true" />
 
     <ImageButton
         android:layout_width="40dp"
@@ -48,23 +47,24 @@
         android:layout_margin="10dp"/>
 
     <ImageView
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:id="@+id/profile_picture"
         android:background="@drawable/rounded_lightgray_button"
+        android:scaleType="center"
+        android:onClick="profilePictureCallback"
         android:layout_below="@+id/notifications_from_profile"
         android:layout_centerHorizontal="true"
-        android:scaleType="center"
-        android:onClick="profilePictureCallback"/>
+        android:layout_marginTop="10dp"/>
 
     <ImageView
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:background="@mipmap/ic_orange_blitz"
         android:id="@+id/blitz_won"
-        android:layout_alignTop="@+id/followers"
-        android:layout_toRightOf="@+id/blitzone_from_profile"
-        android:layout_toEndOf="@+id/blitzone_from_profile" />
+        android:layout_alignTop="@+id/profile_picture"
+        android:layout_alignLeft="@+id/notifications_from_profile"
+        android:layout_alignStart="@+id/notifications_from_profile" />
 
     <ImageView
         android:layout_width="40dp"
@@ -105,9 +105,9 @@
         android:background="@mipmap/ic_disconnect"
         android:id="@+id/disconnect"
         android:onClick="disconnectCallback"
-        android:layout_alignTop="@+id/profile_picture"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentBottom="true"
+        android:layout_alignRight="@+id/profile_picture"
+        android:layout_alignEnd="@+id/profile_picture" />
 
 
     <View style="@style/Divider"
@@ -124,7 +124,7 @@
         android:text="@string/theBigChapter_profile"
         android:textColor="@color/boldGray"
         android:gravity="center"
-        android:textSize="20sp"
+        android:textSize="18sp"
         android:id="@+id/global_challenge"
         android:layout_below="@+id/divider1"
         android:layout_alignParentLeft="true"
@@ -141,8 +141,9 @@
         android:fadingEdgeLength="10dp"
         android:requiresFadingEdge="horizontal"
         android:layout_gravity="center"
-        android:layout_below="@+id/global_challenge"
+        android:layout_above="@+id/disconnect"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/global_challenge" />
 
 </RelativeLayout>

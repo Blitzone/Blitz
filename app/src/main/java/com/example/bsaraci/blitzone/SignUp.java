@@ -67,7 +67,6 @@ public class SignUp extends AppCompatActivity {
                 @Override
                 public void onResponse(JSONObject response)
                 {
-                    spinnerStop();
                     try {
                         if (response.get("statusCode").equals(HttpURLConnection.HTTP_CREATED))
                         {
@@ -245,7 +244,7 @@ public class SignUp extends AppCompatActivity {
             @Override
             protected Void doInBackground(Void... arg0) {
                 try {
-                    Thread.sleep(300);
+                    Thread.sleep(2000);
                 } catch (InterruptedException e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();

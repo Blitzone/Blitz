@@ -76,7 +76,6 @@ public class Blitzone extends AppCompatActivity
     public void enableBlitz()
     {
         ImageButton button = (ImageButton)findViewById(R.id.blitzButton);
-        button.setFocusable(true);
     }
 
 

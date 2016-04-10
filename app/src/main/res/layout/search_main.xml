@@ -14,9 +14,8 @@
         android:textSize="25sp"
         android:id="@+id/search_toolbar_title"
         android:textColor="@color/white"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="15dp"/>
+        android:layout_alignTop="@+id/blitzone_from_search"
+        android:layout_centerHorizontal="true" />
 
     <ImageButton
         android:layout_width="40dp"

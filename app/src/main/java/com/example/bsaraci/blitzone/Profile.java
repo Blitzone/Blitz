@@ -5,6 +5,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
+import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
@@ -88,11 +95,13 @@ public class Profile extends AppCompatActivity
                 case CAMERA_IMAGE_REQUEST:
 
                     Bitmap bitmap = null;
+                    Bitmap bitmap1 = null;
                     try {
                         GetImageThumbnail getImageThumbnail = new GetImageThumbnail();
                         bitmap = getImageThumbnail.getThumbnail(fileUri, this);
                         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
                         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+
                     } catch (FileNotFoundException e1) {
                         // TODO Auto-generated catch block
                         e1.printStackTrace();
@@ -186,7 +195,7 @@ public class Profile extends AppCompatActivity
             BitmapFactory.Options onlyBoundsOptions = new BitmapFactory.Options();
             onlyBoundsOptions.inJustDecodeBounds = true;
             onlyBoundsOptions.inDither = true;// optional
-            onlyBoundsOptions.inPreferredConfig = Bitmap.Config.RGB_565;// optional
+            onlyBoundsOptions.inPreferredConfig = Bitmap.Config.ARGB_8888;// optional
             BitmapFactory.decodeStream(input, null, onlyBoundsOptions);
             input.close();
             if ((onlyBoundsOptions.outWidth == -1)
