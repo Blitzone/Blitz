@@ -26,7 +26,9 @@ import org.json.JSONObject;
  */
 public class MRequest extends JsonObjectRequest {
     private Map<String, String> headers = new HashMap<String, String>();
-    private final static String IP_ADDRESS = "http://146.148.30.95";
+    public final static String IP_ADDRESS = "http://146.148.30.95";
+    private JSONObject response;
+    private boolean _hasResponse = false;
 
     public MRequest(String url, int method, JSONObject body, Listener listener, ErrorListener errorListener, JWTManager jwtManager)
     {
@@ -64,8 +66,18 @@ public class MRequest extends JsonObjectRequest {
         catch (JSONException e) {
             e.printStackTrace();
         }
+        this.response = jsonObject;
+        this._hasResponse = true;
         return Response.success(jsonObject, HttpHeaderParser.parseCacheHeaders(response));
+    }
 
+    public boolean _hasResponse()
+    {
+        return this._hasResponse;
+    }
+    public JSONObject getResponse()
+    {
+        return this.response;
     }
 
 }

@@ -1,21 +1,14 @@
 package com.example.bsaraci.blitzone;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffXfermode;
-import android.graphics.Rect;
-import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -26,18 +19,32 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.NetworkResponse;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.ImageLoader;
+import com.android.volley.toolbox.ImageRequest;
 import com.example.bsaraci.blitzone.HLV.HLVAdapter;
 import com.example.bsaraci.blitzone.HLV.HorizontalListView;
 import com.example.bsaraci.blitzone.ServerComm.JWTManager;
+import com.example.bsaraci.blitzone.ServerComm.MRequest;
+import com.example.bsaraci.blitzone.ServerComm.PhotoUploadRequest;
+import com.example.bsaraci.blitzone.ServerComm.RequestQueueSingleton;
 
-import java.io.ByteArrayInputStream;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.HttpURLConnection;
 import java.util.ArrayList;
 import java.util.Arrays;
+
 
 
 public class Profile extends AppCompatActivity
@@ -61,6 +68,43 @@ public class Profile extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.profile_main);
+
+
+        String url = "/accounts/profile/";
+
+        Response.Listener<JSONObject> listener = new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response)
+            {
+                updateProfile(response);
+            }
+        };
+
+        //Function to be executed in case of an error
+        Response.ErrorListener errorListener = new Response.ErrorListener()
+        {
+
+            @Override
+            public void onErrorResponse(VolleyError error)
+            {
+                Log.e("Error", error.toString());
+            }
+        };
+
+        JWTManager jwtManager = new JWTManager(getApplicationContext());
+        //Put everything in the request
+        MRequest mRequest = new MRequest(
+                url,
+                Request.Method.GET,
+                null, //Put the parameters of the request here (JSONObject format)
+                listener,
+                errorListener,
+                jwtManager
+        );
+
+        //Send the request to execute
+        RequestQueueSingleton.getInstance(this).addToRequestQueue(mRequest);
+
         profileToolbar = (Toolbar) findViewById(R.id.toolbar_of_profile);
         toolbarTitle = (TextView)findViewById(R.id.profile_toolbar_title);
         titleFont= Typeface.createFromAsset(getAssets(), "fonts/AnkePrint.ttf");
@@ -82,6 +126,30 @@ public class Profile extends AppCompatActivity
             }
         });
 
+    }
+
+    private void updateProfile(JSONObject response) {
+        try {
+            String username = response.get("user").toString();
+            Boolean isBanned = response.get("is_banned").toString().equals("true");
+            Integer blitzCount = (Integer)response.get("blitzCount");
+            String avatar = MRequest.IP_ADDRESS + response.get("avatar").toString();
+
+            final ImageView imageView = (ImageView) this.findViewById(R.id.profile_picture);
+            ImageLoader imageLoader;
+
+            imageLoader = RequestQueueSingleton.getInstance(this).getImageLoader();
+            imageLoader.get(avatar, ImageLoader.getImageListener(imageView,
+                    R.drawable.blitz_button_selector, R.drawable.like_button_selector));
+
+            TextView blitzCountView = (TextView) findViewById(R.id.number_of_blitz);
+            blitzCountView.setText(blitzCount.toString());
+
+        }
+        catch (JSONException e)
+        {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -114,6 +182,9 @@ public class Profile extends AppCompatActivity
 
                     ImageView imageView = (ImageView) this.findViewById(R.id.profile_picture);
                     imageView.setImageBitmap(bitmap);
+
+                    PhotoUploadRequest r = new PhotoUploadRequest(new JWTManager(getApplicationContext()));
+                    r.execute(bitmap);
 
                     break;
 
