@@ -126,6 +126,7 @@ public class Profile extends AppCompatActivity
         hlv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                captureImage();
                 Toast.makeText(Profile.this, "You clicked on : " + alName.get(position).toString(), Toast.LENGTH_SHORT).show();
             }
         });

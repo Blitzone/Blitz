@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
 
     <include
         android:id="@+id/toolbar_of_notifications"
@@ -11,7 +13,7 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="@string/toolbar_title_notifications"
-        android:textSize="25sp"
+        android:textSize="20sp"
         android:id="@+id/notifications_toolbar_title"
         android:textColor="@color/white"
         android:layout_alignTop="@+id/profile_from_notifications"
