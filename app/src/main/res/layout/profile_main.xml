@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <include
         android:id="@+id/toolbar_of_profile"
@@ -46,16 +48,18 @@
         android:scaleType="center"
         android:layout_margin="10dp"/>
 
-    <ImageView
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+    <com.example.bsaraci.blitzone.RoundedImageView
+        android:layout_width="80dp"
+        android:layout_height="80dp"
         android:id="@+id/profile_picture"
-        android:background="@drawable/rounded_lightgray_button"
-        android:scaleType="center"
+        android:background="@android:color/transparent"
         android:onClick="profilePictureCallback"
         android:layout_below="@+id/notifications_from_profile"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="10dp"/>
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="15dp"
+        app:civ_border_width="1dp"
+        app:civ_border_color="@color/gray"/>
 
     <ImageView
         android:layout_width="40dp"
@@ -63,17 +67,17 @@
         android:background="@mipmap/ic_orange_blitz"
         android:id="@+id/blitz_won"
         android:layout_alignTop="@+id/profile_picture"
-        android:layout_alignLeft="@+id/notifications_from_profile"
-        android:layout_alignStart="@+id/notifications_from_profile" />
+        android:layout_toRightOf="@+id/blitzone_from_profile"
+        android:layout_toEndOf="@+id/blitzone_from_profile" />
 
     <ImageView
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:background="@mipmap/ic_orange_profile"
         android:id="@+id/followers"
-        android:layout_alignTop="@+id/profile_picture"
-        android:layout_alignLeft="@+id/blitzone_from_profile"
-        android:layout_alignStart="@+id/blitzone_from_profile" />
+        android:layout_above="@+id/number_of_followers"
+        android:layout_toLeftOf="@+id/notifications_from_profile"
+        android:layout_toStartOf="@+id/notifications_from_profile" />
 
     <TextView
         android:layout_width="40dp"
@@ -106,16 +110,14 @@
         android:id="@+id/disconnect"
         android:onClick="disconnectCallback"
         android:layout_alignParentBottom="true"
-        android:layout_alignRight="@+id/profile_picture"
-        android:layout_alignEnd="@+id/profile_picture" />
+        android:layout_centerHorizontal="true" />
 
 
     <View style="@style/Divider"
         android:id="@+id/divider1"
-        android:layout_below="@+id/profile_picture"
+        android:layout_above="@+id/global_challenge"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="37dp" />
+        android:layout_alignParentStart="true" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -126,11 +128,12 @@
         android:gravity="center"
         android:textSize="18sp"
         android:id="@+id/global_challenge"
-        android:layout_below="@+id/divider1"
+        android:layout_below="@+id/profile_picture"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="5dp"/>
 
     <com.example.bsaraci.blitzone.HLV.HorizontalListView
         android:id="@+id/hlvProfile"
@@ -141,9 +144,9 @@
         android:fadingEdgeLength="10dp"
         android:requiresFadingEdge="horizontal"
         android:layout_gravity="center"
-        android:layout_above="@+id/disconnect"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/global_challenge" />
+        android:layout_below="@+id/global_challenge"
+        android:layout_above="@+id/disconnect" />
 
 </RelativeLayout>

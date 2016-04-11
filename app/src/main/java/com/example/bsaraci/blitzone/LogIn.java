@@ -52,7 +52,7 @@ public class  LogIn  extends AppCompatActivity {
     public void loginHomeButtonCallback(View view)
     {
         spinnerTurning();
-            final Intent intent = new Intent(this, Blitzone.class);
+            final Intent intent = new Intent(this, Profile.class);
 
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);

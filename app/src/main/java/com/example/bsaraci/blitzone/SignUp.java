@@ -52,7 +52,7 @@ public class SignUp extends AppCompatActivity {
         spinnerRotating();
         if(_signUpCheck()){
 
-        final Intent intent = new Intent(this, Blitzone.class);
+        final Intent intent = new Intent(this, Profile.class);
 
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -103,7 +103,8 @@ public class SignUp extends AppCompatActivity {
                 public void onErrorResponse(VolleyError error)
                 {
                     spinner.setVisibility(View.GONE);
-                    Log.e("Error", error.toString());
+                    Toast.makeText(getApplicationContext(),error.toString(), Toast.LENGTH_LONG).show();
+                    //Log.e("Error", error.toString());
                 }
             };
 

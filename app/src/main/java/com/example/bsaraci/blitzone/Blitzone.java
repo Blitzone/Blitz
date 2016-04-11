@@ -63,9 +63,7 @@ public class Blitzone extends AppCompatActivity
 
     public void profileFromBlitzoneButtonCallback(View view)
     {
-        Intent intent = new Intent(this, Profile.class);
-
-        startActivity(intent);
+        finish();
     }
 
     public void sendBlitzCallback(View view)

@@ -29,9 +29,9 @@ public class StartActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        final Intent blitzoneIntent = new Intent(this, Blitzone.class);
-        blitzoneIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        blitzoneIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        final Intent profileIntent = new Intent(this, Profile.class);
+        profileIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        profileIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         final Intent loginIntent = new Intent(this, LogIn.class);
         loginIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         loginIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -48,7 +48,7 @@ public class StartActivity extends AppCompatActivity {
                         JWTManager jwtManager = new JWTManager(getApplicationContext());
                         jwtManager.setToken(response.getString("token"));
 
-                        startActivity(blitzoneIntent);
+                        startActivity(profileIntent);
                     }
                     catch (JSONException e)
                     {

@@ -1,7 +1,10 @@
 package com.example.bsaraci.blitzone;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
@@ -44,7 +47,7 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.util.ArrayList;
 import java.util.Arrays;
-
+import java.util.List;
 
 
 public class Profile extends AppCompatActivity
@@ -60,9 +63,11 @@ public class Profile extends AppCompatActivity
 
     private static String root = null;
     private static String imageFolderPath = null;
+    private static String galleryFolderPath = null;
     private String imageName = null;
     private static Uri fileUri = null;
     private static final int CAMERA_IMAGE_REQUEST=1;
+    private static final int UPLOAD_FROM_GALLERY = 2;
 
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -121,7 +126,6 @@ public class Profile extends AppCompatActivity
         hlv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                captureImage();
                 Toast.makeText(Profile.this, "You clicked on : " + alName.get(position).toString(), Toast.LENGTH_SHORT).show();
             }
         });
@@ -140,7 +144,7 @@ public class Profile extends AppCompatActivity
 
             imageLoader = RequestQueueSingleton.getInstance(this).getImageLoader();
             imageLoader.get(avatar, ImageLoader.getImageListener(imageView,
-                    R.drawable.blitz_button_selector, R.drawable.like_button_selector));
+                    R.mipmap.ic_profile_avatar,R.mipmap.ic_profile_avatar));
 
             TextView blitzCountView = (TextView) findViewById(R.id.number_of_blitz);
             blitzCountView.setText(blitzCount.toString());
@@ -163,7 +167,6 @@ public class Profile extends AppCompatActivity
                 case CAMERA_IMAGE_REQUEST:
 
                     Bitmap bitmap = null;
-                    Bitmap bitmap1 = null;
                     try {
                         GetImageThumbnail getImageThumbnail = new GetImageThumbnail();
                         bitmap = getImageThumbnail.getThumbnail(fileUri, this);
@@ -179,7 +182,6 @@ public class Profile extends AppCompatActivity
                     }
 
                     // Setting image image icon on the imageview
-
                     ImageView imageView = (ImageView) this.findViewById(R.id.profile_picture);
                     imageView.setImageBitmap(bitmap);
 
@@ -188,10 +190,36 @@ public class Profile extends AppCompatActivity
 
                     break;
 
-                default:
-                    Toast.makeText(this, "Something went wrong...",
-                            Toast.LENGTH_SHORT).show();
-                    break;
+                case UPLOAD_FROM_GALLERY :
+
+                    Bitmap bitmap1 = null;
+                    Uri selectedImage = data.getData();
+                    String[] filePathColumn = { MediaStore.Images.Media.DATA };
+
+                    // Get the cursor
+                    Cursor cursor = getContentResolver().query(selectedImage, filePathColumn, null, null, null);
+                    // Move to first row
+                    cursor.moveToFirst();
+
+                    int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                    galleryFolderPath = cursor.getString(columnIndex);
+                    cursor.close();
+
+                    try {
+                        bitmap1 = BitmapFactory.decodeFile(galleryFolderPath);
+
+                  } catch (Exception e1) {
+                    Toast.makeText(this, "Something went wrong", Toast.LENGTH_LONG).show();
+                  }
+
+                    ImageView imageView1 = (ImageView) this.findViewById(R.id.profile_picture);
+                    // Set the Image in ImageView after decoding the String
+                    imageView1.setImageBitmap(bitmap1);
+
+                    PhotoUploadRequest r1 = new PhotoUploadRequest(new JWTManager(getApplicationContext()));
+                    r1.execute(bitmap1);
+
+                break;
             }
 
         }
@@ -224,9 +252,24 @@ public class Profile extends AppCompatActivity
 
     }
 
+    public void chooseImageFromGallery(){
+        // Create intent to Open Image applications like Gallery, Google Photos
+        Intent galleryIntent = new Intent(Intent.ACTION_PICK,
+                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        // Start the Intent
+        startActivityForResult(galleryIntent, UPLOAD_FROM_GALLERY);
+    }
+
+    public void removeProfilePicture(){
+        ImageView imageView = (ImageView) findViewById(R.id.profile_picture);
+        imageView.setImageResource(R.mipmap.ic_profile_avatar);
+    }
+
     public void blitzoneFromProfileButtonCallback (View view)
     {
-        finish();
+        Intent intent = new Intent(this, Blitzone.class);
+
+        startActivity(intent);
     }
 
     public void notificationsFromProfileButtonCallback (View view)
@@ -239,14 +282,32 @@ public class Profile extends AppCompatActivity
     public void disconnectCallback (View view)
     {
 
-        Intent intent = new Intent(this, LogIn.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder.setMessage("Are you sure you want to log out ?");
 
-        JWTManager jwtManager = new JWTManager(getApplicationContext());
-        jwtManager.delToken();
+        alertDialogBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface arg0, int arg1) {
+                Intent intent = new Intent(Profile.this, LogIn.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
 
-        startActivity(intent);
+                JWTManager jwtManager = new JWTManager(getApplicationContext());
+                jwtManager.delToken();
+
+                startActivity(intent);
+            }
+        });
+
+        alertDialogBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                onResume();
+            }
+        });
+
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
     }
 
     public static class GetImageThumbnail {
@@ -289,22 +350,41 @@ public class Profile extends AppCompatActivity
         }
     }
 
-    public void showFullImage(View view) {
-        String path = (String) view.getTag();
 
-        if (path != null) {
+    public void showAlertDialogWithListview()
+    {
+        List<String> uploadOptions = new ArrayList<String>();
+        uploadOptions.add("Upload from gallery");
+        uploadOptions.add("Take photo");
+        uploadOptions.add("Remove photo");
 
-            Intent intent = new Intent();
-            intent.setAction(Intent.ACTION_VIEW);
-            Uri imgUri = Uri.parse("file://" + path);
-            intent.setDataAndType(imgUri, "image/*");
-            startActivity(intent);
 
-        }
+        //Create sequence of items
+        final CharSequence[] Options = uploadOptions.toArray(new String[uploadOptions.size()]);
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+        dialogBuilder.setTitle("Set a profile photo");
+        dialogBuilder.setItems(Options, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int item) {
+
+                if(item == 0){
+                    chooseImageFromGallery();
+                }
+                else if(item == 1){
+                    captureImage();
+                }
+                else if(item == 2){
+                    removeProfilePicture();
+                }
+            }
+        });
+        //Create alert dialog object via builder
+        AlertDialog alertDialogObject = dialogBuilder.create();
+        //Show the dialog
+        alertDialogObject.show();
     }
 
     public void profilePictureCallback (View view){
-        showFullImage(view);
+        showAlertDialogWithListview();
     }
 }
 

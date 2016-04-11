@@ -33,7 +33,7 @@
     <!--*****************************************************************************-->
 
     <!-- PROFILE -->
-    <string name="toolbar_title_profile">story</string>
+    <string name="toolbar_title_profile">brajansaraci</string>
     <string name="points_profile">0</string>
     <string name="followers_profile">50</string>
     <string name="textBelow_hlv">Test</string>
