@@ -254,8 +254,7 @@ public class Profile extends AppCompatActivity
 
     public void chooseImageFromGallery(){
         // Create intent to Open Image applications like Gallery, Google Photos
-        Intent galleryIntent = new Intent(Intent.ACTION_PICK,
-                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        Intent galleryIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         // Start the Intent
         startActivityForResult(galleryIntent, UPLOAD_FROM_GALLERY);
     }
@@ -279,7 +278,7 @@ public class Profile extends AppCompatActivity
         startActivity(intent);
     }
 
-    public void disconnectCallback (View view)
+    public void disconnectCallback ()
     {
 
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
@@ -354,15 +353,16 @@ public class Profile extends AppCompatActivity
     public void showAlertDialogWithListview()
     {
         List<String> uploadOptions = new ArrayList<String>();
-        uploadOptions.add("Upload from gallery");
+        uploadOptions.add("Upload a photo from gallery");
         uploadOptions.add("Take photo");
         uploadOptions.add("Remove photo");
+        uploadOptions.add("Log out");
 
 
         //Create sequence of items
         final CharSequence[] Options = uploadOptions.toArray(new String[uploadOptions.size()]);
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
-        dialogBuilder.setTitle("Set a profile photo");
+        dialogBuilder.setTitle("Options");
         dialogBuilder.setItems(Options, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int item) {
 
@@ -374,6 +374,9 @@ public class Profile extends AppCompatActivity
                 }
                 else if(item == 2){
                     removeProfilePicture();
+                }
+                else if(item == 3){
+                    disconnectCallback();
                 }
             }
         });
