@@ -1,6 +1,5 @@
 package com.example.bsaraci.blitzone;
 
-import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -92,10 +91,10 @@ public class DailyTabFragment extends Fragment implements SwipeRefreshLayout.OnR
         swipeLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipeContainer);
         swipeLayout.setOnRefreshListener(this);
         swipeLayout.setColorSchemeResources(
-                R.color.orange,
-                R.color.orange,
-                R.color.orange,
-                R.color.orange);
+                R.color.mint,
+                R.color.mint,
+                R.color.mint,
+                R.color.mint);
 
         return view;
 

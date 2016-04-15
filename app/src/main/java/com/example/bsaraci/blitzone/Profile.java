@@ -162,10 +162,7 @@ public class Profile extends AppCompatActivity
         // TODO Auto-generated method stub
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (resultCode == RESULT_OK) {
-
-            switch (requestCode) {
-                case CAMERA_IMAGE_REQUEST:
+        if (resultCode == RESULT_OK && requestCode == CAMERA_IMAGE_REQUEST) {
 
                     Bitmap bitmap = null;
                     try {
@@ -189,39 +186,29 @@ public class Profile extends AppCompatActivity
                     PhotoUploadRequest r = new PhotoUploadRequest(new JWTManager(getApplicationContext()));
                     r.execute(bitmap);
 
-                    break;
+        }
 
-                case UPLOAD_FROM_GALLERY :
+        else if(requestCode == UPLOAD_FROM_GALLERY && resultCode == RESULT_OK && null != data && data.getData() != null){
+            Uri selectedImage = data.getData();
+            Bitmap bitmap1 = null;
 
-                    Bitmap bitmap1 = null;
-                    Uri selectedImage = data.getData();
-                    String[] filePathColumn = { MediaStore.Images.Media.DATA };
+            try {
+                //Getting the Bitmap from Gallery
+                bitmap1 = MediaStore.Images.Media.getBitmap(getContentResolver(), selectedImage);
+                ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+                bitmap1.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
 
-                    // Get the cursor
-                    Cursor cursor = getContentResolver().query(selectedImage, filePathColumn, null, null, null);
-                    // Move to first row
-                    cursor.moveToFirst();
-
-                    int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-                    galleryFolderPath = cursor.getString(columnIndex);
-                    cursor.close();
-
-                    try {
-                        bitmap1 = BitmapFactory.decodeFile(galleryFolderPath);
-
-                  } catch (Exception e1) {
-                    Toast.makeText(this, "Something went wrong", Toast.LENGTH_LONG).show();
-                  }
-
-                    ImageView imageView1 = (ImageView) this.findViewById(R.id.profile_picture);
-                    // Set the Image in ImageView after decoding the String
-                    imageView1.setImageBitmap(bitmap1);
-
-                    PhotoUploadRequest r1 = new PhotoUploadRequest(new JWTManager(getApplicationContext()));
-                    r1.execute(bitmap1);
-
-                break;
+            } catch (IOException e) {
+                e.printStackTrace();
             }
+
+            //Setting the Bitmap to ImageView
+            ImageView imageView1 = (ImageView) this.findViewById(R.id.profile_picture);
+            imageView1.setImageBitmap(bitmap1);
+
+            PhotoUploadRequest r1 = new PhotoUploadRequest(new JWTManager(getApplicationContext()));
+            r1.execute(bitmap1);
+
 
         }
     }
@@ -320,8 +307,7 @@ public class Profile extends AppCompatActivity
                 return k;
         }
 
-        public Bitmap getThumbnail(Uri uri, Context context)
-                throws FileNotFoundException, IOException {
+        public Bitmap getThumbnail(Uri uri, Context context) throws FileNotFoundException, IOException {
             InputStream input = context.getContentResolver().openInputStream(uri);
 
             BitmapFactory.Options onlyBoundsOptions = new BitmapFactory.Options();
@@ -330,8 +316,7 @@ public class Profile extends AppCompatActivity
             onlyBoundsOptions.inPreferredConfig = Bitmap.Config.ARGB_8888;// optional
             BitmapFactory.decodeStream(input, null, onlyBoundsOptions);
             input.close();
-            if ((onlyBoundsOptions.outWidth == -1)
-                    || (onlyBoundsOptions.outHeight == -1))
+            if ((onlyBoundsOptions.outWidth == -1) || (onlyBoundsOptions.outHeight == -1))
                 return null;
 
             int originalSize = (onlyBoundsOptions.outHeight > onlyBoundsOptions.outWidth) ? onlyBoundsOptions.outHeight
