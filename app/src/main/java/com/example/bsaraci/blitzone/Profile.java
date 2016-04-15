@@ -145,10 +145,13 @@ public class Profile extends AppCompatActivity
 
             imageLoader = RequestQueueSingleton.getInstance(this).getImageLoader();
             imageLoader.get(avatar, ImageLoader.getImageListener(imageView,
-                    R.mipmap.ic_profile_avatar,R.mipmap.ic_profile_avatar));
+                    R.mipmap.ic_profile_avatar, R.mipmap.ic_profile_avatar));
 
             TextView blitzCountView = (TextView) findViewById(R.id.number_of_blitz);
             blitzCountView.setText(blitzCount.toString());
+
+            TextView usernameView = (TextView) findViewById(R.id.profileName);
+            usernameView.setText(username);
 
         }
         catch (JSONException e)
@@ -182,7 +185,6 @@ public class Profile extends AppCompatActivity
                     // Setting image image icon on the imageview
                     ImageView imageView = (ImageView) this.findViewById(R.id.profile_picture);
                     imageView.setImageBitmap(bitmap);
-
                     PhotoUploadRequest r = new PhotoUploadRequest(new JWTManager(getApplicationContext()));
                     r.execute(bitmap);
 
@@ -195,8 +197,8 @@ public class Profile extends AppCompatActivity
             try {
                 //Getting the Bitmap from Gallery
                 bitmap1 = MediaStore.Images.Media.getBitmap(getContentResolver(), selectedImage);
-                ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-                bitmap1.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+//                ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+//                bitmap1.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -205,6 +207,7 @@ public class Profile extends AppCompatActivity
             //Setting the Bitmap to ImageView
             ImageView imageView1 = (ImageView) this.findViewById(R.id.profile_picture);
             imageView1.setImageBitmap(bitmap1);
+
 
             PhotoUploadRequest r1 = new PhotoUploadRequest(new JWTManager(getApplicationContext()));
             r1.execute(bitmap1);

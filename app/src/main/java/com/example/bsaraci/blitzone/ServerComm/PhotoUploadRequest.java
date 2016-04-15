@@ -2,6 +2,7 @@ package com.example.bsaraci.blitzone.ServerComm;
 
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -58,18 +59,9 @@ public class PhotoUploadRequest extends AsyncTask<Bitmap, Void, String> {
                         attachmentFileName + "\"" + crlf);
                 request.writeBytes(crlf);
 
-                byte[] pixels = new byte[bitmap.getWidth() * bitmap.getHeight()];
-                for (int i = 0; i < bitmap.getWidth(); ++i) {
-                    for (int j = 0; j < bitmap.getHeight(); ++j) {
-                        //we're interested only in the MSB of the first byte,
-                        //since the other 3 bytes are identical for B&W images
-                        pixels[i + j] = (byte) ((bitmap.getPixel(i, j) & 0x80) >> 7);
-                    }
-                }
-
                 ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
                 bitmap.compress(Bitmap.CompressFormat.PNG, 0, byteArrayOutputStream);
-                pixels = byteArrayOutputStream.toByteArray();
+                byte[] pixels = byteArrayOutputStream.toByteArray();
 
 
                 request.write(pixels);
@@ -77,6 +69,7 @@ public class PhotoUploadRequest extends AsyncTask<Bitmap, Void, String> {
                 request.writeBytes(crlf);
                 request.writeBytes(twoHyphens + boundary +
                         twoHyphens + crlf);
+                Log.i("UploadGallery", "doing it");
 
                 request.flush();
                 request.close();
