@@ -22,7 +22,7 @@
     <!--*****************************************************************************-->
 
     <!-- BLITZONE -->
-    <string name="blitzone_toolbar_title">blitzmade</string>
+    <string name="blitzone_toolbar_title">Blitzmade</string>
     <string name="name_blitzone_row_content">mikelv92</string>
     <string name="points_blitzone_row_content">117</string>
     <string name="name_blitzone_view_content">mikelv92</string>
@@ -41,12 +41,16 @@
     <!--*****************************************************************************-->
 
     <!-- NOTIFICATIONS -->
-    <string name="toolbar_title_notifications">notifications</string>
+    <string name="toolbar_title_notifications">Notifications</string>
     <!--*****************************************************************************-->
 
     <!-- SEARCH -->
-    <string name="toolbar_title_search">search</string>
+    <string name="toolbar_title_search">Search</string>
     <string name="searchHint_search">Search</string>
+    <!--*****************************************************************************-->
+
+    <!-- OPTIONS -->
+    <string name="toolbar_title_options">Options</string>
     <!--*****************************************************************************-->
 
 </resources>

@@ -16,15 +16,15 @@
         android:textSize="20sp"
         android:id="@+id/search_toolbar_title"
         android:textColor="@color/white"
-        android:layout_alignTop="@+id/blitzone_from_search"
+        android:layout_alignBottom="@+id/blitzone_from_search"
         android:layout_centerHorizontal="true"
-        />
+        android:layout_marginBottom="8dp"/>
 
     <ImageButton
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:id="@+id/blitzone_from_search"
-        android:background="@mipmap/ic_blitz"
+        android:background="@mipmap/ic_back"
         android:onClick="blitzoneFromSearchButtonCallback"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"

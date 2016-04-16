@@ -20,8 +20,6 @@ public class Search extends AppCompatActivity
         setContentView(R.layout.search_main);
         searchToolbar = (Toolbar) findViewById(R.id.toolbar_of_search);
         toolbarTitle = (TextView)findViewById(R.id.search_toolbar_title);
-        titleFont= Typeface.createFromAsset(getAssets(), "fonts/AnkePrint.ttf");
-        toolbarTitle.setTypeface(titleFont);
 
     }
 

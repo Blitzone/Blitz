@@ -112,8 +112,6 @@ public class Profile extends AppCompatActivity
 
         profileToolbar = (Toolbar) findViewById(R.id.toolbar_of_profile);
         toolbarTitle = (TextView)findViewById(R.id.profile_toolbar_title);
-        titleFont= Typeface.createFromAsset(getAssets(), "fonts/AnkePrint.ttf");
-        toolbarTitle.setTypeface(titleFont);
 
         alName = new ArrayList<>(Arrays.asList("Old travel throwback", "Travel friend", "Tickets to new adventure"));
 //      Take your won images for your app and give drawable path as below to arraylist
@@ -377,6 +375,13 @@ public class Profile extends AppCompatActivity
 
     public void profilePictureCallback (View view){
         showAlertDialogWithListview();
+    }
+
+    public void optionsCallback (View view){
+
+        Intent intent = new Intent(this, Options.class);
+        startActivity(intent);
+
     }
 }
 

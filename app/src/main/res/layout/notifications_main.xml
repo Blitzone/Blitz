@@ -16,14 +16,15 @@
         android:textSize="20sp"
         android:id="@+id/notifications_toolbar_title"
         android:textColor="@color/white"
-        android:layout_alignTop="@+id/profile_from_notifications"
-        android:layout_centerHorizontal="true" />
+        android:layout_alignBottom="@+id/toolbar_of_notifications"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="15dp"/>
 
     <ImageButton
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:id="@+id/profile_from_notifications"
-        android:background="@mipmap/ic_profile"
+        android:background="@mipmap/ic_back"
         android:onClick="profileFromNotificationsButtonCallback"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
