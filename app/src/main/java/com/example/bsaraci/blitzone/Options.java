@@ -3,7 +3,6 @@ package com.example.bsaraci.blitzone;
 import android.app.ListActivity;
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -15,7 +14,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.TreeSet;
 
-public class Options extends AppCompatActivity implements OnTouchListener{
+public class Options extends ListActivity implements OnTouchListener{
 
     private MyCustomAdapter mAdapter;
 

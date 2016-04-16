@@ -8,8 +8,10 @@
         android:layout_height="50dp"
         android:gravity="center_vertical"
         android:text="text"
+        android:textSize="15sp"
         android:visibility="visible"
         android:layout_width="fill_parent"
+        android:paddingLeft="5dp"
         android:textColor="@color/boldGray"
         android:background="@android:color/transparent" />
 </LinearLayout>
