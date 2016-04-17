@@ -26,20 +26,20 @@ import org.json.JSONObject;
  */
 public class MRequest extends JsonObjectRequest {
     private Map<String, String> headers = new HashMap<String, String>();
-    public final static String IP_ADDRESS = "http://146.148.30.95";
     private JSONObject response;
     private boolean _hasResponse = false;
 
     public MRequest(String url, int method, JSONObject body, Listener listener, ErrorListener errorListener, JWTManager jwtManager)
     {
-        super(method, IP_ADDRESS + url, body, listener, errorListener);
+        super(method, url, body, listener, errorListener);
 
         headers.put("Content-Type", "application/json");
 
-        if (jwtManager._hasToken())
+        if (RequestURL._needsAuth(url) && jwtManager._hasToken())
         {
             headers.put("Authorization", "JWT " + jwtManager.getToken());
         }
+
     }
 
 

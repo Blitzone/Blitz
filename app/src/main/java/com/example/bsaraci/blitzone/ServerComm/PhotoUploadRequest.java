@@ -37,7 +37,7 @@ public class PhotoUploadRequest extends AsyncTask<Bitmap, Void, String> {
             HttpURLConnection httpUrlConnection = null;
             URL url = null;
             try {
-                url = new URL(MRequest.IP_ADDRESS + "/accounts/avatar/");
+                url = new URL(RequestURL.IP_ADDRESS + "/accounts/avatar/");
 
                 httpUrlConnection = (HttpURLConnection) url.openConnection();
                 httpUrlConnection.setUseCaches(false);

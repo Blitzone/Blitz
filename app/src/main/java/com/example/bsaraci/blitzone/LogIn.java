@@ -26,6 +26,7 @@ import com.android.volley.VolleyError;
 import com.example.bsaraci.blitzone.ServerComm.JWTManager;
 import com.example.bsaraci.blitzone.ServerComm.MRequest;
 import com.example.bsaraci.blitzone.ServerComm.RequestQueueSingleton;
+import com.example.bsaraci.blitzone.ServerComm.RequestURL;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -37,7 +38,6 @@ import android.media.session.MediaSession.Token;
 
 
 public class  LogIn  extends AppCompatActivity {
-    private final String loginUrl = "/accounts/login/";
     private EditText username;
     private EditText pass;
     private ProgressBar spinner;
@@ -102,7 +102,7 @@ public class  LogIn  extends AppCompatActivity {
 
             //Put everything in the request
             MRequest mRequest = new MRequest(
-                    loginUrl,
+                    RequestURL.LOGIN,
                     Request.Method.POST,
                     getLoginParams(), //Put the parameters of the request here (JSONObject format)
                     listener,

@@ -1,16 +1,12 @@
 package com.example.bsaraci.blitzone;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -21,6 +17,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.example.bsaraci.blitzone.ServerComm.JWTManager;
 import com.example.bsaraci.blitzone.ServerComm.MRequest;
+import com.example.bsaraci.blitzone.ServerComm.RequestURL;
 import com.example.bsaraci.blitzone.ServerComm.RequestQueueSingleton;
 
 import org.json.JSONException;
@@ -58,10 +55,6 @@ public class SignUp extends AppCompatActivity {
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
 
             //Build the request
-
-            //Url
-            String url = "/accounts/register/";
-
 
             Response.Listener<JSONObject> listener = new Response.Listener<JSONObject>() {
                 @Override
@@ -111,7 +104,7 @@ public class SignUp extends AppCompatActivity {
             JWTManager jwtManager = new JWTManager(getApplicationContext());
             //Put everything in the request
             MRequest mRequest = new MRequest(
-                    url,
+                    RequestURL.REGISTER,
                     Request.Method.POST,
                     getSignUpParams(), //Put the parameters of the request here (JSONObject format)
                     listener,

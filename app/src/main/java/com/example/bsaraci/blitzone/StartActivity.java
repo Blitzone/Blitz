@@ -12,6 +12,7 @@ import com.android.volley.VolleyError;
 import com.example.bsaraci.blitzone.ServerComm.JWTManager;
 import com.example.bsaraci.blitzone.ServerComm.MRequest;
 import com.example.bsaraci.blitzone.ServerComm.RequestQueueSingleton;
+import com.example.bsaraci.blitzone.ServerComm.RequestURL;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -24,7 +25,6 @@ import java.util.Map;
  * Created by bsaraci on 4/3/2016.
  */
 public class StartActivity extends AppCompatActivity {
-    private final String verifyTokenUrl = "/accounts/verifyToken/";
 
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -72,7 +72,7 @@ public class StartActivity extends AppCompatActivity {
         JWTManager jwtManager = new JWTManager(getApplicationContext());
 
         MRequest mRequest = new MRequest(
-                verifyTokenUrl,
+                RequestURL.VERIFY_TOKEN,
                 Request.Method.POST,
                 getVerifyTokenParams(),
                 listener,

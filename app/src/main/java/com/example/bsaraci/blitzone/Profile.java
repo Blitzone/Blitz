@@ -34,6 +34,7 @@ import com.example.bsaraci.blitzone.ServerComm.JWTManager;
 import com.example.bsaraci.blitzone.ServerComm.MRequest;
 import com.example.bsaraci.blitzone.ServerComm.PhotoUploadRequest;
 import com.example.bsaraci.blitzone.ServerComm.RequestQueueSingleton;
+import com.example.bsaraci.blitzone.ServerComm.RequestURL;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -75,8 +76,6 @@ public class Profile extends AppCompatActivity
         setContentView(R.layout.profile_main);
 
 
-        String url = "/accounts/profile/";
-
         Response.Listener<JSONObject> listener = new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response)
@@ -99,7 +98,7 @@ public class Profile extends AppCompatActivity
         JWTManager jwtManager = new JWTManager(getApplicationContext());
         //Put everything in the request
         MRequest mRequest = new MRequest(
-                url,
+                RequestURL.PROFILE,
                 Request.Method.GET,
                 null, //Put the parameters of the request here (JSONObject format)
                 listener,
@@ -138,7 +137,7 @@ public class Profile extends AppCompatActivity
             String username = response.get("user").toString();
             Boolean isBanned = response.get("is_banned").toString().equals("true");
             Integer blitzCount = (Integer)response.get("blitzCount");
-            String avatar = MRequest.IP_ADDRESS + response.get("avatar").toString();
+            String avatar = RequestURL.IP_ADDRESS + response.get("avatar").toString();
 
             final ImageView imageView = (ImageView) this.findViewById(R.id.profile_picture);
             ImageLoader imageLoader;
