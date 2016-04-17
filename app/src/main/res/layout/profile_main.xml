@@ -22,8 +22,9 @@
         android:textSize="20sp"
         android:id="@+id/profile_toolbar_title"
         android:textColor="@color/white"
-        android:layout_alignTop="@+id/blitzone_from_profile"
-        android:layout_centerHorizontal="true" />
+        android:layout_alignBottom="@+id/blitzone_from_profile"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="8dp"/>
 
     <ImageButton
         android:layout_width="40dp"
@@ -150,7 +151,8 @@
         android:background="@mipmap/ic_options_icon"
         android:layout_alignTop="@+id/divider2"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:onClick="optionsCallback"/>
 
     <ImageButton
         android:layout_width="45dp"

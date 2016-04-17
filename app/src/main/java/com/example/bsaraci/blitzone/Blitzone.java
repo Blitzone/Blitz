@@ -32,8 +32,6 @@ public class Blitzone extends AppCompatActivity
         setContentView(R.layout.blitzone_main);
         blitzoneToolbar = (Toolbar) findViewById(R.id.toolbar_of_blitzone);
         toolbarTitle = (TextView)findViewById(R.id.blitzone_toolbar_title);
-        titleFont=Typeface.createFromAsset(getAssets(),"fonts/AnkePrint.ttf");
-        toolbarTitle.setTypeface(titleFont);
 
         tabLayout = (SlidingTabLayout) findViewById(R.id.tabs);
         viewPager = (ViewPager) findViewById(R.id.viewpager);

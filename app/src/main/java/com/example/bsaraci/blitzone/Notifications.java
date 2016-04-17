@@ -20,8 +20,6 @@ public class Notifications extends AppCompatActivity
         setContentView(R.layout.notifications_main);
         notificationsToolbar = (Toolbar) findViewById(R.id.toolbar_of_notifications);
         toolbarTitle = (TextView)findViewById(R.id.notifications_toolbar_title);
-        titleFont= Typeface.createFromAsset(getAssets(), "fonts/AnkePrint.ttf");
-        toolbarTitle.setTypeface(titleFont);
 
     }
 
