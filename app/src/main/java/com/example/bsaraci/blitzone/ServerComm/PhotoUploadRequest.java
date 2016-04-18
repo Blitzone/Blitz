@@ -21,7 +21,7 @@ import java.net.URL;
  */
 public class PhotoUploadRequest extends AsyncTask<Bitmap, Void, String> {
     private static String attachmentName = "filedata";
-    private static String attachmentFileName = "image.bmp";
+    private static String attachmentFileName = "image.png";
     private static String crlf = "\r\n";
     private static String twoHyphens = "--";
     private static String boundary = "*****";
@@ -33,6 +33,7 @@ public class PhotoUploadRequest extends AsyncTask<Bitmap, Void, String> {
     }
 
     protected String doInBackground(Bitmap... bitmapSet) {
+        String response = null;
         for (Bitmap bitmap : bitmapSet) {
             HttpURLConnection httpUrlConnection = null;
             URL url = null;
@@ -69,12 +70,15 @@ public class PhotoUploadRequest extends AsyncTask<Bitmap, Void, String> {
                 request.writeBytes(crlf);
                 request.writeBytes(twoHyphens + boundary +
                         twoHyphens + crlf);
-                Log.i("UploadGallery", "doing it");
-
                 request.flush();
                 request.close();
 
+                int responseCode = httpUrlConnection.getResponseCode();
+                Log.i("Response", "" + responseCode);
+                //TODO
+                //if (responseCode == HttpURLConnection.HTTP_ENTITY_TOO_LARGE)
 
+/*
                 InputStream responseStream = new
                         BufferedInputStream(httpUrlConnection.getInputStream());
 
@@ -89,9 +93,11 @@ public class PhotoUploadRequest extends AsyncTask<Bitmap, Void, String> {
                 }
                 responseStreamReader.close();
 
-                String response = stringBuilder.toString();
+                response = stringBuilder.toString();
                 responseStream.close();
                 httpUrlConnection.disconnect();
+                Log.i("UploadGallery", "did it");
+*/
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -99,7 +105,7 @@ public class PhotoUploadRequest extends AsyncTask<Bitmap, Void, String> {
 
         }
 
-        return "hey";
+        return response;
 
     }
 }
