@@ -2,43 +2,46 @@ package com.example.bsaraci.blitzone.ServerComm;
 
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
-import android.util.Log;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
 import java.net.URL;
 
 /**
  * Created by mikel on 4/10/16.
  */
-public class PhotoUploadRequest extends AsyncTask<Bitmap, Void, String> {
+public class PhotoUploadRequest extends AsyncTask<Bitmap, Void, Integer> {
     private static String attachmentName = "filedata";
-    private static String attachmentFileName = "image.png";
+    private static String attachmentFileName = "image.png"; //TODO get the real image name here
     private static String crlf = "\r\n";
     private static String twoHyphens = "--";
     private static String boundary = "*****";
+
+    private String urlAddress;
     private JWTManager jwtManager;
 
-    public PhotoUploadRequest(JWTManager jwtManager)
+    public PhotoUploadResponse delegate = null;
+
+    public PhotoUploadRequest(String urlAddress, JWTManager jwtManager, PhotoUploadResponse delegate)
     {
+        this.urlAddress = urlAddress;
         this.jwtManager = jwtManager;
+        this.delegate = delegate;
     }
 
-    protected String doInBackground(Bitmap... bitmapSet) {
-        String response = null;
+    @Override
+    protected void onPostExecute(Integer responseCode) {
+        delegate.uploadFinishedCallback(responseCode);
+    }
+
+    protected Integer doInBackground(Bitmap... bitmapSet) {
+        Integer responseCode = 0;
         for (Bitmap bitmap : bitmapSet) {
             HttpURLConnection httpUrlConnection = null;
             URL url = null;
             try {
-                url = new URL(RequestURL.IP_ADDRESS + "/accounts/avatar/");
+                url = new URL(this.urlAddress);
 
                 httpUrlConnection = (HttpURLConnection) url.openConnection();
                 httpUrlConnection.setUseCaches(false);
@@ -49,7 +52,10 @@ public class PhotoUploadRequest extends AsyncTask<Bitmap, Void, String> {
                 httpUrlConnection.setRequestProperty("Cache-Control", "no-cache");
                 httpUrlConnection.setRequestProperty(
                         "Content-Type", "multipart/form-data;boundary=" + boundary);
-                httpUrlConnection.setRequestProperty("Authorization", "JWT " + jwtManager.getToken());
+                if (RequestURL._needsAuth(this.urlAddress) && this.jwtManager._hasToken())
+                {
+                    httpUrlConnection.setRequestProperty("Authorization", "JWT " + jwtManager.getToken());
+                }
 
                 DataOutputStream request = new DataOutputStream(
                         httpUrlConnection.getOutputStream());
@@ -73,31 +79,7 @@ public class PhotoUploadRequest extends AsyncTask<Bitmap, Void, String> {
                 request.flush();
                 request.close();
 
-                int responseCode = httpUrlConnection.getResponseCode();
-                Log.i("Response", "" + responseCode);
-                //TODO
-                //if (responseCode == HttpURLConnection.HTTP_ENTITY_TOO_LARGE)
-
-/*
-                InputStream responseStream = new
-                        BufferedInputStream(httpUrlConnection.getInputStream());
-
-                BufferedReader responseStreamReader =
-                        new BufferedReader(new InputStreamReader(responseStream));
-
-                String line = "";
-                StringBuilder stringBuilder = new StringBuilder();
-
-                while ((line = responseStreamReader.readLine()) != null) {
-                    stringBuilder.append(line).append("\n");
-                }
-                responseStreamReader.close();
-
-                response = stringBuilder.toString();
-                responseStream.close();
-                httpUrlConnection.disconnect();
-                Log.i("UploadGallery", "did it");
-*/
+                responseCode = httpUrlConnection.getResponseCode();
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -105,7 +87,7 @@ public class PhotoUploadRequest extends AsyncTask<Bitmap, Void, String> {
 
         }
 
-        return response;
+        return responseCode;
 
     }
 }

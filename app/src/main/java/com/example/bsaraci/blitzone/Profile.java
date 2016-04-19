@@ -33,6 +33,7 @@ import com.example.bsaraci.blitzone.HLV.HorizontalListView;
 import com.example.bsaraci.blitzone.ServerComm.JWTManager;
 import com.example.bsaraci.blitzone.ServerComm.MRequest;
 import com.example.bsaraci.blitzone.ServerComm.PhotoUploadRequest;
+import com.example.bsaraci.blitzone.ServerComm.PhotoUploadResponse;
 import com.example.bsaraci.blitzone.ServerComm.RequestQueueSingleton;
 import com.example.bsaraci.blitzone.ServerComm.RequestURL;
 
@@ -75,39 +76,7 @@ public class Profile extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.profile_main);
 
-
-        Response.Listener<JSONObject> listener = new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response)
-            {
-                updateProfile(response);
-            }
-        };
-
-        //Function to be executed in case of an error
-        Response.ErrorListener errorListener = new Response.ErrorListener()
-        {
-
-            @Override
-            public void onErrorResponse(VolleyError error)
-            {
-                Log.e("Error", error.toString());
-            }
-        };
-
-        JWTManager jwtManager = new JWTManager(getApplicationContext());
-        //Put everything in the request
-        MRequest mRequest = new MRequest(
-                RequestURL.PROFILE,
-                Request.Method.GET,
-                null, //Put the parameters of the request here (JSONObject format)
-                listener,
-                errorListener,
-                jwtManager
-        );
-
-        //Send the request to execute
-        RequestQueueSingleton.getInstance(this).addToRequestQueue(mRequest);
+        getProfileData();
 
         profileToolbar = (Toolbar) findViewById(R.id.toolbar_of_profile);
         toolbarTitle = (TextView)findViewById(R.id.profile_toolbar_title);
@@ -130,32 +99,6 @@ public class Profile extends AppCompatActivity
 
     }
 
-    private void updateProfile(JSONObject response) {
-        try {
-            String username = response.get("user").toString();
-            Boolean isBanned = response.get("is_banned").toString().equals("true");
-            Integer blitzCount = (Integer)response.get("blitzCount");
-            String avatar = RequestURL.IP_ADDRESS + response.get("avatar").toString();
-
-            final ImageView imageView = (ImageView) this.findViewById(R.id.profile_picture);
-            ImageLoader imageLoader;
-
-            imageLoader = RequestQueueSingleton.getInstance(this).getImageLoader();
-            imageLoader.get(avatar, ImageLoader.getImageListener(imageView,
-                    R.mipmap.ic_profile_avatar, R.mipmap.ic_profile_avatar));
-
-            TextView blitzCountView = (TextView) findViewById(R.id.number_of_blitz);
-            blitzCountView.setText(blitzCount.toString());
-
-            TextView usernameView = (TextView) findViewById(R.id.profileName);
-            usernameView.setText(username);
-
-        }
-        catch (JSONException e)
-        {
-            e.printStackTrace();
-        }
-    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -182,18 +125,18 @@ public class Profile extends AppCompatActivity
                     // Setting image image icon on the imageview
                     ImageView imageView = (ImageView) this.findViewById(R.id.profile_picture);
                     imageView.setImageBitmap(bitmap);
-                    PhotoUploadRequest r = new PhotoUploadRequest(new JWTManager(getApplicationContext()));
-                    r.execute(bitmap);
+
+                    uploadPicture(bitmap);
 
         }
 
         else if(requestCode == UPLOAD_FROM_GALLERY && resultCode == RESULT_OK && null != data && data.getData() != null){
             Uri selectedImage = data.getData();
-            Bitmap bitmap1 = null;
+            Bitmap bitmap = null;
 
             try {
                 //Getting the Bitmap from Gallery
-                bitmap1 = MediaStore.Images.Media.getBitmap(getContentResolver(), selectedImage);
+                bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), selectedImage);
 //                ByteArrayOutputStream bytes = new ByteArrayOutputStream();
 //                bitmap1.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
 
@@ -203,14 +146,34 @@ public class Profile extends AppCompatActivity
 
             //Setting the Bitmap to ImageView
             ImageView imageView1 = (ImageView) this.findViewById(R.id.profile_picture);
-            imageView1.setImageBitmap(bitmap1);
+            imageView1.setImageBitmap(bitmap);
 
 
-            PhotoUploadRequest r1 = new PhotoUploadRequest(new JWTManager(getApplicationContext()));
-            r1.execute(bitmap1);
-
+            uploadPicture(bitmap);
 
         }
+    }
+
+    private void uploadPicture(Bitmap bitmap) {
+        PhotoUploadRequest r = new PhotoUploadRequest(
+                RequestURL.AVATAR,
+                new JWTManager(getApplicationContext()),
+                new PhotoUploadResponse() {
+                    @Override
+                    public void uploadFinishedCallback(Integer responseCode) {
+                        if (responseCode == HttpURLConnection.HTTP_ENTITY_TOO_LARGE)
+                        {
+                            Toast.makeText(Profile.this, "Photo size is too big.", Toast.LENGTH_SHORT).show();
+                        }
+                        else if (responseCode == HttpURLConnection.HTTP_OK)
+                        {
+                            Toast.makeText(Profile.this, "Upload complete.", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }
+
+        );
+        r.execute(bitmap);
     }
 
     public void captureImage() {
@@ -296,6 +259,72 @@ public class Profile extends AppCompatActivity
         AlertDialog alertDialog = alertDialogBuilder.create();
         alertDialog.show();
     }
+
+    public void getProfileData() {
+
+        Response.Listener<JSONObject> listener = new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response)
+            {
+                updateProfile(response);
+            }
+        };
+
+        //Function to be executed in case of an error
+        Response.ErrorListener errorListener = new Response.ErrorListener()
+        {
+
+            @Override
+            public void onErrorResponse(VolleyError error)
+            {
+                Log.e("Error", error.toString());
+            }
+        };
+
+        JWTManager jwtManager = new JWTManager(getApplicationContext());
+        //Put everything in the request
+        MRequest mRequest = new MRequest(
+                RequestURL.PROFILE,
+                Request.Method.GET,
+                null, //Put the parameters of the request here (JSONObject format)
+                listener,
+                errorListener,
+                jwtManager
+        );
+
+        //Send the request to execute
+        RequestQueueSingleton.getInstance(this).addToRequestQueue(mRequest);
+
+
+    }
+
+    private void updateProfile(JSONObject response) {
+        try {
+            String username = response.get("user").toString();
+            Boolean isBanned = response.get("is_banned").toString().equals("true");
+            Integer blitzCount = (Integer)response.get("blitzCount");
+            String avatar = RequestURL.IP_ADDRESS + response.get("avatar").toString();
+
+            final ImageView imageView = (ImageView) this.findViewById(R.id.profile_picture);
+            ImageLoader imageLoader;
+
+            imageLoader = RequestQueueSingleton.getInstance(this).getImageLoader();
+            imageLoader.get(avatar, ImageLoader.getImageListener(imageView,
+                    R.mipmap.ic_profile_avatar, R.mipmap.ic_profile_avatar));
+
+            TextView blitzCountView = (TextView) findViewById(R.id.number_of_blitz);
+            blitzCountView.setText(blitzCount.toString());
+
+            TextView usernameView = (TextView) findViewById(R.id.profileName);
+            usernameView.setText(username);
+
+        }
+        catch (JSONException e)
+        {
+            e.printStackTrace();
+        }
+    }
+
 
     public static class GetImageThumbnail {
 
