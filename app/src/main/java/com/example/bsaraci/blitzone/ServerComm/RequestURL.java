@@ -12,17 +12,19 @@ public class RequestURL {
     public static final String VERIFY_TOKEN = IP_ADDRESS + "/accounts/verifyToken/";
     public static final String AVATAR       = IP_ADDRESS + "/accounts/avatar/";
     public static final String PROFILE      = IP_ADDRESS + "/accounts/profile/";
+    public static final String USER_CHAPTER = IP_ADDRESS + "/images/userChapter/";
 
     public static boolean _needsAuth(String url)
     {
         switch(url) {
-            case REGISTER: return false;
-            case LOGIN: return false;
-            case VERIFY_TOKEN: return true;
-            case AVATAR: return true;
-            case PROFILE: return true;
+            case REGISTER:      return false;
+            case LOGIN:         return false;
+            case VERIFY_TOKEN:  return true;
+            case AVATAR:        return true;
+            case PROFILE:       return true;
+            case USER_CHAPTER:  return true;
 
-            default: return false;
+            default:            return false;
         }
     }
 

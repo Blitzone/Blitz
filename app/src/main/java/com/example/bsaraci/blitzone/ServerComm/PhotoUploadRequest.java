@@ -3,6 +3,8 @@ package com.example.bsaraci.blitzone.ServerComm;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 
+import org.json.JSONObject;
+
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.net.HttpURLConnection;
@@ -20,14 +22,17 @@ public class PhotoUploadRequest extends AsyncTask<Bitmap, Void, Integer> {
 
     private String urlAddress;
     private JWTManager jwtManager;
+    private JSONObject params;
 
     public PhotoUploadResponse delegate = null;
 
-    public PhotoUploadRequest(String urlAddress, JWTManager jwtManager, PhotoUploadResponse delegate)
+    public PhotoUploadRequest(String urlAddress, JWTManager jwtManager, PhotoUploadResponse delegate, JSONObject params)
     {
+        //this.urlAddress = urlAddress;
         this.urlAddress = urlAddress;
         this.jwtManager = jwtManager;
         this.delegate = delegate;
+        this.params = params;
     }
 
     @Override
@@ -59,6 +64,18 @@ public class PhotoUploadRequest extends AsyncTask<Bitmap, Void, Integer> {
 
                 DataOutputStream request = new DataOutputStream(
                         httpUrlConnection.getOutputStream());
+                if (params != null)
+                {
+                    //TODO implement a _needsParams?
+                    request.writeBytes(twoHyphens + boundary + crlf);
+
+                    request.writeBytes("Content-Disposition: form-data; name=\"params\"" + crlf);
+                    //dos.writeBytes("Content-Type: text/plain; charset=UTF-8" + lineEnd);
+                    //dos.writeBytes("Content-Length: " + name.length() + lineEnd);
+                    request.writeBytes(crlf);
+                    request.writeBytes(params.toString()); // mobile_no is String variable
+                    request.writeBytes(crlf);
+                }
 
                 request.writeBytes(twoHyphens + boundary + crlf);
                 request.writeBytes("Content-Disposition: form-data; name=\"" +
@@ -72,6 +89,7 @@ public class PhotoUploadRequest extends AsyncTask<Bitmap, Void, Integer> {
 
 
                 request.write(pixels);
+
 
                 request.writeBytes(crlf);
                 request.writeBytes(twoHyphens + boundary +

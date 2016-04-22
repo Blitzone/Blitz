@@ -170,8 +170,8 @@ public class Profile extends AppCompatActivity
                             Toast.makeText(Profile.this, "Upload complete.", Toast.LENGTH_SHORT).show();
                         }
                     }
-                }
-
+                },
+                null
         );
         r.execute(bitmap);
     }
