@@ -14,6 +14,7 @@ public class RequestURL {
     public static final String PROFILE      = IP_ADDRESS + "/accounts/profile/";
     public static final String USER_CHAPTER = IP_ADDRESS + "/images/userChapter/";
     public static final String TOPIC        = IP_ADDRESS + "/images/topic/";
+    public static final String CHAPTERS     = IP_ADDRESS + "/images/chapters/";
 
     public static boolean _needsAuth(String url)
     {
@@ -25,6 +26,7 @@ public class RequestURL {
             case PROFILE:       return true;
             case USER_CHAPTER:  return true;
             case TOPIC:         return false;
+            case CHAPTERS:      return false;
             default:            return false;
         }
     }

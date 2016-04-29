@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -14,23 +13,21 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
-import com.android.volley.toolbox.ImageRequest;
 import com.example.bsaraci.blitzone.HLV.HLVAdapter;
 import com.example.bsaraci.blitzone.HLV.HorizontalListView;
 import com.example.bsaraci.blitzone.ServerComm.JWTManager;
@@ -40,11 +37,11 @@ import com.example.bsaraci.blitzone.ServerComm.PhotoUploadResponse;
 import com.example.bsaraci.blitzone.ServerComm.RequestQueueSingleton;
 import com.example.bsaraci.blitzone.ServerComm.RequestURL;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -52,8 +49,9 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 public class Profile extends AppCompatActivity
@@ -62,8 +60,9 @@ public class Profile extends AppCompatActivity
     private HorizontalListView hlv;
     private HLVAdapter hlvAdapter;
 
-    ArrayList<String> alName;
-    ArrayList<Bitmap> alImage;
+    ArrayList<String> chapter;
+    ArrayList<Bitmap> photoChapter;
+    private Integer topicId;
     TextView toolbarTitle;
     Typeface titleFont;
 
@@ -86,22 +85,15 @@ public class Profile extends AppCompatActivity
         profileToolbar = (Toolbar) findViewById(R.id.toolbar_of_profile);
         toolbarTitle = (TextView)findViewById(R.id.profile_toolbar_title);
 
-        alName = new ArrayList<>(Arrays.asList("Old travel throwback", "Travel friend", "Tickets to new adventure"));
-//      Take your won images for your app and give drawable path as below to arraylist
-        Bitmap bitmap1= BitmapFactory.decodeResource(this.getResources(),R.color.mint);
-        Bitmap bitmap2= BitmapFactory.decodeResource(this.getResources(),R.color.mint);
-        Bitmap bitmap3= BitmapFactory.decodeResource(this.getResources(),R.color.mint);
-        alImage = new ArrayList<>(Arrays.asList(bitmap1, bitmap2, bitmap3));
-
         hlv = (HorizontalListView) findViewById(R.id.hlvProfile);
-        hlvAdapter = new HLVAdapter(Profile.this, alName, alImage);
+        hlvAdapter = new HLVAdapter(Profile.this, chapter, photoChapter);
         hlv.setAdapter(hlvAdapter);
 
         hlv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 captureImage();
-                Toast.makeText(Profile.this, "You clicked on : " + alName.get(position).toString(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(Profile.this, "You clicked on : " + chapter.get(position).toString(), Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -153,8 +145,8 @@ public class Profile extends AppCompatActivity
             }
 
             //Setting the Bitmap to ImageView
-            alImage.remove(0);
-            alImage.add(0, bitmap);
+            photoChapter.remove(0);
+            photoChapter.add(0, bitmap);
             ImageView imageView1 = (ImageView) this.findViewById(R.id.profile_picture);
             imageView1.setImageBitmap(bitmap);
 
@@ -305,7 +297,33 @@ public class Profile extends AppCompatActivity
         //Send the request to execute
         RequestQueueSingleton.getInstance(this).addToRequestQueue(mRequest);
 
+    }
 
+    private void updateProfile(JSONObject response) {
+        try {
+            String username = response.get("user").toString();
+            Boolean isBanned = response.get("is_banned").toString().equals("true");
+            Integer blitzCount = (Integer)response.get("blitzCount");
+            String avatar = RequestURL.IP_ADDRESS + response.get("avatar").toString();
+
+            final ImageView imageView = (ImageView) this.findViewById(R.id.profile_picture);
+            ImageLoader imageLoader;
+
+            imageLoader = RequestQueueSingleton.getInstance(this).getImageLoader();
+            imageLoader.get(avatar, ImageLoader.getImageListener(imageView,
+                    R.mipmap.ic_profile_avatar, R.mipmap.ic_profile_avatar));
+
+            TextView blitzCountView = (TextView) findViewById(R.id.number_of_blitz);
+            blitzCountView.setText(blitzCount.toString());
+
+            TextView usernameView = (TextView) findViewById(R.id.profileName);
+            usernameView.setText(username);
+
+        }
+        catch (JSONException e)
+        {
+            e.printStackTrace();
+        }
     }
 
     private void getTopic(){
@@ -346,7 +364,7 @@ public class Profile extends AppCompatActivity
     private void updateTopic (JSONObject response) {
         try {
             String topic = response.get("name").toString();
-            Log.i("topic",topic);
+            topicId = (Integer) response.get("id");
             TextView topicText = (TextView)findViewById(R.id.profile_toolbar_title);
             topicText.setText(topic);
         }
@@ -356,31 +374,70 @@ public class Profile extends AppCompatActivity
         }
     }
 
-    private void updateProfile(JSONObject response) {
+    private void getChapter(){
+
+        Response.Listener<JSONObject> listener = new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response)
+            {
+                updateChapter(response);
+            }
+        };
+
+        //Function to be executed in case of an error
+        Response.ErrorListener errorListener = new Response.ErrorListener()
+        {
+
+            @Override
+            public void onErrorResponse(VolleyError error)
+            {
+                Log.e("Error", error.toString());
+            }
+        };
+
+        JWTManager jwtManager = new JWTManager(getApplicationContext());
+        //Put everything in the request
+        MRequest mRequest = new MRequest(
+                RequestURL.CHAPTERS,
+                Request.Method.GET,
+                getChaptersParams(), //Put the parameters of the request here (JSONObject format)
+                listener,
+                errorListener,
+                jwtManager
+        );
+
+        RequestQueueSingleton.getInstance(this).addToRequestQueue(mRequest);
+    }
+
+    private void updateChapter(JSONObject response){
         try {
-            String username = response.get("user").toString();
-            Boolean isBanned = response.get("is_banned").toString().equals("true");
-            Integer blitzCount = (Integer)response.get("blitzCount");
-            String avatar = RequestURL.IP_ADDRESS + response.get("avatar").toString();
+            chapter = new ArrayList<>();
+            Bitmap bitmap1= BitmapFactory.decodeResource(this.getResources(),R.color.mint);
+            Bitmap bitmap2= BitmapFactory.decodeResource(this.getResources(),R.color.mint);
+            Bitmap bitmap3= BitmapFactory.decodeResource(this.getResources(),R.color.mint);
+            photoChapter = new ArrayList<>(Arrays.asList(bitmap1, bitmap2, bitmap3));
 
-            final ImageView imageView = (ImageView) this.findViewById(R.id.profile_picture);
-            ImageLoader imageLoader;
+            JSONArray chapterList = (JSONArray)response.get("chapters");
+            int chapterListSize = chapterList.length();
 
-            imageLoader = RequestQueueSingleton.getInstance(this).getImageLoader();
-            imageLoader.get(avatar, ImageLoader.getImageListener(imageView,
-                    R.mipmap.ic_profile_avatar, R.mipmap.ic_profile_avatar));
-
-            TextView blitzCountView = (TextView) findViewById(R.id.number_of_blitz);
-            blitzCountView.setText(blitzCount.toString());
-
-            TextView usernameView = (TextView) findViewById(R.id.profileName);
-            usernameView.setText(username);
-
+            for(int i = 0; i<chapterListSize; i++){
+                JSONObject jsonChapter = (JSONObject) chapterList.get(i);
+                chapter.add(i, jsonChapter.get("name").toString());
+                Log.i("chapter", jsonChapter.get("name").toString());
+            }
         }
         catch (JSONException e)
         {
             e.printStackTrace();
         }
+    }
+
+    private JSONObject getChaptersParams()
+    {
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("topic",  topicId.toString());
+
+        return new JSONObject(params);
     }
 
 
