@@ -27,7 +27,8 @@
                 android:layout_height="match_parent"
                 android:layout_above="@+id/photo_chapter"
                 android:layout_centerHorizontal="true"
-                android:src="@color/lightGray"/>
+                android:src="@color/mint"
+                android:scaleType="centerCrop"/>
 
             <TextView
                 android:id="@+id/photo_chapter"

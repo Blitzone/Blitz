@@ -64,15 +64,7 @@ public class Blitzone extends AppCompatActivity
         finish();
     }
 
-    public void sendBlitzCallback(View view)
-    {
-        enableBlitz();
-    }
 
-    public void enableBlitz()
-    {
-        ImageButton button = (ImageButton)findViewById(R.id.blitzButton);
-    }
 
 
 }

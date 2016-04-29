@@ -1,6 +1,7 @@
 package com.example.bsaraci.blitzone.HLV;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,9 +19,9 @@ public class HLVAdapter extends BaseAdapter {
     private Context context;
 
     ArrayList<String> alName;
-    ArrayList<Integer> alImage;
+    ArrayList<Bitmap> alImage;
 
-    public HLVAdapter(Context context, ArrayList<String> alName, ArrayList<Integer> alImage) {
+    public HLVAdapter(Context context, ArrayList<String> alName, ArrayList<Bitmap> alImage) {
 
         mInflater = LayoutInflater.from(context);
         this.context = context;
@@ -59,7 +60,7 @@ public class HLVAdapter extends BaseAdapter {
         }
 
         holder.tvSpecies.setText(alName.get(position));
-        holder.imgThumbnail.setImageResource(alImage.get(position));
+        holder.imgThumbnail.setImageBitmap(alImage.get(position));
         return view;
     }
 

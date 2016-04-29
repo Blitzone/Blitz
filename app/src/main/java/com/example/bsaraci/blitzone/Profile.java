@@ -7,7 +7,10 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.graphics.Typeface;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -49,6 +52,7 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 
@@ -59,7 +63,7 @@ public class Profile extends AppCompatActivity
     private HLVAdapter hlvAdapter;
 
     ArrayList<String> alName;
-    ArrayList<Integer> alImage;
+    ArrayList<Bitmap> alImage;
     TextView toolbarTitle;
     Typeface titleFont;
 
@@ -83,7 +87,10 @@ public class Profile extends AppCompatActivity
 
         alName = new ArrayList<>(Arrays.asList("Old travel throwback", "Travel friend", "Tickets to new adventure"));
 //      Take your won images for your app and give drawable path as below to arraylist
-        alImage = new ArrayList<>(Arrays.asList(R.color.lightGray, R.color.lightGray, R.color.lightGray));
+        Bitmap bitmap1= BitmapFactory.decodeResource(this.getResources(),R.color.mint);
+        Bitmap bitmap2= BitmapFactory.decodeResource(this.getResources(),R.color.mint);
+        Bitmap bitmap3= BitmapFactory.decodeResource(this.getResources(),R.color.mint);
+        alImage = new ArrayList<>(Arrays.asList(bitmap1, bitmap2, bitmap3));
 
         hlv = (HorizontalListView) findViewById(R.id.hlvProfile);
         hlvAdapter = new HLVAdapter(Profile.this, alName, alImage);
@@ -145,6 +152,8 @@ public class Profile extends AppCompatActivity
             }
 
             //Setting the Bitmap to ImageView
+            alImage.remove(0);
+            alImage.add(0, bitmap);
             ImageView imageView1 = (ImageView) this.findViewById(R.id.profile_picture);
             imageView1.setImageBitmap(bitmap);
 
@@ -260,7 +269,7 @@ public class Profile extends AppCompatActivity
         alertDialog.show();
     }
 
-    public void getProfileData() {
+    private void getProfileData() {
 
         Response.Listener<JSONObject> listener = new Response.Listener<JSONObject>() {
             @Override
@@ -296,6 +305,54 @@ public class Profile extends AppCompatActivity
         RequestQueueSingleton.getInstance(this).addToRequestQueue(mRequest);
 
 
+    }
+
+    private void getTopic(){
+        Response.Listener<JSONObject> listener = new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response)
+            {
+                updateTopic(response);
+            }
+        };
+
+        //Function to be executed in case of an error
+        Response.ErrorListener errorListener = new Response.ErrorListener()
+        {
+
+            @Override
+            public void onErrorResponse(VolleyError error)
+            {
+                Log.e("Error", error.toString());
+            }
+        };
+
+        JWTManager jwtManager = new JWTManager(getApplicationContext());
+        //Put everything in the request
+        MRequest mRequest = new MRequest(
+                RequestURL.TOPIC,
+                Request.Method.GET,
+                null, //Put the parameters of the request here (JSONObject format)
+                listener,
+                errorListener,
+                jwtManager
+        );
+
+        RequestQueueSingleton.getInstance(this).addToRequestQueue(mRequest);
+
+    }
+
+    private void updateTopic (JSONObject response) {
+        try {
+            String topic = response.get("name").toString();
+            Log.i("topic",topic);
+            TextView topicText = (TextView)findViewById(R.id.profile_toolbar_title);
+            topicText.setText(topic);
+        }
+        catch (JSONException e)
+        {
+            e.printStackTrace();
+        }
     }
 
     private void updateProfile(JSONObject response) {
@@ -411,5 +468,31 @@ public class Profile extends AppCompatActivity
         startActivity(intent);
 
     }
+
+
+
+    public static Bitmap drawableToBitmap (Drawable drawable) {
+        Bitmap bitmap = null;
+
+        if (drawable instanceof BitmapDrawable) {
+            BitmapDrawable bitmapDrawable = (BitmapDrawable) drawable;
+            if(bitmapDrawable.getBitmap() != null) {
+                return bitmapDrawable.getBitmap();
+            }
+        }
+
+        if(drawable.getIntrinsicWidth() <= 0 || drawable.getIntrinsicHeight() <= 0) {
+            bitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888); // Single color bitmap will be created of 1x1 pixel
+        } else {
+            bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        }
+
+        Canvas canvas = new Canvas(bitmap);
+        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+        drawable.draw(canvas);
+        return bitmap;
+    }
+
+
 }
 
