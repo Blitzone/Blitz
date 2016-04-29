@@ -81,6 +81,7 @@ public class Profile extends AppCompatActivity
         setContentView(R.layout.profile_main);
 
         getProfileData();
+        getTopic();
 
         profileToolbar = (Toolbar) findViewById(R.id.toolbar_of_profile);
         toolbarTitle = (TextView)findViewById(R.id.profile_toolbar_title);
