@@ -19,7 +19,6 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -60,7 +59,7 @@ public class Profile extends AppCompatActivity
     private HorizontalListView hlv;
     private HLVAdapter hlvAdapter;
 
-    ArrayList<String> chapter;
+    ArrayList<String> chapters;
     ArrayList<Bitmap> photoChapter;
     private Integer topicId;
     TextView toolbarTitle;
@@ -81,23 +80,9 @@ public class Profile extends AppCompatActivity
 
         getProfileData();
         getTopic();
-        getChapter();
 
         profileToolbar = (Toolbar) findViewById(R.id.toolbar_of_profile);
         toolbarTitle = (TextView)findViewById(R.id.profile_toolbar_title);
-
-        hlv = (HorizontalListView) findViewById(R.id.hlvProfile);
-        hlvAdapter = new HLVAdapter(Profile.this, chapter, photoChapter);
-        hlv.setAdapter(hlvAdapter);
-
-        hlv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                captureImage();
-                Toast.makeText(Profile.this, "You clicked on : " + chapter.get(position).toString(), Toast.LENGTH_SHORT).show();
-            }
-        });
-
     }
 
 
@@ -373,9 +358,10 @@ public class Profile extends AppCompatActivity
         {
             e.printStackTrace();
         }
+        getChapters();
     }
 
-    private void getChapter(){
+    private void getChapters(){
 
         Response.Listener<JSONObject> listener = new Response.Listener<JSONObject>() {
             @Override
@@ -411,8 +397,9 @@ public class Profile extends AppCompatActivity
     }
 
     private void updateChapter(JSONObject response){
+
         try {
-            chapter = new ArrayList<>();
+            chapters = new ArrayList<>();
             Bitmap bitmap1= BitmapFactory.decodeResource(this.getResources(),R.color.mint);
             Bitmap bitmap2= BitmapFactory.decodeResource(this.getResources(),R.color.mint);
             Bitmap bitmap3= BitmapFactory.decodeResource(this.getResources(),R.color.mint);
@@ -423,14 +410,26 @@ public class Profile extends AppCompatActivity
 
             for(int i = 0; i<chapterListSize; i++){
                 JSONObject jsonChapter = (JSONObject) chapterList.get(i);
-                chapter.add(i, jsonChapter.get("name").toString());
-                Log.i("chapter", jsonChapter.get("name").toString());
+                chapters.add(i, jsonChapter.get("name").toString());
+                Log.i("chapters", jsonChapter.get("name").toString());
             }
         }
         catch (JSONException e)
         {
             e.printStackTrace();
         }
+
+        hlv = (HorizontalListView) findViewById(R.id.hlvProfile);
+        hlvAdapter = new HLVAdapter(Profile.this, chapters, photoChapter);
+        hlv.setAdapter(hlvAdapter);
+
+        hlv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                captureImage();
+                Toast.makeText(Profile.this, "You clicked on : " + chapters.get(position).toString(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private JSONObject getChaptersParams()
