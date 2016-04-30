@@ -1,71 +1,148 @@
 package com.example.bsaraci.blitzone.HLV;
 
-import android.content.Context;
-import android.graphics.Bitmap;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.example.bsaraci.blitzone.OnLoadMoreListener;
 import com.example.bsaraci.blitzone.R;
+import com.example.bsaraci.blitzone.viewDataProvider;
 
-import java.util.ArrayList;
+import org.w3c.dom.Text;
 
-public class HLVAdapter extends BaseAdapter {
+import java.util.List;
 
-    private LayoutInflater mInflater;
-    private Context context;
+public class HLVAdapter extends  RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    ArrayList<String> alName;
-    ArrayList<Bitmap> alImage;
+    List<viewDataProvider> list;
+    private final int VIEW_ITEM = 1;
+    private final int VIEW_PROG = 0;
 
-    public HLVAdapter(Context context, ArrayList<String> alName, ArrayList<Bitmap> alImage) {
+    private int visibleThreshold = 10;
+    private int lastVisibleItem, totalItemCount;
+    private boolean loading;
+    private OnLoadMoreListener onLoadMoreListener;
 
-        mInflater = LayoutInflater.from(context);
-        this.context = context;
-        this.alName = alName;
-        this.alImage = alImage;
-    }
+    public HLVAdapter(List<viewDataProvider> list, RecyclerView recyclerView ) {
+        this.list=list;
 
-    @Override
-    public int getCount() {
-        return alName.size();
-    }
+        if(recyclerView.getLayoutManager() instanceof LinearLayoutManager){
+            final LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+            recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                @Override
+                public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                    super.onScrolled(recyclerView, dx, dy);
 
-    @Override
-    public Object getItem(int position) {
-        return alName.get(position);
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return position;
-    }
-
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        View view;
-        ViewHolder holder;
-        if (convertView == null) {
-            view = mInflater.inflate(R.layout.hlv_inflate, parent, false);
-            holder = new ViewHolder();
-            holder.imgThumbnail = (ImageView) view.findViewById(R.id.img_thumbnail);
-            holder.tvSpecies = (TextView) view.findViewById(R.id.photo_chapter);
-            view.setTag(holder);
-        } else {
-            view = convertView;
-            holder = (ViewHolder) view.getTag();
+                    totalItemCount = linearLayoutManager.getItemCount();
+                    lastVisibleItem = linearLayoutManager
+                            .findLastVisibleItemPosition();
+                    if (!loading && totalItemCount <= (lastVisibleItem + visibleThreshold)) {
+                        // End has been reached
+                        // Do something
+                        if (onLoadMoreListener != null) {
+                            onLoadMoreListener.onLoadMore();
+                        }
+                        loading = true;
+                    }
+                }
+            });
         }
 
-        holder.tvSpecies.setText(alName.get(position));
-        holder.imgThumbnail.setImageBitmap(alImage.get(position));
-        return view;
     }
 
-    private class ViewHolder {
-        public ImageView imgThumbnail;
-        public TextView tvSpecies;
+
+    @Override
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+
+        RecyclerView.ViewHolder vh;
+        if (viewType == VIEW_ITEM) {
+            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.blitzone_view_content, parent, false);
+
+            vh = new DailyViewHolder(v);
+        } else {
+            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.progressbar_item, parent, false);
+
+            vh = new ProgressViewHolder(v);
+        }
+        return vh;
+    }
+
+    @Override
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        if (holder instanceof DailyViewHolder) {
+
+            viewDataProvider viewDataProvider= (viewDataProvider) list.get(position);
+
+            ((DailyViewHolder) holder).mProfile.setImageResource(viewDataProvider.getProfilePicture());
+            ((DailyViewHolder) holder).mUsername.setText(viewDataProvider.getUsername());
+            ((DailyViewHolder) holder).mBlitz.setImageResource(viewDataProvider.getBlitz());
+            ((DailyViewHolder) holder).mPoints.setText(viewDataProvider.getPoints());
+            ((DailyViewHolder) holder).mChallenge.setText(viewDataProvider.getChallengeOfTheDay());
+            ((DailyViewHolder) holder).mHour.setText(viewDataProvider.getHour());
+
+        } else {
+            ((ProgressViewHolder) holder).progressBar.setIndeterminate(true);
+        }
+    }
+
+    public void setLoaded() {
+        loading = false;
+    }
+
+    @Override
+    public int getItemCount() {
+        return list.size();
+    }
+
+    public void setOnLoadMoreListener(OnLoadMoreListener onLoadMoreListener) {
+        this.onLoadMoreListener = onLoadMoreListener;
+    }
+
+    public List<viewDataProvider> getItems() {
+        return list;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return list.get(position) != null ? VIEW_ITEM : VIEW_PROG;
+    }
+
+    public static class DailyViewHolder extends RecyclerView.ViewHolder {
+
+        public View mView;
+
+        public ImageView mProfile;
+        public TextView mUsername;
+        public TextView mPoints;
+        public ImageView mBlitz;
+        public TextView mChallenge;
+        public TextView mHour;
+
+
+        public DailyViewHolder(View view) {
+            super(view);
+            mView = view;
+            mProfile= (ImageView) view.findViewById(R.id.profile_picture);
+            mUsername = (TextView) view.findViewById(R.id.name);
+            mPoints= (TextView) view.findViewById(R.id.points);
+            mBlitz = (ImageView) view.findViewById(R.id.blitz);
+            mChallenge = (TextView) view.findViewById(R.id.chapterDescription);
+            mHour = (TextView) view.findViewById(R.id.timePublished);
+
+        }
+    }
+
+    public static class ProgressViewHolder extends RecyclerView.ViewHolder {
+        public ProgressBar progressBar;
+
+        public ProgressViewHolder(View v) {
+            super(v);
+            progressBar = (ProgressBar) v.findViewById(R.id.progressBar);
+        }
     }
 }

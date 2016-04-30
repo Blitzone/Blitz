@@ -15,6 +15,8 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
@@ -28,7 +30,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
 import com.example.bsaraci.blitzone.HLV.HLVAdapter;
-import com.example.bsaraci.blitzone.HLV.HorizontalListView;
+import com.example.bsaraci.blitzone.HLV.HLV;
 import com.example.bsaraci.blitzone.ServerComm.JWTManager;
 import com.example.bsaraci.blitzone.ServerComm.MRequest;
 import com.example.bsaraci.blitzone.ServerComm.PhotoUploadRequest;
@@ -56,14 +58,16 @@ import java.util.Map;
 public class Profile extends AppCompatActivity
 {
     Toolbar profileToolbar ;
-    private HorizontalListView hlv;
+    private HLV hlv;
     private HLVAdapter hlvAdapter;
+    private RecyclerView mRecyclerView;
+    private RecyclerView.Adapter mAdapter;
+    private RecyclerView.LayoutManager mLayoutManager;
 
     ArrayList<String> chapters;
     ArrayList<Bitmap> photoChapter;
     private Integer topicId;
     TextView toolbarTitle;
-    Typeface titleFont;
 
     private static String root = null;
     private static String imageFolderPath = null;
@@ -131,8 +135,12 @@ public class Profile extends AppCompatActivity
             }
 
             //Setting the Bitmap to ImageView
-            photoChapter.remove(0);
-            photoChapter.add(0, bitmap);
+            photoChapter.add(2, bitmap);
+
+            mAdapter = new profileRecyclerviewAdapter(getDataSet());
+            mAdapter.notifyDataSetChanged();
+            mRecyclerView.setAdapter(mAdapter);
+
             ImageView imageView1 = (ImageView) this.findViewById(R.id.profile_picture);
             imageView1.setImageBitmap(bitmap);
 
@@ -419,17 +427,28 @@ public class Profile extends AppCompatActivity
             e.printStackTrace();
         }
 
-        hlv = (HorizontalListView) findViewById(R.id.hlvProfile);
-        hlvAdapter = new HLVAdapter(Profile.this, chapters, photoChapter);
-        hlv.setAdapter(hlvAdapter);
+        mRecyclerView = (RecyclerView) findViewById(R.id.hlvProfile);
+        mLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        mAdapter = new profileRecyclerviewAdapter(getDataSet());
+        mRecyclerView.setAdapter(mAdapter);
 
-        hlv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        /*mAdapter.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 captureImage();
                 Toast.makeText(Profile.this, "You clicked on : " + chapters.get(position).toString(), Toast.LENGTH_SHORT).show();
             }
-        });
+        });*/
+    }
+
+    private ArrayList<profileHorizontalPhotosProvider> getDataSet() {
+        ArrayList results = new ArrayList<profileHorizontalPhotosProvider>();
+        for (int index = 0; index < 3; index++) {
+            profileHorizontalPhotosProvider obj = new profileHorizontalPhotosProvider(chapters.get(index),photoChapter.get(index));
+            results.add(index, obj);
+        }
+        return results;
     }
 
     private JSONObject getChaptersParams()

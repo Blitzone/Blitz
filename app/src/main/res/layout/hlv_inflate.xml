@@ -22,16 +22,16 @@
             android:layout_height="350dp">
 
             <ImageView
-                android:id="@+id/img_thumbnail"
+                android:id="@+id/photo_chapter"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_above="@+id/photo_chapter"
+                android:layout_above="@+id/chapter"
                 android:layout_centerHorizontal="true"
                 android:src="@color/mint"
                 android:scaleType="centerCrop"/>
 
             <TextView
-                android:id="@+id/photo_chapter"
+                android:id="@+id/chapter"
                 android:layout_width="300dp"
                 android:layout_height="30dp"
                 android:layout_gravity="center|bottom"
