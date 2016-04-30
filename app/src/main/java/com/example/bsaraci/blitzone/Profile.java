@@ -384,9 +384,10 @@ public class Profile extends AppCompatActivity
 
         JWTManager jwtManager = new JWTManager(getApplicationContext());
         //Put everything in the request
+
         MRequest mRequest = new MRequest(
                 RequestURL.CHAPTERS,
-                Request.Method.GET,
+                Request.Method.POST,
                 getChaptersParams(), //Put the parameters of the request here (JSONObject format)
                 listener,
                 errorListener,
@@ -409,9 +410,8 @@ public class Profile extends AppCompatActivity
             int chapterListSize = chapterList.length();
 
             for(int i = 0; i<chapterListSize; i++){
-                JSONObject jsonChapter = (JSONObject) chapterList.get(i);
+                JSONObject jsonChapter = (JSONObject) chapterList.getJSONObject(i);
                 chapters.add(i, jsonChapter.get("name").toString());
-                Log.i("chapters", jsonChapter.get("name").toString());
             }
         }
         catch (JSONException e)
@@ -435,7 +435,7 @@ public class Profile extends AppCompatActivity
     private JSONObject getChaptersParams()
     {
         Map<String, String> params = new HashMap<String, String>();
-        params.put("topic",  topicId.toString());
+        params.put("topic", topicId.toString());
 
         return new JSONObject(params);
     }
