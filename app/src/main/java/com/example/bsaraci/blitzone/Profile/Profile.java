@@ -110,7 +110,7 @@ public class Profile extends AppCompatActivity {
                 Chapter chap = profilePhotosDataSet.getChapter(chapterClicked);
                 profilePhotosDataSet.addPhotoChapter(photoChapter, chap);
                 uploadPicture(photoChapter.getBitmap(), RequestURL.UPLOAD_USER_CHAPTER, getPhotoChapterParams(chap));
-                mAdapter = new ProfileRecyclerviewAdapter(profilePhotosDataSet);
+                mAdapter = new ProfileRecyclerviewAdapter(profilePhotosDataSet,this);
                 mAdapter.notifyDataSetChanged();
                 mRecyclerView.setAdapter(mAdapter);
             }
@@ -127,7 +127,7 @@ public class Profile extends AppCompatActivity {
                 Chapter chap = profilePhotosDataSet.getChapter(chapterClicked);
                 profilePhotosDataSet.addPhotoChapter(photoChapter, chap);
                 uploadPicture(photoChapter.getBitmap(), RequestURL.UPLOAD_USER_CHAPTER, getPhotoChapterParams(chap));
-                mAdapter = new ProfileRecyclerviewAdapter(profilePhotosDataSet);
+                mAdapter = new ProfileRecyclerviewAdapter(profilePhotosDataSet,this);
                 mAdapter.notifyDataSetChanged();
                 mRecyclerView.setAdapter(mAdapter);
             }
@@ -449,7 +449,7 @@ public class Profile extends AppCompatActivity {
         );
         profilePhotosDataSet.addChapters(chapters);
         profilePhotosDataSet.initPhotoChapters(photoChapters);
-        mAdapter = new ProfileRecyclerviewAdapter(profilePhotosDataSet);
+        mAdapter = new ProfileRecyclerviewAdapter(profilePhotosDataSet,this);
         mRecyclerView.setAdapter(mAdapter);
         getPhotoChapters();
     }
@@ -499,24 +499,12 @@ public class Profile extends AppCompatActivity {
                 PhotoChapter photoChapter1 = profilePhotosDataSet.getPhotoChapter(chap);
                 photoChapter1.setUrl(jsonPhotoChapter.get("image").toString());
 
-                String imageUrl = RequestURL.IP_ADDRESS + jsonPhotoChapter.get("image").toString();
-                URL url = null;
-                try {
-                    url = new URL(imageUrl);
-                    Bitmap bitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
-                    photoChapter1.setBitmap(bitmap);
-                } catch (MalformedURLException e) {
-                    e.printStackTrace();
-
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
             }
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-        mAdapter = new ProfileRecyclerviewAdapter(profilePhotosDataSet);
+        mAdapter = new ProfileRecyclerviewAdapter(profilePhotosDataSet,this);
         mAdapter.notifyDataSetChanged();
         mRecyclerView.setAdapter(mAdapter);
 
