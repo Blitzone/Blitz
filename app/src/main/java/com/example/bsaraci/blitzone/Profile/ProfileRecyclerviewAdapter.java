@@ -2,6 +2,7 @@ package com.example.bsaraci.blitzone.Profile;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -57,13 +58,12 @@ public class ProfileRecyclerviewAdapter extends RecyclerView.Adapter<ProfileRecy
         Chapter chap = mDataset.getChapter(position);
         PhotoChapter photoChapter1 = mDataset.getPhotoChapter(chap);
 
-
         imageLoader = RequestQueueSingleton.getInstance(context).getImageLoader();
         imageLoader.get(photoChapter1.getUrl(), ImageLoader.getImageListener(holder.photoChapterImageView,
                 R.mipmap.ic_profile_avatar, R.mipmap.ic_profile_avatar));
 
         holder.chapterTextView.setText(chap.getName());
-        holder.photoChapterImageView.setImageBitmap(photoChapter1.getBitmap());
+        //holder.photoChapterImageView.setImageBitmap(photoChapter1.getBitmap());
     }
 
     public void addItem(ProfilePhotosProvider dataObj, int index) {

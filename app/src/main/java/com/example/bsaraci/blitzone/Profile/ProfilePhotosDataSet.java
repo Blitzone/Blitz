@@ -1,5 +1,7 @@
 package com.example.bsaraci.blitzone.Profile;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 
 /**
@@ -46,6 +48,7 @@ public class ProfilePhotosDataSet {
     public PhotoChapter getPhotoChapter(Chapter chapter){
         for (ProfilePhotosProvider obj : mArray){
             if(obj.getChapter().getId() == chapter.getId()){
+                PhotoChapter photoChapter = obj.getPhotoChapter();
                 return obj.getPhotoChapter();
             }
         }

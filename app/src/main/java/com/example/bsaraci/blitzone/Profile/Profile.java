@@ -416,17 +416,20 @@ public class Profile extends AppCompatActivity {
             JSONArray chapterList = (JSONArray) response.get("chapters");
             int chapterListSize = chapterList.length();
             Bitmap bitmap1 = BitmapFactory.decodeResource(this.getResources(), R.color.mint);
-            PhotoChapter photoChapter1 = new PhotoChapter(bitmap1);
             for (int i = 0; i < chapterListSize; i++) {
                 JSONObject jsonChapter = (JSONObject) chapterList.getJSONObject(i);
                 Chapter chap = new Chapter((int) jsonChapter.get("id"), jsonChapter.get("name").toString());
                 chapters.add(i, chap);
-                photoChapters.add(i, photoChapter1);
+                PhotoChapter photoChapter = new PhotoChapter("https://upload.wikimedia.org/wikipedia/commons/4/47/PNG_transparency_demonstration_1.png",
+                        bitmap1);
+                photoChapters.add(i, photoChapter);
             }
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
+        profilePhotosDataSet.addChapters(chapters);
+        profilePhotosDataSet.initPhotoChapters(photoChapters);
+        Log.i("TestPhotoChap", profilePhotosDataSet.getPhotoChapter(chapters.get(0)) == null ? "null" : "not null");
         mRecyclerView = (RecyclerView) findViewById(R.id.hlvProfile);
         mLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         mRecyclerView.setLayoutManager(mLayoutManager);
@@ -447,8 +450,6 @@ public class Profile extends AppCompatActivity {
                     }
                 })
         );
-        profilePhotosDataSet.addChapters(chapters);
-        profilePhotosDataSet.initPhotoChapters(photoChapters);
         mAdapter = new ProfileRecyclerviewAdapter(profilePhotosDataSet,this);
         mRecyclerView.setAdapter(mAdapter);
         getPhotoChapters();
@@ -497,17 +498,14 @@ public class Profile extends AppCompatActivity {
                 JSONObject jsonPhotoChapter = (JSONObject) photoChapterList.getJSONObject(i);
                 Chapter chap = profilePhotosDataSet.getChapterById((int) jsonPhotoChapter.get("chapter"));
                 PhotoChapter photoChapter1 = profilePhotosDataSet.getPhotoChapter(chap);
-                photoChapter1.setUrl(jsonPhotoChapter.get("image").toString());
-
+                photoChapter1.setUrl(RequestURL.IP_ADDRESS + jsonPhotoChapter.get("image").toString());
+                mAdapter = new ProfileRecyclerviewAdapter(profilePhotosDataSet,this);
+                mAdapter.notifyDataSetChanged();
+                mRecyclerView.setAdapter(mAdapter);
             }
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
-        mAdapter = new ProfileRecyclerviewAdapter(profilePhotosDataSet,this);
-        mAdapter.notifyDataSetChanged();
-        mRecyclerView.setAdapter(mAdapter);
-
     }
 
 
