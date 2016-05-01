@@ -141,7 +141,7 @@ public class Profile extends AppCompatActivity {
         try {
             GetImageThumbnail getImageThumbnail = new GetImageThumbnail();
             bitmap = getImageThumbnail.getThumbnail(fileUri, this);
-            photoChapter1 = new PhotoChapter(bitmap);
+            photoChapter1 = new PhotoChapter("https://upload.wikimedia.org/wikipedia/commons/4/47/PNG_transparency_demonstration_1.png", bitmap);
             ByteArrayOutputStream bytes = new ByteArrayOutputStream();
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
 
@@ -164,7 +164,7 @@ public class Profile extends AppCompatActivity {
             bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), selectedImage);
 //          ByteArrayOutputStream bytes = new ByteArrayOutputStream();
 //          bitmap1.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
-            photoChapter1 = new PhotoChapter(bitmap);
+            photoChapter1 = new PhotoChapter("https://upload.wikimedia.org/wikipedia/commons/4/47/PNG_transparency_demonstration_1.png", bitmap);
         } catch (IOException e) {
             e.printStackTrace();
         }
