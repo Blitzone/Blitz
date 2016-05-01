@@ -1,15 +1,15 @@
 package com.example.bsaraci.blitzone.Profile;
 
 public class Chapter  {
-    private int id;
+    private Integer id;
     private String name;
 
-    public Chapter(int id, String name) {
+    public Chapter(Integer id, String name) {
         this.id = id;
         this.name = name;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
@@ -17,7 +17,7 @@ public class Chapter  {
         return name;
     }
 
-    public void setId(int id) {this.id = id;}
+    public void setId(Integer id) {this.id = id;}
 
     public void setName(String name) {
         this.name = name;

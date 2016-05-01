@@ -35,6 +35,9 @@ import com.example.bsaraci.blitzone.ServerComm.PhotoUploadRequest;
 import com.example.bsaraci.blitzone.ServerComm.PhotoUploadResponse;
 import com.example.bsaraci.blitzone.ServerComm.RequestQueueSingleton;
 import com.example.bsaraci.blitzone.ServerComm.RequestURL;
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.common.api.GoogleApiClient;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -46,15 +49,16 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 
-public class Profile extends AppCompatActivity
-{
-    Toolbar profileToolbar ;
+public class Profile extends AppCompatActivity {
+    Toolbar profileToolbar;
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
@@ -75,7 +79,12 @@ public class Profile extends AppCompatActivity
     private static final int CAMERA_PROFILE_IMAGE_REQUEST = 1;
     private static final int UPLOAD_PROFILE_IMAGE_FROM_GALLERY = 2;
     private static final int CAMERA_CHAPTER_IMAGE_REQUEST = 3;
-    private static final int UPLOAD_CHAPTER_IMAGE_FROM_GALLERY =4;
+    private static final int UPLOAD_CHAPTER_IMAGE_FROM_GALLERY = 4;
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    private GoogleApiClient client;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,7 +94,10 @@ public class Profile extends AppCompatActivity
         getTopic();
 
         profileToolbar = (Toolbar) findViewById(R.id.toolbar_of_profile);
-        toolbarTitle = (TextView)findViewById(R.id.profile_toolbar_title);
+        toolbarTitle = (TextView) findViewById(R.id.profile_toolbar_title);
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
 
@@ -98,35 +110,32 @@ public class Profile extends AppCompatActivity
 
             PhotoChapter photoChapter = photoSaveFromCamera();
 
-            if(requestCamera==CAMERA_PROFILE_IMAGE_REQUEST){
+            if (requestCamera == CAMERA_PROFILE_IMAGE_REQUEST) {
                 ImageView imageView = (ImageView) this.findViewById(R.id.profile_picture);
                 imageView.setImageBitmap(photoChapter.getBitmap());
 
-                uploadPicture(photoChapter.getBitmap());
-            }
-
-            else if (requestCamera==CAMERA_CHAPTER_IMAGE_REQUEST){
+                uploadPicture(photoChapter.getBitmap(), RequestURL.AVATAR, null);
+            } else if (requestCamera == CAMERA_CHAPTER_IMAGE_REQUEST) {
                 Chapter chap = profilePhotosDataSet.getChapter(chapterClicked);
                 profilePhotosDataSet.addPhotoChapter(photoChapter, chap);
+                uploadPicture(photoChapter.getBitmap(), RequestURL.USER_CHAPTER, getPhotoChapterParams(chap));
                 mAdapter = new ProfileRecyclerviewAdapter(profilePhotosDataSet);
                 mAdapter.notifyDataSetChanged();
                 mRecyclerView.setAdapter(mAdapter);
             }
-        }
-
-        else if(requestCode == requestGallery && resultCode == RESULT_OK && null != data && data.getData() != null){
+        } else if (requestCode == requestGallery && resultCode == RESULT_OK && null != data && data.getData() != null) {
             Uri selectedImage = data.getData();
 
             PhotoChapter photoChapter = photoSaveFromGallery(selectedImage);
 
-            if(requestGallery==UPLOAD_PROFILE_IMAGE_FROM_GALLERY){
+            if (requestGallery == UPLOAD_PROFILE_IMAGE_FROM_GALLERY) {
                 ImageView imageView1 = (ImageView) this.findViewById(R.id.profile_picture);
                 imageView1.setImageBitmap(photoChapter.getBitmap());
-                uploadPicture(photoChapter.getBitmap());
-            }
-            else if(requestGallery==UPLOAD_CHAPTER_IMAGE_FROM_GALLERY){
+                uploadPicture(photoChapter.getBitmap(), RequestURL.AVATAR, null);
+            } else if (requestGallery == UPLOAD_CHAPTER_IMAGE_FROM_GALLERY) {
                 Chapter chap = profilePhotosDataSet.getChapter(chapterClicked);
-                profilePhotosDataSet.addPhotoChapter(photoChapter,chap);
+                profilePhotosDataSet.addPhotoChapter(photoChapter, chap);
+                uploadPicture(photoChapter.getBitmap(), RequestURL.USER_CHAPTER, getPhotoChapterParams(chap));
                 mAdapter = new ProfileRecyclerviewAdapter(profilePhotosDataSet);
                 mAdapter.notifyDataSetChanged();
                 mRecyclerView.setAdapter(mAdapter);
@@ -134,14 +143,14 @@ public class Profile extends AppCompatActivity
         }
     }
 
-    private PhotoChapter photoSaveFromCamera(){
+    private PhotoChapter photoSaveFromCamera() {
         Bitmap bitmap = null;
-        PhotoChapter photoChapter1=null;
+        PhotoChapter photoChapter1 = null;
 
         try {
             GetImageThumbnail getImageThumbnail = new GetImageThumbnail();
             bitmap = getImageThumbnail.getThumbnail(fileUri, this);
-            photoChapter1= new PhotoChapter(bitmap);
+            photoChapter1 = new PhotoChapter(bitmap);
             ByteArrayOutputStream bytes = new ByteArrayOutputStream();
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
 
@@ -155,15 +164,15 @@ public class Profile extends AppCompatActivity
         return photoChapter1;
     }
 
-    private PhotoChapter photoSaveFromGallery(Uri selectedImage){
+    private PhotoChapter photoSaveFromGallery(Uri selectedImage) {
         Bitmap bitmap = null;
         PhotoChapter photoChapter1 = null;
 
         try {
             //Getting the Bitmap from Gallery
             bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), selectedImage);
-//                ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-//                bitmap1.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+//          ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+//          bitmap1.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
             photoChapter1 = new PhotoChapter(bitmap);
         } catch (IOException e) {
             e.printStackTrace();
@@ -172,24 +181,21 @@ public class Profile extends AppCompatActivity
         return photoChapter1;
     }
 
-    private void uploadPicture(Bitmap bitmap) {
+    private void uploadPicture(Bitmap bitmap, String url, JSONObject params) {
         PhotoUploadRequest r = new PhotoUploadRequest(
-                RequestURL.AVATAR,
+                url,
                 new JWTManager(getApplicationContext()),
                 new PhotoUploadResponse() {
                     @Override
                     public void uploadFinishedCallback(Integer responseCode) {
-                        if (responseCode == HttpURLConnection.HTTP_ENTITY_TOO_LARGE)
-                        {
+                        if (responseCode == HttpURLConnection.HTTP_ENTITY_TOO_LARGE) {
                             Toast.makeText(Profile.this, "Photo size is too big.", Toast.LENGTH_SHORT).show();
-                        }
-                        else if (responseCode == HttpURLConnection.HTTP_OK)
-                        {
+                        } else if (responseCode == HttpURLConnection.HTTP_OK) {
                             Toast.makeText(Profile.this, "Upload complete.", Toast.LENGTH_SHORT).show();
                         }
                     }
                 },
-                null
+                params
         );
         r.execute(bitmap);
     }
@@ -221,31 +227,31 @@ public class Profile extends AppCompatActivity
 
     }
 
-    public void chooseImageFromGallery(){
+    public void chooseImageFromGallery() {
         // Create intent to Open Image applications like Gallery, Google Photos
-        Intent galleryIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         // Start the Intent
         startActivityForResult(galleryIntent, requestGallery);
     }
 
-    public void removeProfilePicture(){
+    public void removeProfilePicture() {
         ImageView imageView = (ImageView) findViewById(R.id.profile_picture);
         imageView.setImageResource(R.mipmap.ic_profile_avatar);
     }
 
-    public void blitzoneFromProfileButtonCallback (View view) {
+    public void blitzoneFromProfileButtonCallback(View view) {
         Intent intent = new Intent(this, Blitzone.class);
 
         startActivity(intent);
     }
 
-    public void notificationsFromProfileButtonCallback (View view) {
+    public void notificationsFromProfileButtonCallback(View view) {
         Intent intent = new Intent(this, Notifications.class);
 
         startActivity(intent);
     }
 
-    public void disconnectCallback () {
+    public void disconnectCallback() {
 
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
         alertDialogBuilder.setMessage("Are you sure you want to log out ?");
@@ -279,19 +285,16 @@ public class Profile extends AppCompatActivity
 
         Response.Listener<JSONObject> listener = new Response.Listener<JSONObject>() {
             @Override
-            public void onResponse(JSONObject response)
-            {
+            public void onResponse(JSONObject response) {
                 updateProfile(response);
             }
         };
 
         //Function to be executed in case of an error
-        Response.ErrorListener errorListener = new Response.ErrorListener()
-        {
+        Response.ErrorListener errorListener = new Response.ErrorListener() {
 
             @Override
-            public void onErrorResponse(VolleyError error)
-            {
+            public void onErrorResponse(VolleyError error) {
                 Log.e("Error", error.toString());
             }
         };
@@ -316,7 +319,7 @@ public class Profile extends AppCompatActivity
         try {
             String username = response.get("user").toString();
             Boolean isBanned = response.get("is_banned").toString().equals("true");
-            Integer blitzCount = (Integer)response.get("blitzCount");
+            Integer blitzCount = (Integer) response.get("blitzCount");
             String avatar = RequestURL.IP_ADDRESS + response.get("avatar").toString();
 
             final ImageView imageView = (ImageView) this.findViewById(R.id.profile_picture);
@@ -332,29 +335,24 @@ public class Profile extends AppCompatActivity
             TextView usernameView = (TextView) findViewById(R.id.profileName);
             usernameView.setText(username);
 
-        }
-        catch (JSONException e)
-        {
+        } catch (JSONException e) {
             e.printStackTrace();
         }
     }
 
-    private void getTopic(){
+    private void getTopic() {
         Response.Listener<JSONObject> listener = new Response.Listener<JSONObject>() {
             @Override
-            public void onResponse(JSONObject response)
-            {
+            public void onResponse(JSONObject response) {
                 updateTopic(response);
             }
         };
 
         //Function to be executed in case of an error
-        Response.ErrorListener errorListener = new Response.ErrorListener()
-        {
+        Response.ErrorListener errorListener = new Response.ErrorListener() {
 
             @Override
-            public void onErrorResponse(VolleyError error)
-            {
+            public void onErrorResponse(VolleyError error) {
                 Log.e("Error", error.toString());
             }
         };
@@ -374,37 +372,32 @@ public class Profile extends AppCompatActivity
 
     }
 
-    private void updateTopic (JSONObject response) {
+    private void updateTopic(JSONObject response) {
         try {
             String topic = response.get("name").toString();
             topicId = (Integer) response.get("id");
-            TextView topicText = (TextView)findViewById(R.id.profile_toolbar_title);
+            TextView topicText = (TextView) findViewById(R.id.profile_toolbar_title);
             topicText.setText(topic);
-        }
-        catch (JSONException e)
-        {
+        } catch (JSONException e) {
             e.printStackTrace();
         }
         getChapters();
     }
 
-    private void getChapters(){
+    private void getChapters() {
 
         Response.Listener<JSONObject> listener = new Response.Listener<JSONObject>() {
             @Override
-            public void onResponse(JSONObject response)
-            {
+            public void onResponse(JSONObject response) {
                 updateChapters(response);
             }
         };
 
         //Function to be executed in case of an error
-        Response.ErrorListener errorListener = new Response.ErrorListener()
-        {
+        Response.ErrorListener errorListener = new Response.ErrorListener() {
 
             @Override
-            public void onErrorResponse(VolleyError error)
-            {
+            public void onErrorResponse(VolleyError error) {
                 Log.e("Error", error.toString());
             }
         };
@@ -413,8 +406,8 @@ public class Profile extends AppCompatActivity
         //Put everything in the request
 
         MRequest mRequest = new MRequest(
-                RequestURL.CHAPTERS,
-                Request.Method.POST,
+                RequestURL.USER_CHAPTER,
+                Request.Method.GET,
                 getChaptersParams(), //Put the parameters of the request here (JSONObject format)
                 listener,
                 errorListener,
@@ -424,24 +417,22 @@ public class Profile extends AppCompatActivity
         RequestQueueSingleton.getInstance(this).addToRequestQueue(mRequest);
     }
 
-    private void updateChapters(JSONObject response){
+    private void updateChapters(JSONObject response) {
 
         try {
             photoChapters = new ArrayList<PhotoChapter>();
             chapters = new ArrayList<Chapter>();
-            JSONArray chapterList = (JSONArray)response.get("chapters");
+            JSONArray chapterList = (JSONArray) response.get("chapters");
             int chapterListSize = chapterList.length();
-            Bitmap bitmap1= BitmapFactory.decodeResource(this.getResources(), R.color.mint);
+            Bitmap bitmap1 = BitmapFactory.decodeResource(this.getResources(), R.color.mint);
             PhotoChapter photoChapter1 = new PhotoChapter(bitmap1);
-            for(int i = 0; i<chapterListSize; i++){
+            for (int i = 0; i < chapterListSize; i++) {
                 JSONObject jsonChapter = (JSONObject) chapterList.getJSONObject(i);
-                Chapter chap = new Chapter((int)jsonChapter.get("id"), jsonChapter.get("name").toString());
+                Chapter chap = new Chapter((int) jsonChapter.get("id"), jsonChapter.get("name").toString());
                 chapters.add(i, chap);
                 photoChapters.add(i, photoChapter1);
             }
-        }
-        catch (JSONException e)
-        {
+        } catch (JSONException e) {
             e.printStackTrace();
         }
 
@@ -469,7 +460,77 @@ public class Profile extends AppCompatActivity
         profilePhotosDataSet.initPhotoChapters(photoChapters);
         mAdapter = new ProfileRecyclerviewAdapter(profilePhotosDataSet);
         mRecyclerView.setAdapter(mAdapter);
+        getPhotoChapters();
     }
+
+    private void getPhotoChapters() {
+
+        Response.Listener<JSONObject> listener = new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                updatePhotoChapters(response);
+            }
+        };
+
+        //Function to be executed in case of an error
+        Response.ErrorListener errorListener = new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("Error", error.toString());
+            }
+        };
+
+        JWTManager jwtManager = new JWTManager(getApplicationContext());
+        //Put everything in the request
+
+        MRequest mRequest = new MRequest(
+                RequestURL.USER_CHAPTER,
+                Request.Method.POST,
+                getPhotoChapterParams(topicId), //Put the parameters of the request here (JSONObject format)
+                listener,
+                errorListener,
+                jwtManager
+        );
+
+        RequestQueueSingleton.getInstance(this).addToRequestQueue(mRequest);
+    }
+
+    private void updatePhotoChapters(JSONObject response) {
+
+        try {
+
+            JSONArray photoChapterList = (JSONArray) response.get("userChapters");
+            int photoChapterListSize = photoChapterList.length();
+            for (int i = 0; i < photoChapterListSize; i++) {
+                JSONObject jsonPhotoChapter = (JSONObject) photoChapterList.getJSONObject(i);
+                Chapter chap = profilePhotosDataSet.getChapterById((int) jsonPhotoChapter.get("chapter"));
+                PhotoChapter photoChapter1 = profilePhotosDataSet.getPhotoChapter(chap);
+                photoChapter1.setUrl(jsonPhotoChapter.get("image").toString());
+
+                String imageUrl = RequestURL.IP_ADDRESS + jsonPhotoChapter.get("image").toString();
+                URL url = null;
+                try {
+                    url = new URL(imageUrl);
+                    Bitmap bitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                    photoChapter1.setBitmap(bitmap);
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        mAdapter = new ProfileRecyclerviewAdapter(profilePhotosDataSet);
+        mAdapter.notifyDataSetChanged();
+        mRecyclerView.setAdapter(mAdapter);
+
+    }
+
 
     private JSONObject getChaptersParams() {
         Map<String, String> params = new HashMap<String, String>();
@@ -478,6 +539,20 @@ public class Profile extends AppCompatActivity
         return new JSONObject(params);
     }
 
+    private JSONObject getPhotoChapterParams(Chapter chap) {
+
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("chapter", chap.getId().toString());
+
+        return new JSONObject(params);
+    }
+
+    private JSONObject getPhotoChapterParams(Integer topicId) {
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("topic", topicId.toString());
+        return new JSONObject(params);
+    }
+    
     public static class GetImageThumbnail {
 
         private static int getPowerOfTwoForSampleRatio(double ratio) {
@@ -531,18 +606,15 @@ public class Profile extends AppCompatActivity
         dialogBuilder.setItems(Options, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int item) {
 
-                if(item == 0){
-                    requestGallery=UPLOAD_PROFILE_IMAGE_FROM_GALLERY;
+                if (item == 0) {
+                    requestGallery = UPLOAD_PROFILE_IMAGE_FROM_GALLERY;
                     chooseImageFromGallery();
-                }
-                else if(item == 1){
-                    requestCamera=CAMERA_PROFILE_IMAGE_REQUEST;
+                } else if (item == 1) {
+                    requestCamera = CAMERA_PROFILE_IMAGE_REQUEST;
                     captureImage();
-                }
-                else if(item == 2){
+                } else if (item == 2) {
                     removeProfilePicture();
-                }
-                else if(item == 3){
+                } else if (item == 3) {
                     disconnectCallback();
                 }
             }
@@ -553,11 +625,11 @@ public class Profile extends AppCompatActivity
         alertDialogObject.show();
     }
 
-    public void profilePictureCallback (View view){
+    public void profilePictureCallback(View view) {
         showAlertDialogWithListview();
     }
 
-    public void optionsCallback (View view){
+    public void optionsCallback(View view) {
 
         Intent intent = new Intent(this, Options.class);
         startActivity(intent);

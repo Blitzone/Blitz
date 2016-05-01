@@ -64,4 +64,21 @@ public class ProfilePhotosDataSet {
         return mArray.size();
     }
 
+    public Chapter getChapterById(int id){
+        for(ProfilePhotosProvider obj : mArray){
+            if(obj.getChapter().getId() == id){
+                return obj.getChapter();
+            }
+        }
+        return null;
+    }
+    public int getChapterPositonById(int id){
+        for (ProfilePhotosProvider obj : mArray){
+            if(obj.getChapter().getId() == id){
+                return mArray.indexOf(obj);
+            }
+        }
+        return -1;
+    }
+
 }

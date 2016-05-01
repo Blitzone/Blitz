@@ -16,7 +16,6 @@ public class ProfileRecyclerviewAdapter extends RecyclerView.Adapter<ProfileRecy
     }
 
     private ProfilePhotosDataSet mDataset;
-    private static MyClickListener myClickListener;
 
     public static class DataObjectHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView chapterTextView;
@@ -33,9 +32,6 @@ public class ProfileRecyclerviewAdapter extends RecyclerView.Adapter<ProfileRecy
             }
     }
 
-    public void setOnItemClickListener(MyClickListener myClickListener) {
-        this.myClickListener = myClickListener;
-    }
 
     public ProfileRecyclerviewAdapter(ProfilePhotosDataSet myDataset) {
         mDataset = myDataset;
@@ -74,8 +70,5 @@ public class ProfileRecyclerviewAdapter extends RecyclerView.Adapter<ProfileRecy
         return mDataset.getSize();
     }
 
-    public interface MyClickListener {
-        public void onItemClick(int position, View v);
-    }
 }
 
