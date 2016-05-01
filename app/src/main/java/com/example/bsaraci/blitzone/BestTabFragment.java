@@ -14,9 +14,9 @@ import java.util.List;
 
 public class BestTabFragment extends Fragment {
 
-    private List<rowDataProvider> list = new ArrayList<>();
+    private List<RowDataProvider> list = new ArrayList<>();
     private RecyclerView recyclerView;
-    private recycleviewAdapter mAdapter;
+    private RecycleviewAdapter mAdapter;
 
     /*int [] profilePictures = {R.mipmap.ic_orange_profile,R.mipmap.ic_orange_profile,R.mipmap.ic_orange_profile,
             R.mipmap.ic_orange_profile,R.mipmap.ic_orange_profile,R.mipmap.ic_orange_profile,
@@ -37,7 +37,7 @@ public class BestTabFragment extends Fragment {
         RecyclerView recyclerView = (RecyclerView) rv.findViewById(R.id.bestList);
         recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), LinearLayoutManager.VERTICAL));
 
-        rv.setAdapter(new recyclerowAdapter(list));
+        rv.setAdapter(new RecyclerowAdapter(list));
 
         prepareData();
 
@@ -45,25 +45,25 @@ public class BestTabFragment extends Fragment {
 
     }
     public void prepareData (){
-        rowDataProvider l =new rowDataProvider( R.mipmap.ic_profile_avatar,"sarasaraci" ,"200" ,R.mipmap.ic_orange_blitz);
+        RowDataProvider l =new RowDataProvider( R.mipmap.ic_profile_avatar,"sarasaraci" ,"200" ,R.mipmap.ic_orange_blitz);
         list.add(l);
-        l =new rowDataProvider( R.mipmap.ic_profile_avatar,"teasaraci" ,"150" ,0);
+        l =new RowDataProvider( R.mipmap.ic_profile_avatar,"teasaraci" ,"150" ,0);
         list.add(l);
-        l =new rowDataProvider( R.mipmap.ic_profile_avatar,"enderballa" ,"100" ,R.mipmap.ic_orange_blitz);
+        l =new RowDataProvider( R.mipmap.ic_profile_avatar,"enderballa" ,"100" ,R.mipmap.ic_orange_blitz);
         list.add(l);
-        l =new rowDataProvider( R.mipmap.ic_profile_avatar,"mikelv92" ,"100" ,0);
+        l =new RowDataProvider( R.mipmap.ic_profile_avatar,"mikelv92" ,"100" ,0);
         list.add(l);
-        l =new rowDataProvider( R.mipmap.ic_profile_avatar,"jonagolemi" ,"30" ,R.mipmap.ic_orange_blitz);
+        l =new RowDataProvider( R.mipmap.ic_profile_avatar,"jonagolemi" ,"30" ,R.mipmap.ic_orange_blitz);
         list.add(l);
-        l =new rowDataProvider( R.mipmap.ic_profile_avatar,"jv21" ,"15" ,0);
+        l =new RowDataProvider( R.mipmap.ic_profile_avatar,"jv21" ,"15" ,0);
         list.add(l);
-        l =new rowDataProvider( R.mipmap.ic_profile_avatar,"ergysmati" ,"10" ,R.mipmap.ic_orange_blitz);
+        l =new RowDataProvider( R.mipmap.ic_profile_avatar,"ergysmati" ,"10" ,R.mipmap.ic_orange_blitz);
         list.add(l);
-        l =new rowDataProvider( R.mipmap.ic_profile_avatar,"sidritdritorja" ,"10" ,R.mipmap.ic_orange_blitz);
+        l =new RowDataProvider( R.mipmap.ic_profile_avatar,"sidritdritorja" ,"10" ,R.mipmap.ic_orange_blitz);
         list.add(l);
-        l =new rowDataProvider( R.mipmap.ic_profile_avatar,"ilirpirani" ,"1" ,R.mipmap.ic_orange_blitz);
+        l =new RowDataProvider( R.mipmap.ic_profile_avatar,"ilirpirani" ,"1" ,R.mipmap.ic_orange_blitz);
         list.add(l);
-        l =new rowDataProvider( R.mipmap.ic_profile_avatar,"arditmeti" ,"0" ,R.mipmap.ic_orange_blitz);
+        l =new RowDataProvider( R.mipmap.ic_profile_avatar,"arditmeti" ,"0" ,R.mipmap.ic_orange_blitz);
         list.add(l);
 
 

@@ -9,9 +9,9 @@ import android.widget.TextView;
 
 import java.util.List;
 
-public class recyclerowAdapter extends  RecyclerView.Adapter<recyclerowAdapter.ViewHolder> {
+public class RecyclerowAdapter extends  RecyclerView.Adapter<RecyclerowAdapter.ViewHolder> {
 
-    List<rowDataProvider> list;
+    List<RowDataProvider> list;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -34,7 +34,7 @@ public class recyclerowAdapter extends  RecyclerView.Adapter<recyclerowAdapter.V
         }
     }
 
-    public recyclerowAdapter(List<rowDataProvider> list ) {
+    public RecyclerowAdapter(List<RowDataProvider> list) {
 
         this.list=list;
 
@@ -51,7 +51,7 @@ public class recyclerowAdapter extends  RecyclerView.Adapter<recyclerowAdapter.V
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        rowDataProvider listDataProvider = list.get(position);
+        RowDataProvider listDataProvider = list.get(position);
         holder.mProfile.setImageResource(listDataProvider.getProfilePicture());
         holder.mUsername.setText(listDataProvider.getUsername());
         holder.mBlitz.setImageResource(listDataProvider.getBlitz());

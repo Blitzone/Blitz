@@ -1,13 +1,13 @@
 package com.example.bsaraci.blitzone;
 
-public class rowDataProvider {
+public class RowDataProvider {
 
     private int profilePicture;
     private String username;
     private String points;
     private int blitz;
 
-    public rowDataProvider(int profilePicture, String username, String points, int blitz) {
+    public RowDataProvider(int profilePicture, String username, String points, int blitz) {
         this.setProfilePicture(profilePicture);
         this.setUsername(username);
         this.setPoints(points);

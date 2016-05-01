@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -20,7 +19,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,8 +27,6 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
-import com.example.bsaraci.blitzone.HLV.HLVAdapter;
-import com.example.bsaraci.blitzone.HLV.HLV;
 import com.example.bsaraci.blitzone.ServerComm.JWTManager;
 import com.example.bsaraci.blitzone.ServerComm.MRequest;
 import com.example.bsaraci.blitzone.ServerComm.PhotoUploadRequest;
@@ -58,14 +54,13 @@ import java.util.Map;
 public class Profile extends AppCompatActivity
 {
     Toolbar profileToolbar ;
-    private HLV hlv;
-    private HLVAdapter hlvAdapter;
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
+    private DataSet dataSet = new DataSet();
 
-    ArrayList<String> chapters;
-    ArrayList<Bitmap> photoChapter;
+    private ArrayList<Chapter> chapters;
+    private ArrayList<Bitmap> photoChapter;
     private Integer topicId;
     TextView toolbarTitle;
 
@@ -135,9 +130,9 @@ public class Profile extends AppCompatActivity
             }
 
             //Setting the Bitmap to ImageView
-            photoChapter.add(2, bitmap);
+            photoChapter.add(0, bitmap);
 
-            mAdapter = new profileRecyclerviewAdapter(getDataSet());
+            mAdapter = new ProfileRecyclerviewAdapter(dataSet);
             mAdapter.notifyDataSetChanged();
             mRecyclerView.setAdapter(mAdapter);
 
@@ -407,19 +402,20 @@ public class Profile extends AppCompatActivity
 
     private void updateChapter(JSONObject response){
 
+        Bitmap bitmap1= BitmapFactory.decodeResource(this.getResources(),R.color.mint);
+        Bitmap bitmap2= BitmapFactory.decodeResource(this.getResources(),R.color.mint);
+        Bitmap bitmap3= BitmapFactory.decodeResource(this.getResources(),R.color.mint);
+        photoChapter = new ArrayList<>(Arrays.asList(bitmap1, bitmap2, bitmap3));
+
         try {
             chapters = new ArrayList<>();
-            Bitmap bitmap1= BitmapFactory.decodeResource(this.getResources(),R.color.mint);
-            Bitmap bitmap2= BitmapFactory.decodeResource(this.getResources(),R.color.mint);
-            Bitmap bitmap3= BitmapFactory.decodeResource(this.getResources(),R.color.mint);
-            photoChapter = new ArrayList<>(Arrays.asList(bitmap1, bitmap2, bitmap3));
-
             JSONArray chapterList = (JSONArray)response.get("chapters");
             int chapterListSize = chapterList.length();
 
             for(int i = 0; i<chapterListSize; i++){
                 JSONObject jsonChapter = (JSONObject) chapterList.getJSONObject(i);
-                chapters.add(i, jsonChapter.get("name").toString());
+                Chapter chap = new Chapter((int)jsonChapter.get("id"), jsonChapter.get("name").toString());
+                chapters.add(i, chap);
             }
         }
         catch (JSONException e)
@@ -430,7 +426,11 @@ public class Profile extends AppCompatActivity
         mRecyclerView = (RecyclerView) findViewById(R.id.hlvProfile);
         mLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         mRecyclerView.setLayoutManager(mLayoutManager);
-        mAdapter = new profileRecyclerviewAdapter(getDataSet());
+        dataSet.addChapters(chapters);
+        dataSet.addPhotoChapter(bitmap1,chapters.get(0));
+        dataSet.addPhotoChapter(bitmap2,chapters.get(1));
+        dataSet.addPhotoChapter(bitmap3,chapters.get(2));
+        mAdapter = new ProfileRecyclerviewAdapter(dataSet);
         mRecyclerView.setAdapter(mAdapter);
 
         /*mAdapter.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -442,14 +442,14 @@ public class Profile extends AppCompatActivity
         });*/
     }
 
-    private ArrayList<profileHorizontalPhotosProvider> getDataSet() {
-        ArrayList results = new ArrayList<profileHorizontalPhotosProvider>();
+    /*private ArrayList<ProfileHorizontalPhotosProvider> getDataSet() {
+        ArrayList results = new ArrayList<ProfileHorizontalPhotosProvider>();
         for (int index = 0; index < 3; index++) {
-            profileHorizontalPhotosProvider obj = new profileHorizontalPhotosProvider(chapters.get(index),photoChapter.get(index));
+            ProfileHorizontalPhotosProvider obj = new ProfileHorizontalPhotosProvider(chapters.get(index),photoChapter.get(index));
             results.add(index, obj);
         }
         return results;
-    }
+    }*/
 
     private JSONObject getChaptersParams()
     {

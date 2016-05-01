@@ -1,6 +1,6 @@
 package com.example.bsaraci.blitzone;
 
-public class viewDataProvider {
+public class ViewDataProvider {
 
     private int profilePicture;
     private String username;
@@ -9,7 +9,7 @@ public class viewDataProvider {
     private String challengeOfTheDay;
     private String hour;
 
-    public viewDataProvider(int profilePicture, String username, String points, int blitz, String challengeOfTheDay, String hour) {
+    public ViewDataProvider(int profilePicture, String username, String points, int blitz, String challengeOfTheDay, String hour) {
         this.setProfilePicture(profilePicture);
         this.setUsername(username);
         this.setPoints(points);

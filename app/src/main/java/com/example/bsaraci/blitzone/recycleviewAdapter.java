@@ -9,13 +9,11 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
 import java.util.List;
 
-public class recycleviewAdapter extends  RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class RecycleviewAdapter extends  RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    List<viewDataProvider> list;
+    List<ViewDataProvider> list;
     private final int VIEW_ITEM = 1;
     private final int VIEW_PROG = 0;
 
@@ -24,7 +22,7 @@ public class recycleviewAdapter extends  RecyclerView.Adapter<RecyclerView.ViewH
     private boolean loading;
     private OnLoadMoreListener onLoadMoreListener;
 
-    public recycleviewAdapter(List<viewDataProvider> list, RecyclerView recyclerView ) {
+    public RecycleviewAdapter(List<ViewDataProvider> list, RecyclerView recyclerView) {
         this.list=list;
 
         if(recyclerView.getLayoutManager() instanceof LinearLayoutManager){
@@ -72,7 +70,7 @@ public class recycleviewAdapter extends  RecyclerView.Adapter<RecyclerView.ViewH
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof DailyViewHolder) {
 
-            viewDataProvider viewDataProvider= (viewDataProvider) list.get(position);
+            ViewDataProvider viewDataProvider= (ViewDataProvider) list.get(position);
 
             ((DailyViewHolder) holder).mProfile.setImageResource(viewDataProvider.getProfilePicture());
             ((DailyViewHolder) holder).mUsername.setText(viewDataProvider.getUsername());
@@ -99,7 +97,7 @@ public class recycleviewAdapter extends  RecyclerView.Adapter<RecyclerView.ViewH
         this.onLoadMoreListener = onLoadMoreListener;
     }
 
-    public List<viewDataProvider> getItems() {
+    public List<ViewDataProvider> getItems() {
         return list;
     }
 

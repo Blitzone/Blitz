@@ -11,15 +11,13 @@ import android.widget.TextView;
 
 import com.example.bsaraci.blitzone.OnLoadMoreListener;
 import com.example.bsaraci.blitzone.R;
-import com.example.bsaraci.blitzone.viewDataProvider;
-
-import org.w3c.dom.Text;
+import com.example.bsaraci.blitzone.ViewDataProvider;
 
 import java.util.List;
 
 public class HLVAdapter extends  RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    List<viewDataProvider> list;
+    List<ViewDataProvider> list;
     private final int VIEW_ITEM = 1;
     private final int VIEW_PROG = 0;
 
@@ -28,7 +26,7 @@ public class HLVAdapter extends  RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private boolean loading;
     private OnLoadMoreListener onLoadMoreListener;
 
-    public HLVAdapter(List<viewDataProvider> list, RecyclerView recyclerView ) {
+    public HLVAdapter(List<ViewDataProvider> list, RecyclerView recyclerView ) {
         this.list=list;
 
         if(recyclerView.getLayoutManager() instanceof LinearLayoutManager){
@@ -76,7 +74,7 @@ public class HLVAdapter extends  RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof DailyViewHolder) {
 
-            viewDataProvider viewDataProvider= (viewDataProvider) list.get(position);
+            ViewDataProvider viewDataProvider= (ViewDataProvider) list.get(position);
 
             ((DailyViewHolder) holder).mProfile.setImageResource(viewDataProvider.getProfilePicture());
             ((DailyViewHolder) holder).mUsername.setText(viewDataProvider.getUsername());
@@ -103,7 +101,7 @@ public class HLVAdapter extends  RecyclerView.Adapter<RecyclerView.ViewHolder> {
         this.onLoadMoreListener = onLoadMoreListener;
     }
 
-    public List<viewDataProvider> getItems() {
+    public List<ViewDataProvider> getItems() {
         return list;
     }
 

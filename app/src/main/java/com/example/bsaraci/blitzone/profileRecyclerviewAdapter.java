@@ -9,13 +9,13 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-public class profileRecyclerviewAdapter extends RecyclerView.Adapter<profileRecyclerviewAdapter.DataObjectHolder> {
+public class ProfileRecyclerviewAdapter extends RecyclerView.Adapter<ProfileRecyclerviewAdapter.DataObjectHolder> {
 
     public interface OnItemClickListener {
-        void onItemClick(profileHorizontalPhotosProvider item);
+        void onItemClick(ProfileHorizontalPhotosProvider item);
     }
 
-    private ArrayList<profileHorizontalPhotosProvider> mDataset;
+    private DataSet mDataset;
     private static MyClickListener myClickListener;
 
     public static class DataObjectHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -39,7 +39,7 @@ public class profileRecyclerviewAdapter extends RecyclerView.Adapter<profileRecy
         this.myClickListener = myClickListener;
     }
 
-    public profileRecyclerviewAdapter(ArrayList<profileHorizontalPhotosProvider> myDataset) {
+    public ProfileRecyclerviewAdapter(DataSet myDataset) {
         mDataset = myDataset;
     }
 
@@ -53,23 +53,26 @@ public class profileRecyclerviewAdapter extends RecyclerView.Adapter<profileRecy
 
     @Override
     public void onBindViewHolder(DataObjectHolder holder, int position) {
-        holder.chapter.setText(mDataset.get(position).getmChapter());
-        holder.photoChapter.setImageBitmap(mDataset.get(position).getmBitpmap());
+        Chapter chap = mDataset.getChapter(position);
+        holder.chapter.setText(chap.getName());
+        holder.photoChapter.setImageBitmap(mDataset.getPhotoChapter(chap));
     }
 
-    public void addItem(profileHorizontalPhotosProvider dataObj, int index) {
-        mDataset.add(dataObj);
+    public void addItem(ProfileHorizontalPhotosProvider dataObj, int index) {
+        Chapter chap = mDataset.getChapter(index);
+        mDataset.addChapter(dataObj.getmChapter());
+        mDataset.addPhotoChapter(dataObj.getmBitpmap(),chap);
         notifyItemInserted(index);
     }
 
-    public void deleteItem(int index) {
+    /*public void deleteItem(int index) {
         mDataset.remove(index);
         notifyItemRemoved(index);
-    }
+    }*/
 
     @Override
     public int getItemCount() {
-        return mDataset.size();
+        return mDataset.getSize();
     }
 
     public interface MyClickListener {

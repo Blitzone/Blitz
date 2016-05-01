@@ -18,7 +18,7 @@ import java.util.List;
 
 public class DailyTabFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener{
 
-    private List<viewDataProvider> list = new ArrayList<>();
+    private List<ViewDataProvider> list = new ArrayList<>();
     private List <String> usernames = new ArrayList<>();
     private List <String> points = new ArrayList<>();
     private List <String> description = new ArrayList<>();
@@ -27,7 +27,7 @@ public class DailyTabFragment extends Fragment implements SwipeRefreshLayout.OnR
     private List <Integer> blitz = new ArrayList<>();
     private SwipeRefreshLayout swipeLayout;
     RecyclerView recyclerView;
-    recycleviewAdapter adap ;
+    RecycleviewAdapter adap ;
     LinearLayoutManager linearLayoutManager;
     private TextView tvEmptyView;
     protected Handler handler;
@@ -75,7 +75,7 @@ public class DailyTabFragment extends Fragment implements SwipeRefreshLayout.OnR
                         for (int i = start + 1; i <= end; i++) {
                             //TODO COUNTING VIEWS FOR TESTING. REMOVE WHEN YOU DEPLOY
                             teaCount++;
-                            list.add(new viewDataProvider(R.mipmap.ic_profile_avatar,"teasaraci" + teaCount.toString(),"200",0,"Old travel throwback","6 minutes ago"));
+                            list.add(new ViewDataProvider(R.mipmap.ic_profile_avatar,"teasaraci" + teaCount.toString(),"200",0,"Old travel throwback","6 minutes ago"));
                             adap.notifyItemInserted(list.size());
                         }
                         adap.setLoaded();
@@ -104,7 +104,7 @@ public class DailyTabFragment extends Fragment implements SwipeRefreshLayout.OnR
         linearLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(linearLayoutManager);
-        adap = new recycleviewAdapter(list,recyclerView);
+        adap = new RecycleviewAdapter(list,recyclerView);
         recyclerView.setAdapter(adap);
     }
 
@@ -119,7 +119,7 @@ public class DailyTabFragment extends Fragment implements SwipeRefreshLayout.OnR
             profilePictures.add(i,R.mipmap.ic_profile_avatar);
             blitz.add(i,R.mipmap.ic_orange_blitz);
 
-            viewDataProvider l =new viewDataProvider( profilePictures.get(i),usernames.get(i) ,points.get(i) ,blitz.get(i),description.get(i), time.get(i));
+            ViewDataProvider l =new ViewDataProvider( profilePictures.get(i),usernames.get(i) ,points.get(i) ,blitz.get(i),description.get(i), time.get(i));
             list.add(l);
         }
     }
@@ -133,7 +133,7 @@ public class DailyTabFragment extends Fragment implements SwipeRefreshLayout.OnR
         description.add("testDescription");
         time.add("testTime");
 
-        viewDataProvider l =new viewDataProvider( profilePictures.get(profilePictures.size()-1),usernames.get(usernames.size()-1) ,points.get(points.size()-1) ,blitz.get(points.size()-1),description.get(description.size()-1), time.get(time.size()-1));
+        ViewDataProvider l =new ViewDataProvider( profilePictures.get(profilePictures.size()-1),usernames.get(usernames.size()-1) ,points.get(points.size()-1) ,blitz.get(points.size()-1),description.get(description.size()-1), time.get(time.size()-1));
         list.add(0,l);
 
 
