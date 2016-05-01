@@ -7,27 +7,29 @@ public class RequestURL {
 
     public final static String IP_ADDRESS = "http://52.38.241.194";
 
-    public static final String REGISTER     = IP_ADDRESS + "/accounts/register/";
-    public static final String LOGIN        = IP_ADDRESS + "/accounts/login/";
-    public static final String VERIFY_TOKEN = IP_ADDRESS + "/accounts/verifyToken/";
-    public static final String AVATAR       = IP_ADDRESS + "/accounts/avatar/";
-    public static final String PROFILE      = IP_ADDRESS + "/accounts/profile/";
-    public static final String USER_CHAPTER = IP_ADDRESS + "/images/userChapter/";
-    public static final String TOPIC        = IP_ADDRESS + "/images/topic/";
-    public static final String CHAPTERS     = IP_ADDRESS + "/images/chapters/";
+    public static final String REGISTER                 = IP_ADDRESS + "/accounts/register/";
+    public static final String LOGIN                    = IP_ADDRESS + "/accounts/login/";
+    public static final String VERIFY_TOKEN             = IP_ADDRESS + "/accounts/verifyToken/";
+    public static final String AVATAR                   = IP_ADDRESS + "/accounts/avatar/";
+    public static final String PROFILE                  = IP_ADDRESS + "/accounts/profile/";
+    public static final String UPLOAD_USER_CHAPTER      = IP_ADDRESS + "/images/uploadUserChapter/";
+    public static final String GET_USER_CHAPTERS        = IP_ADDRESS + "/images/getUserChapters/";
+    public static final String TOPIC                    = IP_ADDRESS + "/images/topic/";
+    public static final String CHAPTERS                 = IP_ADDRESS + "/images/chapters/";
 
     public static boolean _needsAuth(String url)
     {
         switch(url) {
-            case REGISTER:      return false;
-            case LOGIN:         return false;
-            case VERIFY_TOKEN:  return true;
-            case AVATAR:        return true;
-            case PROFILE:       return true;
-            case USER_CHAPTER:  return true;
-            case TOPIC:         return false;
-            case CHAPTERS:      return false;
-            default:            return false;
+            case REGISTER:              return false;
+            case LOGIN:                 return false;
+            case VERIFY_TOKEN:          return true;
+            case AVATAR:                return true;
+            case PROFILE:               return true;
+            case UPLOAD_USER_CHAPTER:   return true;
+            case GET_USER_CHAPTERS:     return true;
+            case TOPIC:                 return false;
+            case CHAPTERS:              return false;
+            default:                    return false;
         }
     }
 

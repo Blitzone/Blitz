@@ -35,9 +35,6 @@ import com.example.bsaraci.blitzone.ServerComm.PhotoUploadRequest;
 import com.example.bsaraci.blitzone.ServerComm.PhotoUploadResponse;
 import com.example.bsaraci.blitzone.ServerComm.RequestQueueSingleton;
 import com.example.bsaraci.blitzone.ServerComm.RequestURL;
-import com.google.android.gms.appindexing.Action;
-import com.google.android.gms.appindexing.AppIndex;
-import com.google.android.gms.common.api.GoogleApiClient;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -80,11 +77,6 @@ public class Profile extends AppCompatActivity {
     private static final int UPLOAD_PROFILE_IMAGE_FROM_GALLERY = 2;
     private static final int CAMERA_CHAPTER_IMAGE_REQUEST = 3;
     private static final int UPLOAD_CHAPTER_IMAGE_FROM_GALLERY = 4;
-    /**
-     * ATTENTION: This was auto-generated to implement the App Indexing API.
-     * See https://g.co/AppIndexing/AndroidStudio for more information.
-     */
-    private GoogleApiClient client;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -97,7 +89,6 @@ public class Profile extends AppCompatActivity {
         toolbarTitle = (TextView) findViewById(R.id.profile_toolbar_title);
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
-        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
 
@@ -118,7 +109,7 @@ public class Profile extends AppCompatActivity {
             } else if (requestCamera == CAMERA_CHAPTER_IMAGE_REQUEST) {
                 Chapter chap = profilePhotosDataSet.getChapter(chapterClicked);
                 profilePhotosDataSet.addPhotoChapter(photoChapter, chap);
-                uploadPicture(photoChapter.getBitmap(), RequestURL.USER_CHAPTER, getPhotoChapterParams(chap));
+                uploadPicture(photoChapter.getBitmap(), RequestURL.UPLOAD_USER_CHAPTER, getPhotoChapterParams(chap));
                 mAdapter = new ProfileRecyclerviewAdapter(profilePhotosDataSet);
                 mAdapter.notifyDataSetChanged();
                 mRecyclerView.setAdapter(mAdapter);
@@ -135,7 +126,7 @@ public class Profile extends AppCompatActivity {
             } else if (requestGallery == UPLOAD_CHAPTER_IMAGE_FROM_GALLERY) {
                 Chapter chap = profilePhotosDataSet.getChapter(chapterClicked);
                 profilePhotosDataSet.addPhotoChapter(photoChapter, chap);
-                uploadPicture(photoChapter.getBitmap(), RequestURL.USER_CHAPTER, getPhotoChapterParams(chap));
+                uploadPicture(photoChapter.getBitmap(), RequestURL.UPLOAD_USER_CHAPTER, getPhotoChapterParams(chap));
                 mAdapter = new ProfileRecyclerviewAdapter(profilePhotosDataSet);
                 mAdapter.notifyDataSetChanged();
                 mRecyclerView.setAdapter(mAdapter);
@@ -406,8 +397,8 @@ public class Profile extends AppCompatActivity {
         //Put everything in the request
 
         MRequest mRequest = new MRequest(
-                RequestURL.USER_CHAPTER,
-                Request.Method.GET,
+                RequestURL.CHAPTERS,
+                Request.Method.POST,
                 getChaptersParams(), //Put the parameters of the request here (JSONObject format)
                 listener,
                 errorListener,
@@ -485,7 +476,7 @@ public class Profile extends AppCompatActivity {
         //Put everything in the request
 
         MRequest mRequest = new MRequest(
-                RequestURL.USER_CHAPTER,
+                RequestURL.GET_USER_CHAPTERS,
                 Request.Method.POST,
                 getPhotoChapterParams(topicId), //Put the parameters of the request here (JSONObject format)
                 listener,
