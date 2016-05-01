@@ -7,15 +7,13 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-
 public class ProfileRecyclerviewAdapter extends RecyclerView.Adapter<ProfileRecyclerviewAdapter.DataObjectHolder> {
 
     public interface OnItemClickListener {
-        void onItemClick(ProfileHorizontalPhotosProvider item);
+        void onItemClick(ProfilePhotosProvider item);
     }
 
-    private DataSet mDataset;
+    private ProfilePhotosDataSet mDataset;
     private static MyClickListener myClickListener;
 
     public static class DataObjectHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -26,12 +24,10 @@ public class ProfileRecyclerviewAdapter extends RecyclerView.Adapter<ProfileRecy
             super(itemView);
             chapter = (TextView) itemView.findViewById(R.id.chapter);
             photoChapter = (ImageView) itemView.findViewById(R.id.photo_chapter);
-            itemView.setOnClickListener(this);
         }
 
             @Override
             public void onClick(View v) {
-                myClickListener.onItemClick(getPosition(), v);
             }
     }
 
@@ -39,7 +35,7 @@ public class ProfileRecyclerviewAdapter extends RecyclerView.Adapter<ProfileRecy
         this.myClickListener = myClickListener;
     }
 
-    public ProfileRecyclerviewAdapter(DataSet myDataset) {
+    public ProfileRecyclerviewAdapter(ProfilePhotosDataSet myDataset) {
         mDataset = myDataset;
     }
 
@@ -58,7 +54,7 @@ public class ProfileRecyclerviewAdapter extends RecyclerView.Adapter<ProfileRecy
         holder.photoChapter.setImageBitmap(mDataset.getPhotoChapter(chap));
     }
 
-    public void addItem(ProfileHorizontalPhotosProvider dataObj, int index) {
+    public void addItem(ProfilePhotosProvider dataObj, int index) {
         Chapter chap = mDataset.getChapter(index);
         mDataset.addChapter(dataObj.getmChapter());
         mDataset.addPhotoChapter(dataObj.getmBitpmap(),chap);

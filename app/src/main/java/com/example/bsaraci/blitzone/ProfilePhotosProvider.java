@@ -4,16 +4,16 @@ import android.graphics.Bitmap;
 
 import java.util.ArrayList;
 
-public class ProfileHorizontalPhotosProvider {
+public class ProfilePhotosProvider {
     private Chapter mChapter;
     private Bitmap mBitpmap;
 
-    public ProfileHorizontalPhotosProvider(Chapter mChapter, Bitmap mBitpmap) {
+    public ProfilePhotosProvider(Chapter mChapter, Bitmap mBitpmap) {
         this.mChapter = mChapter;
         this.mBitpmap = mBitpmap;
     }
 
-    public ProfileHorizontalPhotosProvider(Chapter mChapter)
+    public ProfilePhotosProvider(Chapter mChapter)
     {
         this.mChapter = mChapter;
     }

@@ -57,7 +57,7 @@ public class Profile extends AppCompatActivity
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
-    private DataSet dataSet = new DataSet();
+    private ProfilePhotosDataSet profilePhotosDataSet = new ProfilePhotosDataSet();
 
     private ArrayList<Chapter> chapters;
     private ArrayList<Bitmap> photoChapter;
@@ -69,8 +69,11 @@ public class Profile extends AppCompatActivity
     private static String galleryFolderPath = null;
     private String imageName = null;
     private static Uri fileUri = null;
-    private static final int CAMERA_IMAGE_REQUEST=1;
-    private static final int UPLOAD_FROM_GALLERY = 2;
+    private int chapterClicked = 0;
+    private static final int CAMERA_PROFILE_IMAGE_REQUEST =1;
+    private static final int UPLOAD_PROFILE_IMAGE_FROM_GALLERY = 2;
+    private static final int CAMERA_CHAPTER_IMAGE_REQUEST = 3;
+    private static final int UPLOAD_CHAPTER_IMAGE_FROM_GALLERY =4;
 
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -90,7 +93,7 @@ public class Profile extends AppCompatActivity
         // TODO Auto-generated method stub
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (resultCode == RESULT_OK && requestCode == CAMERA_IMAGE_REQUEST) {
+        if (resultCode == RESULT_OK && requestCode == CAMERA_PROFILE_IMAGE_REQUEST) {
 
                     Bitmap bitmap = null;
                     try {
@@ -108,6 +111,7 @@ public class Profile extends AppCompatActivity
                     }
 
                     // Setting image image icon on the imageview
+
                     ImageView imageView = (ImageView) this.findViewById(R.id.profile_picture);
                     imageView.setImageBitmap(bitmap);
 
@@ -115,7 +119,7 @@ public class Profile extends AppCompatActivity
 
         }
 
-        else if(requestCode == UPLOAD_FROM_GALLERY && resultCode == RESULT_OK && null != data && data.getData() != null){
+        else if(requestCode == UPLOAD_PROFILE_IMAGE_FROM_GALLERY && resultCode == RESULT_OK && null != data && data.getData() != null){
             Uri selectedImage = data.getData();
             Bitmap bitmap = null;
 
@@ -129,19 +133,59 @@ public class Profile extends AppCompatActivity
                 e.printStackTrace();
             }
 
-            //Setting the Bitmap to ImageView
-//            photoChapter.add(0, bitmap);
-            Chapter chap = dataSet.getChapter(0);
-            dataSet.addPhotoChapter(bitmap, chap);
-            mAdapter = new ProfileRecyclerviewAdapter(dataSet);
-            mAdapter.notifyDataSetChanged();
-            mRecyclerView.setAdapter(mAdapter);
-
             ImageView imageView1 = (ImageView) this.findViewById(R.id.profile_picture);
             imageView1.setImageBitmap(bitmap);
 
-
             uploadPicture(bitmap);
+
+        }
+
+        else if (resultCode == RESULT_OK && requestCode == CAMERA_CHAPTER_IMAGE_REQUEST) {
+
+            Bitmap bitmap = null;
+            try {
+                GetImageThumbnail getImageThumbnail = new GetImageThumbnail();
+                bitmap = getImageThumbnail.getThumbnail(fileUri, this);
+                ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+
+            } catch (FileNotFoundException e1) {
+                // TODO Auto-generated catch block
+                e1.printStackTrace();
+            } catch (IOException e1) {
+                // TODO Auto-generated catch block
+                e1.printStackTrace();
+            }
+
+            // Setting image image icon on the imageview
+            Chapter chap = profilePhotosDataSet.getChapter(0);
+            profilePhotosDataSet.addPhotoChapter(bitmap, chap);
+            mAdapter = new ProfileRecyclerviewAdapter(profilePhotosDataSet);
+            mAdapter.notifyDataSetChanged();
+            mRecyclerView.setAdapter(mAdapter);
+
+        }
+
+        else if(requestCode == UPLOAD_CHAPTER_IMAGE_FROM_GALLERY && resultCode == RESULT_OK && null != data && data.getData() != null){
+            Uri selectedImage = data.getData();
+            Bitmap bitmap = null;
+
+            try {
+                //Getting the Bitmap from Gallery
+                bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), selectedImage);
+//                ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+//                bitmap1.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+
+            Chapter chap = profilePhotosDataSet.getChapter(chapterClicked);
+            profilePhotosDataSet.addPhotoChapter(bitmap, chap);
+            mAdapter = new ProfileRecyclerviewAdapter(profilePhotosDataSet);
+            mAdapter.notifyDataSetChanged();
+            mRecyclerView.setAdapter(mAdapter);
 
         }
     }
@@ -168,7 +212,7 @@ public class Profile extends AppCompatActivity
         r.execute(bitmap);
     }
 
-    public void captureImage() {
+    public void captureProfileImage() {
 
         ImageView imageView = (ImageView) findViewById(R.id.profile_picture);
 
@@ -191,15 +235,49 @@ public class Profile extends AppCompatActivity
         imageView.setTag(imageFolderPath + File.separator + imageName);
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
-        startActivityForResult(takePictureIntent, CAMERA_IMAGE_REQUEST);
+        startActivityForResult(takePictureIntent, CAMERA_PROFILE_IMAGE_REQUEST);
 
     }
 
-    public void chooseImageFromGallery(){
+    public void captureChapterImage() {
+
+        ImageView imageView = (ImageView) findViewById(R.id.profile_picture);
+
+        // fetching the root directory
+        root = Environment.getExternalStorageDirectory().toString()
+                + "/Your_Folder";
+
+        // Creating folders for Image
+        imageFolderPath = root + "/Blitzmade";
+        File imagesFolder = new File(imageFolderPath);
+        imagesFolder.mkdirs();
+
+        // Generating file name
+        imageName = "test.png";
+
+        // Creating image here
+
+        File image = new File(imageFolderPath, imageName);
+        fileUri = Uri.fromFile(image);
+        imageView.setTag(imageFolderPath + File.separator + imageName);
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
+        startActivityForResult(takePictureIntent, CAMERA_CHAPTER_IMAGE_REQUEST);
+
+    }
+
+    public void chooseProfileImageFromGallery(){
         // Create intent to Open Image applications like Gallery, Google Photos
         Intent galleryIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         // Start the Intent
-        startActivityForResult(galleryIntent, UPLOAD_FROM_GALLERY);
+        startActivityForResult(galleryIntent, UPLOAD_PROFILE_IMAGE_FROM_GALLERY);
+    }
+
+    public void chooseChapterImageFromGallery(){
+        // Create intent to Open Image applications like Gallery, Google Photos
+        Intent galleryIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        // Start the Intent
+        startActivityForResult(galleryIntent, UPLOAD_CHAPTER_IMAGE_FROM_GALLERY);
     }
 
     public void removeProfilePicture(){
@@ -427,31 +505,28 @@ public class Profile extends AppCompatActivity
         mRecyclerView = (RecyclerView) findViewById(R.id.hlvProfile);
         mLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         mRecyclerView.setLayoutManager(mLayoutManager);
-        dataSet.addChapters(chapters);
-        dataSet.addPhotoChapter(bitmap1, dataSet.getChapter(0));
-        dataSet.addPhotoChapter(bitmap2, dataSet.getChapter(1));
-        dataSet.addPhotoChapter(bitmap3, dataSet.getChapter(2));
-        mAdapter = new ProfileRecyclerviewAdapter(dataSet);
+        mRecyclerView.addOnItemTouchListener(
+                new RecyclerItemClickListener(this, mRecyclerView, new RecyclerItemClickListener.OnItemClickListener() {
+                    public void onItemClick(View view, int position) {
+                        chapterClicked=position;
+                        captureChapterImage();
+                        Toast.makeText(Profile.this, "You clicked on : " + chapters.get(position).getName().toString(), Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onItemLongClick(View view, int position) {
+                        chapterClicked=position;
+                        chooseChapterImageFromGallery();
+                    }
+                })
+        );
+        profilePhotosDataSet.addChapters(chapters);
+        profilePhotosDataSet.addPhotoChapter(bitmap1, profilePhotosDataSet.getChapter(0));
+        profilePhotosDataSet.addPhotoChapter(bitmap2, profilePhotosDataSet.getChapter(1));
+        profilePhotosDataSet.addPhotoChapter(bitmap3, profilePhotosDataSet.getChapter(2));
+        mAdapter = new ProfileRecyclerviewAdapter(profilePhotosDataSet);
         mRecyclerView.setAdapter(mAdapter);
-
-        /*mAdapter.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                captureImage();
-                Toast.makeText(Profile.this, "You clicked on : " + chapters.get(position).toString(), Toast.LENGTH_SHORT).show();
-            }
-        });*/
     }
-
-    /*private ArrayList<ProfileHorizontalPhotosProvider> getDataSet() {
-        ArrayList results = new ArrayList<ProfileHorizontalPhotosProvider>();
-        for (int index = 0; index < 3; index++) {
-            ProfileHorizontalPhotosProvider obj = new ProfileHorizontalPhotosProvider(chapters.get(index),photoChapter.get(index));
-            results.add(index, obj);
-        }
-        return results;
-    }*/
-
     private JSONObject getChaptersParams()
     {
         Map<String, String> params = new HashMap<String, String>();
@@ -517,10 +592,10 @@ public class Profile extends AppCompatActivity
             public void onClick(DialogInterface dialog, int item) {
 
                 if(item == 0){
-                    chooseImageFromGallery();
+                    chooseProfileImageFromGallery();
                 }
                 else if(item == 1){
-                    captureImage();
+                    captureProfileImage();
                 }
                 else if(item == 2){
                     removeProfilePicture();

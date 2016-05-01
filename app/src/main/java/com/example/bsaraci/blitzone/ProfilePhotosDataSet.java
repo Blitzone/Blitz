@@ -8,24 +8,24 @@ import java.util.ArrayList;
 /**
  * Created by bsaraci on 5/1/2016.
  */
-public class DataSet {
-    private ArrayList<ProfileHorizontalPhotosProvider> mArray;
+public class ProfilePhotosDataSet {
+    private ArrayList<ProfilePhotosProvider> mArray;
 
-    public DataSet(){
-        mArray = new ArrayList<ProfileHorizontalPhotosProvider>();
+    public ProfilePhotosDataSet(){
+        mArray = new ArrayList<ProfilePhotosProvider>();
     }
 
-    public DataSet( ArrayList<ProfileHorizontalPhotosProvider> mArray){
+    public ProfilePhotosDataSet(ArrayList<ProfilePhotosProvider> mArray){
         this.mArray=mArray;
     }
 
-    public void addProfileHorizontalPhotoProvider (ProfileHorizontalPhotosProvider profileHorizontalPhotosProvider){
-        mArray.add(profileHorizontalPhotosProvider);
+    public void addProfileHorizontalPhotoProvider (ProfilePhotosProvider profilePhotosProvider){
+        mArray.add(profilePhotosProvider);
     }
 
     public void addChapter (Chapter chapter){
-        ProfileHorizontalPhotosProvider profileHorizontalPhotosProvider = new ProfileHorizontalPhotosProvider(chapter,null);
-        mArray.add(profileHorizontalPhotosProvider);
+        ProfilePhotosProvider profilePhotosProvider = new ProfilePhotosProvider(chapter,null);
+        mArray.add(profilePhotosProvider);
     }
 
     public Chapter getChapter (int position){
@@ -35,12 +35,12 @@ public class DataSet {
     public void addChapters (ArrayList<Chapter> list){
         for(Chapter obj : list){
             Log.i("Chap", obj.getName());
-            mArray.add(new ProfileHorizontalPhotosProvider(obj));
+            mArray.add(new ProfilePhotosProvider(obj));
         }
     }
 
     public Bitmap getPhotoChapter(Chapter chapter){
-        for (ProfileHorizontalPhotosProvider obj : mArray){
+        for (ProfilePhotosProvider obj : mArray){
             if(obj.getmChapter().getId() == chapter.getId()){
                 return obj.getmBitpmap();
             }
@@ -49,7 +49,7 @@ public class DataSet {
     }
 
     public void addPhotoChapter(Bitmap bitmap, Chapter chapter){
-        for (ProfileHorizontalPhotosProvider obj : mArray){
+        for (ProfilePhotosProvider obj : mArray){
             if(obj.getmChapter().getId() == chapter.getId()){
                 obj.setmBitpmap(bitmap);
             }
