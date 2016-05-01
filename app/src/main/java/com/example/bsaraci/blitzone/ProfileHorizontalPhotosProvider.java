@@ -13,6 +13,11 @@ public class ProfileHorizontalPhotosProvider {
         this.mBitpmap = mBitpmap;
     }
 
+    public ProfileHorizontalPhotosProvider(Chapter mChapter)
+    {
+        this.mChapter = mChapter;
+    }
+
     public Chapter getmChapter() {
         return mChapter;
     }

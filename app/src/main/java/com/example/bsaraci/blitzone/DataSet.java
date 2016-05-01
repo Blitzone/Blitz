@@ -1,6 +1,7 @@
 package com.example.bsaraci.blitzone;
 
 import android.graphics.Bitmap;
+import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -11,6 +12,7 @@ public class DataSet {
     private ArrayList<ProfileHorizontalPhotosProvider> mArray;
 
     public DataSet(){
+        mArray = new ArrayList<ProfileHorizontalPhotosProvider>();
     }
 
     public DataSet( ArrayList<ProfileHorizontalPhotosProvider> mArray){
@@ -32,7 +34,8 @@ public class DataSet {
 
     public void addChapters (ArrayList<Chapter> list){
         for(Chapter obj : list){
-            mArray.add(new ProfileHorizontalPhotosProvider(obj,null));
+            Log.i("Chap", obj.getName());
+            mArray.add(new ProfileHorizontalPhotosProvider(obj));
         }
     }
 

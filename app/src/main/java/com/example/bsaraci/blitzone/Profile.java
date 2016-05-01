@@ -130,8 +130,9 @@ public class Profile extends AppCompatActivity
             }
 
             //Setting the Bitmap to ImageView
-            photoChapter.add(0, bitmap);
-
+//            photoChapter.add(0, bitmap);
+            Chapter chap = dataSet.getChapter(0);
+            dataSet.addPhotoChapter(bitmap, chap);
             mAdapter = new ProfileRecyclerviewAdapter(dataSet);
             mAdapter.notifyDataSetChanged();
             mRecyclerView.setAdapter(mAdapter);
@@ -427,9 +428,9 @@ public class Profile extends AppCompatActivity
         mLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         mRecyclerView.setLayoutManager(mLayoutManager);
         dataSet.addChapters(chapters);
-        dataSet.addPhotoChapter(bitmap1,chapters.get(0));
-        dataSet.addPhotoChapter(bitmap2,chapters.get(1));
-        dataSet.addPhotoChapter(bitmap3,chapters.get(2));
+        dataSet.addPhotoChapter(bitmap1, dataSet.getChapter(0));
+        dataSet.addPhotoChapter(bitmap2, dataSet.getChapter(1));
+        dataSet.addPhotoChapter(bitmap3, dataSet.getChapter(2));
         mAdapter = new ProfileRecyclerviewAdapter(dataSet);
         mRecyclerView.setAdapter(mAdapter);
 
