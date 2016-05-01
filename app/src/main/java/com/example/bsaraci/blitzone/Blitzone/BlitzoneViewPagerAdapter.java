@@ -24,7 +24,7 @@ public class BlitzoneViewPagerAdapter extends FragmentStatePagerAdapter {
         }
 
         else{
-            Blitzone.BestTabFragment bestTabFragment = new Blitzone.BestTabFragment();
+            BestTabFragment bestTabFragment = new BestTabFragment();
             return bestTabFragment;
         }
     }

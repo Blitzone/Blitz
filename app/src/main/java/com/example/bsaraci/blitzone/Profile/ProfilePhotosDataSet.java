@@ -20,22 +20,22 @@ public class ProfilePhotosDataSet {
         mArray.add(profilePhotosProvider);
     }
 
-    public void addChapter (Profile.Chapter chapter){
+    public void addChapter (Chapter chapter){
         ProfilePhotosProvider profilePhotosProvider = new ProfilePhotosProvider(chapter,null);
         mArray.add(profilePhotosProvider);
     }
 
-    public Profile.Chapter getChapter (int position){
+    public Chapter getChapter (int position){
        return mArray.get(position).getChapter();
     }
 
-    public void addChapters (ArrayList<Profile.Chapter> list){
-        for(Profile.Chapter obj : list){
+    public void addChapters (ArrayList<Chapter> list){
+        for(Chapter obj : list){
             mArray.add(new ProfilePhotosProvider(obj));
         }
     }
 
-    public void initPhotoChapters(ArrayList<Profile.PhotoChapter> list){
+    public void initPhotoChapters(ArrayList<PhotoChapter> list){
         for (int i = 0; i < this.getSize(); i++)
         {
             ProfilePhotosProvider elem = mArray.get(i);
@@ -43,7 +43,7 @@ public class ProfilePhotosDataSet {
         }
     }
 
-    public Profile.PhotoChapter getPhotoChapter(Profile.Chapter chapter){
+    public PhotoChapter getPhotoChapter(Chapter chapter){
         for (ProfilePhotosProvider obj : mArray){
             if(obj.getChapter().getId() == chapter.getId()){
                 return obj.getPhotoChapter();
@@ -52,7 +52,7 @@ public class ProfilePhotosDataSet {
         return null;
     }
 
-    public void addPhotoChapter(Profile.PhotoChapter bitmap, Profile.Chapter chapter){
+    public void addPhotoChapter(PhotoChapter bitmap, Chapter chapter){
         for (ProfilePhotosProvider obj : mArray){
             if(obj.getChapter().getId() == chapter.getId()){
                 obj.setPhotoChapter(bitmap);

@@ -3,37 +3,37 @@ package com.example.bsaraci.blitzone.Profile;
 import com.example.bsaraci.blitzone.Profile.Profile;
 
 public class ProfilePhotosProvider {
-    private Profile.Chapter chapter;
-    private Profile.PhotoChapter photoChapter;
+    private Chapter chapter;
+    private PhotoChapter photoChapter;
 
-    public ProfilePhotosProvider(Profile.Chapter chapter, Profile.PhotoChapter photoChapter) {
+    public ProfilePhotosProvider(Chapter chapter, PhotoChapter photoChapter) {
         this.chapter = chapter;
         this.photoChapter = photoChapter;
     }
 
-    public ProfilePhotosProvider(Profile.Chapter chapter)
+    public ProfilePhotosProvider(Chapter chapter)
     {
         this.chapter = chapter;
     }
 
-    public ProfilePhotosProvider(Profile.PhotoChapter photoChapter)
+    public ProfilePhotosProvider(PhotoChapter photoChapter)
     {
         this.photoChapter = photoChapter;
     }
 
-    public Profile.Chapter getChapter() {
+    public Chapter getChapter() {
         return chapter;
     }
 
-    public Profile.PhotoChapter getPhotoChapter() {
+    public PhotoChapter getPhotoChapter() {
         return photoChapter;
     }
 
-    public void setPhotoChapter(Profile.PhotoChapter mPhotoChapter) {
+    public void setPhotoChapter(PhotoChapter mPhotoChapter) {
         this.photoChapter = mPhotoChapter;
     }
 
-    public void setChapter(Profile.Chapter mChapter) {
+    public void setChapter(Chapter mChapter) {
         this.chapter = mChapter;
     }
 }
