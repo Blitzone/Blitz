@@ -158,7 +158,7 @@ public class Profile extends AppCompatActivity
             }
 
             // Setting image image icon on the imageview
-            Chapter chap = profilePhotosDataSet.getChapter(0);
+            Chapter chap = profilePhotosDataSet.getChapter(chapterClicked);
             profilePhotosDataSet.addPhotoChapter(bitmap, chap);
             mAdapter = new ProfileRecyclerviewAdapter(profilePhotosDataSet);
             mAdapter.notifyDataSetChanged();
