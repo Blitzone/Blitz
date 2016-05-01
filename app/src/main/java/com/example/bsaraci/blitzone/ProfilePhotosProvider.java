@@ -1,37 +1,37 @@
 package com.example.bsaraci.blitzone;
 
 public class ProfilePhotosProvider {
-    private Chapter mChapter;
-    private PhotoChapter mBitmap;
+    private Chapter chapter;
+    private PhotoChapter photoChapter;
 
-    public ProfilePhotosProvider(Chapter mChapter, PhotoChapter mBitmap) {
-        this.mChapter = mChapter;
-        this.mBitmap = mBitmap;
+    public ProfilePhotosProvider(Chapter chapter, PhotoChapter photoChapter) {
+        this.chapter = chapter;
+        this.photoChapter = photoChapter;
     }
 
-    public ProfilePhotosProvider(Chapter mChapter)
+    public ProfilePhotosProvider(Chapter chapter)
     {
-        this.mChapter = mChapter;
+        this.chapter = chapter;
     }
 
-    public ProfilePhotosProvider(PhotoChapter mBitmap)
+    public ProfilePhotosProvider(PhotoChapter photoChapter)
     {
-        this.mBitmap = mBitmap;
+        this.photoChapter = photoChapter;
     }
 
-    public Chapter getmChapter() {
-        return mChapter;
+    public Chapter getChapter() {
+        return chapter;
     }
 
-    public PhotoChapter getmBitmap() {
-        return mBitmap;
+    public PhotoChapter getPhotoChapter() {
+        return photoChapter;
     }
 
-    public void setmBitmap(PhotoChapter mBitmap) {
-        this.mBitmap = mBitmap;
+    public void setPhotoChapter(PhotoChapter mPhotoChapter) {
+        this.photoChapter = mPhotoChapter;
     }
 
-    public void setmChapter(Chapter mChapter) {
-        this.mChapter = mChapter;
+    public void setChapter(Chapter mChapter) {
+        this.chapter = mChapter;
     }
 }

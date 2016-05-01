@@ -91,18 +91,18 @@ public class Profile extends AppCompatActivity
 
         if (resultCode == RESULT_OK && requestCode == requestCamera) {
 
-            PhotoChapter bitmap = photoSaveFromCamera();
+            PhotoChapter photoChapter = photoSaveFromCamera();
 
             if(requestCamera==CAMERA_PROFILE_IMAGE_REQUEST){
                 ImageView imageView = (ImageView) this.findViewById(R.id.profile_picture);
-                imageView.setImageBitmap(bitmap.getBitmap());
+                imageView.setImageBitmap(photoChapter.getBitmap());
 
-                uploadPicture(bitmap.getBitmap());
+                uploadPicture(photoChapter.getBitmap());
             }
 
             else if (requestCamera==CAMERA_CHAPTER_IMAGE_REQUEST){
                 Chapter chap = profilePhotosDataSet.getChapter(chapterClicked);
-                profilePhotosDataSet.addPhotoChapter(bitmap, chap);
+                profilePhotosDataSet.addPhotoChapter(photoChapter, chap);
                 mAdapter = new ProfileRecyclerviewAdapter(profilePhotosDataSet);
                 mAdapter.notifyDataSetChanged();
                 mRecyclerView.setAdapter(mAdapter);
@@ -112,16 +112,16 @@ public class Profile extends AppCompatActivity
         else if(requestCode == requestGallery && resultCode == RESULT_OK && null != data && data.getData() != null){
             Uri selectedImage = data.getData();
 
-            PhotoChapter bitmap = photoSaveFromGallery(selectedImage);
+            PhotoChapter photoChapter = photoSaveFromGallery(selectedImage);
 
             if(requestGallery==UPLOAD_PROFILE_IMAGE_FROM_GALLERY){
                 ImageView imageView1 = (ImageView) this.findViewById(R.id.profile_picture);
-                imageView1.setImageBitmap(bitmap.getBitmap());
-                uploadPicture(bitmap.getBitmap());
+                imageView1.setImageBitmap(photoChapter.getBitmap());
+                uploadPicture(photoChapter.getBitmap());
             }
             else if(requestGallery==UPLOAD_CHAPTER_IMAGE_FROM_GALLERY){
                 Chapter chap = profilePhotosDataSet.getChapter(chapterClicked);
-                profilePhotosDataSet.addPhotoChapter(bitmap,chap);
+                profilePhotosDataSet.addPhotoChapter(photoChapter,chap);
                 mAdapter = new ProfileRecyclerviewAdapter(profilePhotosDataSet);
                 mAdapter.notifyDataSetChanged();
                 mRecyclerView.setAdapter(mAdapter);
@@ -461,7 +461,7 @@ public class Profile extends AppCompatActivity
                 })
         );
         profilePhotosDataSet.addChapters(chapters);
-        profilePhotosDataSet.addPhotos(photoChapters);
+        profilePhotosDataSet.initPhotoChapters(photoChapters);
         mAdapter = new ProfileRecyclerviewAdapter(profilePhotosDataSet);
         mRecyclerView.setAdapter(mAdapter);
     }

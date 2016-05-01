@@ -17,13 +17,13 @@ public class ProfileRecyclerviewAdapter extends RecyclerView.Adapter<ProfileRecy
     private static MyClickListener myClickListener;
 
     public static class DataObjectHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        TextView chapter;
-        ImageView photoChapter;
+        TextView chapterTextView;
+        ImageView photoChapterImageView;
 
         public DataObjectHolder(View itemView) {
             super(itemView);
-            chapter = (TextView) itemView.findViewById(R.id.chapter);
-            photoChapter = (ImageView) itemView.findViewById(R.id.photo_chapter);
+            chapterTextView = (TextView) itemView.findViewById(R.id.chapter);
+            photoChapterImageView = (ImageView) itemView.findViewById(R.id.photo_chapter);
         }
 
             @Override
@@ -50,15 +50,15 @@ public class ProfileRecyclerviewAdapter extends RecyclerView.Adapter<ProfileRecy
     @Override
     public void onBindViewHolder(DataObjectHolder holder, int position) {
         Chapter chap = mDataset.getChapter(position);
-        holder.chapter.setText(chap.getName());
+        holder.chapterTextView.setText(chap.getName());
         PhotoChapter photoChapter1 = mDataset.getPhotoChapter(chap);
-        holder.photoChapter.setImageBitmap(photoChapter1.getBitmap());
+        holder.photoChapterImageView.setImageBitmap(photoChapter1.getBitmap());
     }
 
     public void addItem(ProfilePhotosProvider dataObj, int index) {
         Chapter chap = mDataset.getChapter(index);
-        mDataset.addChapter(dataObj.getmChapter());
-        mDataset.addPhotoChapter(dataObj.getmBitmap(),chap);
+        mDataset.addChapter(dataObj.getChapter());
+        mDataset.addPhotoChapter(dataObj.getPhotoChapter(),chap);
         notifyItemInserted(index);
     }
 

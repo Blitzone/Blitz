@@ -21,6 +21,12 @@ public class PhotoChapter {
         this.bitmap = bitmap;
     }
 
+    public PhotoChapter(String url, Bitmap bitmap, boolean _hasPhoto) {
+        this.url = url;
+        this.bitmap = bitmap;
+        this._hasPhoto = _hasPhoto;
+    }
+
     public PhotoChapter() {}
 
     public void setUrl(String url) {
