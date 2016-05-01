@@ -34,12 +34,17 @@ public class ProfilePhotosDataSet {
 
     public void addChapters (ArrayList<Chapter> list){
         for(Chapter obj : list){
-            Log.i("Chap", obj.getName());
             mArray.add(new ProfilePhotosProvider(obj));
         }
     }
 
-    public Bitmap getPhotoChapter(Chapter chapter){
+    public void addPhotos(ArrayList<PhotoChapter> list){
+        for(PhotoChapter obj : list){
+            mArray.add(new ProfilePhotosProvider(obj));
+        }
+    }
+
+    public PhotoChapter getPhotoChapter(Chapter chapter){
         for (ProfilePhotosProvider obj : mArray){
             if(obj.getmChapter().getId() == chapter.getId()){
                 return obj.getmBitpmap();
@@ -48,7 +53,7 @@ public class ProfilePhotosDataSet {
         return null;
     }
 
-    public void addPhotoChapter(Bitmap bitmap, Chapter chapter){
+    public void addPhotoChapter(PhotoChapter bitmap, Chapter chapter){
         for (ProfilePhotosProvider obj : mArray){
             if(obj.getmChapter().getId() == chapter.getId()){
                 obj.setmBitpmap(bitmap);

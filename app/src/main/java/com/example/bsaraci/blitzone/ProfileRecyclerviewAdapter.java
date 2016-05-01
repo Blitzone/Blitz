@@ -51,7 +51,8 @@ public class ProfileRecyclerviewAdapter extends RecyclerView.Adapter<ProfileRecy
     public void onBindViewHolder(DataObjectHolder holder, int position) {
         Chapter chap = mDataset.getChapter(position);
         holder.chapter.setText(chap.getName());
-        holder.photoChapter.setImageBitmap(mDataset.getPhotoChapter(chap));
+        PhotoChapter photoChapter1 = mDataset.getPhotoChapter(chap);
+        holder.photoChapter.setImageBitmap(photoChapter1.getBitmap());
     }
 
     public void addItem(ProfilePhotosProvider dataObj, int index) {

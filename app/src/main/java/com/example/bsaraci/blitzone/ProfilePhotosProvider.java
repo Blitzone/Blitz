@@ -6,9 +6,9 @@ import java.util.ArrayList;
 
 public class ProfilePhotosProvider {
     private Chapter mChapter;
-    private Bitmap mBitpmap;
+    private PhotoChapter mBitpmap;
 
-    public ProfilePhotosProvider(Chapter mChapter, Bitmap mBitpmap) {
+    public ProfilePhotosProvider(Chapter mChapter, PhotoChapter mBitpmap) {
         this.mChapter = mChapter;
         this.mBitpmap = mBitpmap;
     }
@@ -18,15 +18,20 @@ public class ProfilePhotosProvider {
         this.mChapter = mChapter;
     }
 
+    public ProfilePhotosProvider(PhotoChapter mBitpmap)
+    {
+        this.mBitpmap = mBitpmap;
+    }
+
     public Chapter getmChapter() {
         return mChapter;
     }
 
-    public Bitmap getmBitpmap() {
+    public PhotoChapter getmBitpmap() {
         return mBitpmap;
     }
 
-    public void setmBitpmap(Bitmap mBitpmap) {
+    public void setmBitpmap(PhotoChapter mBitpmap) {
         this.mBitpmap = mBitpmap;
     }
 
