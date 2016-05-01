@@ -1,16 +1,12 @@
 package com.example.bsaraci.blitzone;
 
-import android.graphics.Bitmap;
-
-import java.util.ArrayList;
-
 public class ProfilePhotosProvider {
     private Chapter mChapter;
-    private PhotoChapter mBitpmap;
+    private PhotoChapter mBitmap;
 
-    public ProfilePhotosProvider(Chapter mChapter, PhotoChapter mBitpmap) {
+    public ProfilePhotosProvider(Chapter mChapter, PhotoChapter mBitmap) {
         this.mChapter = mChapter;
-        this.mBitpmap = mBitpmap;
+        this.mBitmap = mBitmap;
     }
 
     public ProfilePhotosProvider(Chapter mChapter)
@@ -18,21 +14,21 @@ public class ProfilePhotosProvider {
         this.mChapter = mChapter;
     }
 
-    public ProfilePhotosProvider(PhotoChapter mBitpmap)
+    public ProfilePhotosProvider(PhotoChapter mBitmap)
     {
-        this.mBitpmap = mBitpmap;
+        this.mBitmap = mBitmap;
     }
 
     public Chapter getmChapter() {
         return mChapter;
     }
 
-    public PhotoChapter getmBitpmap() {
-        return mBitpmap;
+    public PhotoChapter getmBitmap() {
+        return mBitmap;
     }
 
-    public void setmBitpmap(PhotoChapter mBitpmap) {
-        this.mBitpmap = mBitpmap;
+    public void setmBitmap(PhotoChapter mBitmap) {
+        this.mBitmap = mBitmap;
     }
 
     public void setmChapter(Chapter mChapter) {

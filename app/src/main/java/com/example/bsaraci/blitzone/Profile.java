@@ -9,7 +9,6 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -57,7 +56,7 @@ public class Profile extends AppCompatActivity
     private ProfilePhotosDataSet profilePhotosDataSet = new ProfilePhotosDataSet();
 
     private ArrayList<Chapter> chapters;
-    private ArrayList<PhotoChapter> photoChapter;
+    private ArrayList<PhotoChapter> photoChapters;
     private Integer topicId;
     TextView toolbarTitle;
 
@@ -390,7 +389,7 @@ public class Profile extends AppCompatActivity
             @Override
             public void onResponse(JSONObject response)
             {
-                updateChapter(response);
+                updateChapters(response);
             }
         };
 
@@ -420,11 +419,11 @@ public class Profile extends AppCompatActivity
         RequestQueueSingleton.getInstance(this).addToRequestQueue(mRequest);
     }
 
-    private void updateChapter(JSONObject response){
+    private void updateChapters(JSONObject response){
 
         try {
-            photoChapter = new ArrayList<>();
-            chapters = new ArrayList<>();
+            photoChapters = new ArrayList<PhotoChapter>();
+            chapters = new ArrayList<Chapter>();
             JSONArray chapterList = (JSONArray)response.get("chapters");
             int chapterListSize = chapterList.length();
             Bitmap bitmap1= BitmapFactory.decodeResource(this.getResources(), R.color.mint);
@@ -433,7 +432,7 @@ public class Profile extends AppCompatActivity
                 JSONObject jsonChapter = (JSONObject) chapterList.getJSONObject(i);
                 Chapter chap = new Chapter((int)jsonChapter.get("id"), jsonChapter.get("name").toString());
                 chapters.add(i, chap);
-                photoChapter.add(i,photoChapter1);
+                photoChapters.add(i, photoChapter1);
             }
         }
         catch (JSONException e)
@@ -462,7 +461,7 @@ public class Profile extends AppCompatActivity
                 })
         );
         profilePhotosDataSet.addChapters(chapters);
-        profilePhotosDataSet.addPhotos(photoChapter);
+        profilePhotosDataSet.addPhotos(photoChapters);
         mAdapter = new ProfileRecyclerviewAdapter(profilePhotosDataSet);
         mRecyclerView.setAdapter(mAdapter);
     }

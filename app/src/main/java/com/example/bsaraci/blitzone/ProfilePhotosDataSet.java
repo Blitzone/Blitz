@@ -1,8 +1,5 @@
 package com.example.bsaraci.blitzone;
 
-import android.graphics.Bitmap;
-import android.util.Log;
-
 import java.util.ArrayList;
 
 /**
@@ -39,15 +36,17 @@ public class ProfilePhotosDataSet {
     }
 
     public void addPhotos(ArrayList<PhotoChapter> list){
-        for(PhotoChapter obj : list){
-            mArray.add(new ProfilePhotosProvider(obj));
+        for (int i = 0; i < this.getSize(); i++)
+        {
+            ProfilePhotosProvider elem = mArray.get(i);
+            elem.setmBitmap(list.get(i));
         }
     }
 
     public PhotoChapter getPhotoChapter(Chapter chapter){
         for (ProfilePhotosProvider obj : mArray){
             if(obj.getmChapter().getId() == chapter.getId()){
-                return obj.getmBitpmap();
+                return obj.getmBitmap();
             }
         }
         return null;
@@ -56,7 +55,7 @@ public class ProfilePhotosDataSet {
     public void addPhotoChapter(PhotoChapter bitmap, Chapter chapter){
         for (ProfilePhotosProvider obj : mArray){
             if(obj.getmChapter().getId() == chapter.getId()){
-                obj.setmBitpmap(bitmap);
+                obj.setmBitmap(bitmap);
             }
         }
     }

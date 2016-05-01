@@ -58,7 +58,7 @@ public class ProfileRecyclerviewAdapter extends RecyclerView.Adapter<ProfileRecy
     public void addItem(ProfilePhotosProvider dataObj, int index) {
         Chapter chap = mDataset.getChapter(index);
         mDataset.addChapter(dataObj.getmChapter());
-        mDataset.addPhotoChapter(dataObj.getmBitpmap(),chap);
+        mDataset.addPhotoChapter(dataObj.getmBitmap(),chap);
         notifyItemInserted(index);
     }
 
