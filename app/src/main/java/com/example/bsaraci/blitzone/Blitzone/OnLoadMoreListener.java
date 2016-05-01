@@ -1,4 +1,4 @@
-package com.example.bsaraci.blitzone;
+package com.example.bsaraci.blitzone.Blitzone;
 
 /**
  * Created by bsaraci on 4/2/2016.

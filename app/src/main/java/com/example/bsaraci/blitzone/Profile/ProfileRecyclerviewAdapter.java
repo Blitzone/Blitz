@@ -1,4 +1,4 @@
-package com.example.bsaraci.blitzone;
+package com.example.bsaraci.blitzone.Profile;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -6,6 +6,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.example.bsaraci.blitzone.R;
 
 public class ProfileRecyclerviewAdapter extends RecyclerView.Adapter<ProfileRecyclerviewAdapter.DataObjectHolder> {
 
@@ -49,14 +51,14 @@ public class ProfileRecyclerviewAdapter extends RecyclerView.Adapter<ProfileRecy
 
     @Override
     public void onBindViewHolder(DataObjectHolder holder, int position) {
-        Chapter chap = mDataset.getChapter(position);
+        Profile.Chapter chap = mDataset.getChapter(position);
         holder.chapterTextView.setText(chap.getName());
-        PhotoChapter photoChapter1 = mDataset.getPhotoChapter(chap);
+        Profile.PhotoChapter photoChapter1 = mDataset.getPhotoChapter(chap);
         holder.photoChapterImageView.setImageBitmap(photoChapter1.getBitmap());
     }
 
     public void addItem(ProfilePhotosProvider dataObj, int index) {
-        Chapter chap = mDataset.getChapter(index);
+        Profile.Chapter chap = mDataset.getChapter(index);
         mDataset.addChapter(dataObj.getChapter());
         mDataset.addPhotoChapter(dataObj.getPhotoChapter(),chap);
         notifyItemInserted(index);

@@ -1,4 +1,4 @@
-package com.example.bsaraci.blitzone;
+package com.example.bsaraci.blitzone.Profile;
 
 public class Chapter  {
     private int id;

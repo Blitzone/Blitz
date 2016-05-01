@@ -50,7 +50,7 @@
         android:scaleType="center"
         android:layout_margin="10dp"/>
 
-    <com.example.bsaraci.blitzone.RoundedImageView
+    <com.example.bsaraci.blitzone.Profile.RoundedImageView
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:id="@+id/profile_picture"

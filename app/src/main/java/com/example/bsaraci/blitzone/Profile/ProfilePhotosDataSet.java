@@ -1,4 +1,4 @@
-package com.example.bsaraci.blitzone;
+package com.example.bsaraci.blitzone.Profile;
 
 import java.util.ArrayList;
 
@@ -20,22 +20,22 @@ public class ProfilePhotosDataSet {
         mArray.add(profilePhotosProvider);
     }
 
-    public void addChapter (Chapter chapter){
+    public void addChapter (Profile.Chapter chapter){
         ProfilePhotosProvider profilePhotosProvider = new ProfilePhotosProvider(chapter,null);
         mArray.add(profilePhotosProvider);
     }
 
-    public Chapter getChapter (int position){
+    public Profile.Chapter getChapter (int position){
        return mArray.get(position).getChapter();
     }
 
-    public void addChapters (ArrayList<Chapter> list){
-        for(Chapter obj : list){
+    public void addChapters (ArrayList<Profile.Chapter> list){
+        for(Profile.Chapter obj : list){
             mArray.add(new ProfilePhotosProvider(obj));
         }
     }
 
-    public void initPhotoChapters(ArrayList<PhotoChapter> list){
+    public void initPhotoChapters(ArrayList<Profile.PhotoChapter> list){
         for (int i = 0; i < this.getSize(); i++)
         {
             ProfilePhotosProvider elem = mArray.get(i);
@@ -43,7 +43,7 @@ public class ProfilePhotosDataSet {
         }
     }
 
-    public PhotoChapter getPhotoChapter(Chapter chapter){
+    public Profile.PhotoChapter getPhotoChapter(Profile.Chapter chapter){
         for (ProfilePhotosProvider obj : mArray){
             if(obj.getChapter().getId() == chapter.getId()){
                 return obj.getPhotoChapter();
@@ -52,7 +52,7 @@ public class ProfilePhotosDataSet {
         return null;
     }
 
-    public void addPhotoChapter(PhotoChapter bitmap, Chapter chapter){
+    public void addPhotoChapter(Profile.PhotoChapter bitmap, Profile.Chapter chapter){
         for (ProfilePhotosProvider obj : mArray){
             if(obj.getChapter().getId() == chapter.getId()){
                 obj.setPhotoChapter(bitmap);

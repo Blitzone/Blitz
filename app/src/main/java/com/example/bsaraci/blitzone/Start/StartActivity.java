@@ -1,14 +1,13 @@
-package com.example.bsaraci.blitzone;
+package com.example.bsaraci.blitzone.Start;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.example.bsaraci.blitzone.Profile.Profile;
 import com.example.bsaraci.blitzone.ServerComm.JWTManager;
 import com.example.bsaraci.blitzone.ServerComm.MRequest;
 import com.example.bsaraci.blitzone.ServerComm.RequestQueueSingleton;
@@ -17,7 +16,6 @@ import com.example.bsaraci.blitzone.ServerComm.RequestURL;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.net.HttpURLConnection;
 import java.util.HashMap;
 import java.util.Map;
 

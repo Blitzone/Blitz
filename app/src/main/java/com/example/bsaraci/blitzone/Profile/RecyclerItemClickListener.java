@@ -1,4 +1,4 @@
-package com.example.bsaraci.blitzone;
+package com.example.bsaraci.blitzone.Profile;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;

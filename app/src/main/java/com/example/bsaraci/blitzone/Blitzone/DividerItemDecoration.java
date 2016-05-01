@@ -1,4 +1,4 @@
-package com.example.bsaraci.blitzone;
+package com.example.bsaraci.blitzone.Blitzone;
 
 import android.content.Context;
 import android.content.res.TypedArray;

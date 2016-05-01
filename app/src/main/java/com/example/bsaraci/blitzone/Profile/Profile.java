@@ -1,4 +1,4 @@
-package com.example.bsaraci.blitzone;
+package com.example.bsaraci.blitzone.Profile;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -24,6 +24,11 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
+import com.example.bsaraci.blitzone.Blitzone.Blitzone;
+import com.example.bsaraci.blitzone.Start.LogIn;
+import com.example.bsaraci.blitzone.Notifications.Notifications;
+import com.example.bsaraci.blitzone.Options.Options;
+import com.example.bsaraci.blitzone.R;
 import com.example.bsaraci.blitzone.ServerComm.JWTManager;
 import com.example.bsaraci.blitzone.ServerComm.MRequest;
 import com.example.bsaraci.blitzone.ServerComm.PhotoUploadRequest;
@@ -55,8 +60,8 @@ public class Profile extends AppCompatActivity
     private RecyclerView.LayoutManager mLayoutManager;
     private ProfilePhotosDataSet profilePhotosDataSet = new ProfilePhotosDataSet();
 
-    private ArrayList<Chapter> chapters;
-    private ArrayList<PhotoChapter> photoChapters;
+    private ArrayList<Profile.Chapter> chapters;
+    private ArrayList<Profile.PhotoChapter> photoChapters;
     private Integer topicId;
     TextView toolbarTitle;
 
@@ -91,7 +96,7 @@ public class Profile extends AppCompatActivity
 
         if (resultCode == RESULT_OK && requestCode == requestCamera) {
 
-            PhotoChapter photoChapter = photoSaveFromCamera();
+            Profile.PhotoChapter photoChapter = photoSaveFromCamera();
 
             if(requestCamera==CAMERA_PROFILE_IMAGE_REQUEST){
                 ImageView imageView = (ImageView) this.findViewById(R.id.profile_picture);
@@ -101,7 +106,7 @@ public class Profile extends AppCompatActivity
             }
 
             else if (requestCamera==CAMERA_CHAPTER_IMAGE_REQUEST){
-                Chapter chap = profilePhotosDataSet.getChapter(chapterClicked);
+                Profile.Chapter chap = profilePhotosDataSet.getChapter(chapterClicked);
                 profilePhotosDataSet.addPhotoChapter(photoChapter, chap);
                 mAdapter = new ProfileRecyclerviewAdapter(profilePhotosDataSet);
                 mAdapter.notifyDataSetChanged();
@@ -112,7 +117,7 @@ public class Profile extends AppCompatActivity
         else if(requestCode == requestGallery && resultCode == RESULT_OK && null != data && data.getData() != null){
             Uri selectedImage = data.getData();
 
-            PhotoChapter photoChapter = photoSaveFromGallery(selectedImage);
+            Profile.PhotoChapter photoChapter = photoSaveFromGallery(selectedImage);
 
             if(requestGallery==UPLOAD_PROFILE_IMAGE_FROM_GALLERY){
                 ImageView imageView1 = (ImageView) this.findViewById(R.id.profile_picture);
@@ -120,7 +125,7 @@ public class Profile extends AppCompatActivity
                 uploadPicture(photoChapter.getBitmap());
             }
             else if(requestGallery==UPLOAD_CHAPTER_IMAGE_FROM_GALLERY){
-                Chapter chap = profilePhotosDataSet.getChapter(chapterClicked);
+                Profile.Chapter chap = profilePhotosDataSet.getChapter(chapterClicked);
                 profilePhotosDataSet.addPhotoChapter(photoChapter,chap);
                 mAdapter = new ProfileRecyclerviewAdapter(profilePhotosDataSet);
                 mAdapter.notifyDataSetChanged();
@@ -129,14 +134,14 @@ public class Profile extends AppCompatActivity
         }
     }
 
-    private PhotoChapter photoSaveFromCamera(){
+    private Profile.PhotoChapter photoSaveFromCamera(){
         Bitmap bitmap = null;
-        PhotoChapter photoChapter1=null;
+        Profile.PhotoChapter photoChapter1=null;
 
         try {
             GetImageThumbnail getImageThumbnail = new GetImageThumbnail();
             bitmap = getImageThumbnail.getThumbnail(fileUri, this);
-            photoChapter1= new PhotoChapter(bitmap);
+            photoChapter1= new Profile.PhotoChapter(bitmap);
             ByteArrayOutputStream bytes = new ByteArrayOutputStream();
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
 
@@ -150,16 +155,16 @@ public class Profile extends AppCompatActivity
         return photoChapter1;
     }
 
-    private PhotoChapter photoSaveFromGallery(Uri selectedImage){
+    private Profile.PhotoChapter photoSaveFromGallery(Uri selectedImage){
         Bitmap bitmap = null;
-        PhotoChapter photoChapter1 = null;
+        Profile.PhotoChapter photoChapter1 = null;
 
         try {
             //Getting the Bitmap from Gallery
             bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), selectedImage);
 //                ByteArrayOutputStream bytes = new ByteArrayOutputStream();
 //                bitmap1.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
-            photoChapter1 = new PhotoChapter(bitmap);
+            photoChapter1 = new Profile.PhotoChapter(bitmap);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -422,15 +427,15 @@ public class Profile extends AppCompatActivity
     private void updateChapters(JSONObject response){
 
         try {
-            photoChapters = new ArrayList<PhotoChapter>();
-            chapters = new ArrayList<Chapter>();
+            photoChapters = new ArrayList<Profile.PhotoChapter>();
+            chapters = new ArrayList<Profile.Chapter>();
             JSONArray chapterList = (JSONArray)response.get("chapters");
             int chapterListSize = chapterList.length();
             Bitmap bitmap1= BitmapFactory.decodeResource(this.getResources(), R.color.mint);
-            PhotoChapter photoChapter1 = new PhotoChapter(bitmap1);
+            Profile.PhotoChapter photoChapter1 = new Profile.PhotoChapter(bitmap1);
             for(int i = 0; i<chapterListSize; i++){
                 JSONObject jsonChapter = (JSONObject) chapterList.getJSONObject(i);
-                Chapter chap = new Chapter((int)jsonChapter.get("id"), jsonChapter.get("name").toString());
+                Profile.Chapter chap = new Profile.Chapter((int)jsonChapter.get("id"), jsonChapter.get("name").toString());
                 chapters.add(i, chap);
                 photoChapters.add(i, photoChapter1);
             }

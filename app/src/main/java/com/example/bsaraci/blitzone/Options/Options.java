@@ -1,4 +1,4 @@
-package com.example.bsaraci.blitzone;
+package com.example.bsaraci.blitzone.Options;
 
 import android.app.ListActivity;
 import android.content.Context;
@@ -10,6 +10,8 @@ import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
+
+import com.example.bsaraci.blitzone.R;
 
 import java.util.ArrayList;
 import java.util.TreeSet;

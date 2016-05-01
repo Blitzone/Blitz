@@ -1,4 +1,4 @@
-package com.example.bsaraci.blitzone.HLV;
+package com.example.bsaraci.blitzone.Blitzone;
 
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -9,13 +9,11 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.example.bsaraci.blitzone.OnLoadMoreListener;
 import com.example.bsaraci.blitzone.R;
-import com.example.bsaraci.blitzone.ViewDataProvider;
 
 import java.util.List;
 
-public class HLVAdapter extends  RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class RecycleviewAdapter extends  RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     List<ViewDataProvider> list;
     private final int VIEW_ITEM = 1;
@@ -26,7 +24,7 @@ public class HLVAdapter extends  RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private boolean loading;
     private OnLoadMoreListener onLoadMoreListener;
 
-    public HLVAdapter(List<ViewDataProvider> list, RecyclerView recyclerView ) {
+    public RecycleviewAdapter(List<ViewDataProvider> list, RecyclerView recyclerView) {
         this.list=list;
 
         if(recyclerView.getLayoutManager() instanceof LinearLayoutManager){
@@ -144,3 +142,4 @@ public class HLVAdapter extends  RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
     }
 }
+

@@ -22,7 +22,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".StartActivity"
+            android:name=".Start.StartActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -31,18 +31,18 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".LogIn"
+            android:name=".Start.LogIn"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustPan|stateHidden"></activity>
         <activity
-            android:name=".SignUp"
+            android:name=".Start.SignUp"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustPan|stateHidden"></activity>
-        <activity android:name=".Blitzone"></activity>
-        <activity android:name=".Search"></activity>
-        <activity android:name=".Profile"></activity>
-        <activity android:name=".Notifications"></activity>
-        <activity android:name=".Options"></activity>
+        <activity android:name=".Blitzone.Blitzone"></activity>
+        <activity android:name=".Search.Search"></activity>
+        <activity android:name=".Profile.Profile"></activity>
+        <activity android:name=".Notifications.Notifications"></activity>
+        <activity android:name=".Options.Options"></activity>
     </application>
 
 </manifest>

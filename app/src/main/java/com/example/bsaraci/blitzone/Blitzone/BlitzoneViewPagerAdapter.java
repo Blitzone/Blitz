@@ -1,4 +1,4 @@
-package com.example.bsaraci.blitzone;
+package com.example.bsaraci.blitzone.Blitzone;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -24,7 +24,7 @@ public class BlitzoneViewPagerAdapter extends FragmentStatePagerAdapter {
         }
 
         else{
-            BestTabFragment bestTabFragment = new BestTabFragment();
+            Blitzone.BestTabFragment bestTabFragment = new Blitzone.BestTabFragment();
             return bestTabFragment;
         }
     }

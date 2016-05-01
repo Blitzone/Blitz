@@ -1,28 +1,23 @@
-package com.example.bsaraci.blitzone;
+package com.example.bsaraci.blitzone.Start;
 
-import android.accounts.Account;
-import android.accounts.AccountManager;
-import android.app.ProgressDialog;
 import android.content.Intent;
-import android.media.session.MediaSession;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.android.volley.Request;
-import com.android.volley.Response;
 import com.android.volley.Response.Listener;
 import com.android.volley.Response.ErrorListener;
 import com.android.volley.VolleyError;
+import com.example.bsaraci.blitzone.Profile.Profile;
+import com.example.bsaraci.blitzone.R;
 import com.example.bsaraci.blitzone.ServerComm.JWTManager;
 import com.example.bsaraci.blitzone.ServerComm.MRequest;
 import com.example.bsaraci.blitzone.ServerComm.RequestQueueSingleton;
@@ -34,7 +29,6 @@ import org.json.JSONObject;
 import java.net.HttpURLConnection;
 import java.util.HashMap;
 import java.util.Map;
-import android.media.session.MediaSession.Token;
 
 
 public class  LogIn  extends AppCompatActivity {
