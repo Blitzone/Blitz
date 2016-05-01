@@ -481,20 +481,18 @@ public class Profile extends AppCompatActivity
 
     private void updateChapter(JSONObject response){
 
-        Bitmap bitmap1= BitmapFactory.decodeResource(this.getResources(),R.color.mint);
-        Bitmap bitmap2= BitmapFactory.decodeResource(this.getResources(),R.color.mint);
-        Bitmap bitmap3= BitmapFactory.decodeResource(this.getResources(),R.color.mint);
-        photoChapter = new ArrayList<>(Arrays.asList(bitmap1, bitmap2, bitmap3));
-
         try {
+            photoChapter = new ArrayList<>();
             chapters = new ArrayList<>();
             JSONArray chapterList = (JSONArray)response.get("chapters");
             int chapterListSize = chapterList.length();
+            Bitmap bitmap1= BitmapFactory.decodeResource(this.getResources(), R.color.mint);
 
             for(int i = 0; i<chapterListSize; i++){
                 JSONObject jsonChapter = (JSONObject) chapterList.getJSONObject(i);
                 Chapter chap = new Chapter((int)jsonChapter.get("id"), jsonChapter.get("name").toString());
                 chapters.add(i, chap);
+                photoChapter.add(i,bitmap1);
             }
         }
         catch (JSONException e)
@@ -521,9 +519,9 @@ public class Profile extends AppCompatActivity
                 })
         );
         profilePhotosDataSet.addChapters(chapters);
-        profilePhotosDataSet.addPhotoChapter(bitmap1, profilePhotosDataSet.getChapter(0));
-        profilePhotosDataSet.addPhotoChapter(bitmap2, profilePhotosDataSet.getChapter(1));
-        profilePhotosDataSet.addPhotoChapter(bitmap3, profilePhotosDataSet.getChapter(2));
+        profilePhotosDataSet.addPhotoChapter(photoChapter.get(0), profilePhotosDataSet.getChapter(0));
+        profilePhotosDataSet.addPhotoChapter(photoChapter.get(1), profilePhotosDataSet.getChapter(1));
+        profilePhotosDataSet.addPhotoChapter(photoChapter.get(2), profilePhotosDataSet.getChapter(2));
         mAdapter = new ProfileRecyclerviewAdapter(profilePhotosDataSet);
         mRecyclerView.setAdapter(mAdapter);
     }
