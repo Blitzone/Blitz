@@ -11,6 +11,15 @@ public class PhotoChapter {
     private Bitmap bitmap;
     private String url;
     private boolean _hasPhoto = false;
+    private boolean _urlUpdated = false;
+
+    public boolean is_urlUpdated() {
+        return _urlUpdated;
+    }
+
+    public void set_urlUpdated(boolean _urlUpdated) {
+        this._urlUpdated = _urlUpdated;
+    }
 
     public PhotoChapter(Bitmap bitmap) {
         this.bitmap = bitmap;
@@ -31,6 +40,7 @@ public class PhotoChapter {
 
     public void setUrl(String url) {
         this.url = url;
+        this.set_urlUpdated(true);
     }
 
     public void set_hasPhoto(boolean _hasPhoto) {

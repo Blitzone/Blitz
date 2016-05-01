@@ -57,11 +57,16 @@ public class ProfileRecyclerviewAdapter extends RecyclerView.Adapter<ProfileRecy
     public void onBindViewHolder(DataObjectHolder holder, int position) {
         Chapter chap = mDataset.getChapter(position);
         PhotoChapter photoChapter1 = mDataset.getPhotoChapter(chap);
-        Log.i("Before crash", photoChapter1.getUrl());
-        imageLoader = RequestQueueSingleton.getInstance(context).getImageLoader();
-        imageLoader.get(photoChapter1.getUrl(), ImageLoader.getImageListener(holder.photoChapterImageView,
-                R.mipmap.ic_profile_avatar, R.mipmap.ic_profile_avatar));
-
+        if (photoChapter1.is_urlUpdated())
+        {
+            imageLoader = RequestQueueSingleton.getInstance(context).getImageLoader();
+            imageLoader.get(photoChapter1.getUrl(), ImageLoader.getImageListener(holder.photoChapterImageView,
+                    R.color.mint, R.color.mint));
+        }
+        else
+        {
+            holder.photoChapterImageView.setImageBitmap(photoChapter1.getBitmap());
+        }
         holder.chapterTextView.setText(chap.getName());
         //holder.photoChapterImageView.setImageBitmap(photoChapter1.getBitmap());
     }

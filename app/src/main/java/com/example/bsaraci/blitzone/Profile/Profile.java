@@ -141,7 +141,7 @@ public class Profile extends AppCompatActivity {
         try {
             GetImageThumbnail getImageThumbnail = new GetImageThumbnail();
             bitmap = getImageThumbnail.getThumbnail(fileUri, this);
-            photoChapter1 = new PhotoChapter("https://upload.wikimedia.org/wikipedia/commons/4/47/PNG_transparency_demonstration_1.png", bitmap);
+            photoChapter1 = new PhotoChapter(bitmap);
             ByteArrayOutputStream bytes = new ByteArrayOutputStream();
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
 
@@ -164,7 +164,7 @@ public class Profile extends AppCompatActivity {
             bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), selectedImage);
 //          ByteArrayOutputStream bytes = new ByteArrayOutputStream();
 //          bitmap1.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
-            photoChapter1 = new PhotoChapter("https://upload.wikimedia.org/wikipedia/commons/4/47/PNG_transparency_demonstration_1.png", bitmap);
+            photoChapter1 = new PhotoChapter(bitmap);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -420,8 +420,7 @@ public class Profile extends AppCompatActivity {
                 JSONObject jsonChapter = (JSONObject) chapterList.getJSONObject(i);
                 Chapter chap = new Chapter((int) jsonChapter.get("id"), jsonChapter.get("name").toString());
                 chapters.add(i, chap);
-                PhotoChapter photoChapter = new PhotoChapter("https://upload.wikimedia.org/wikipedia/commons/4/47/PNG_transparency_demonstration_1.png",
-                        bitmap1);
+                PhotoChapter photoChapter = new PhotoChapter(bitmap1);
                 photoChapters.add(i, photoChapter);
             }
         } catch (JSONException e) {
@@ -429,7 +428,6 @@ public class Profile extends AppCompatActivity {
         }
         profilePhotosDataSet.addChapters(chapters);
         profilePhotosDataSet.initPhotoChapters(photoChapters);
-        Log.i("TestPhotoChap", profilePhotosDataSet.getPhotoChapter(chapters.get(0)) == null ? "null" : "not null");
         mRecyclerView = (RecyclerView) findViewById(R.id.hlvProfile);
         mLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         mRecyclerView.setLayoutManager(mLayoutManager);
