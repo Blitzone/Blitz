@@ -1,6 +1,7 @@
 package com.example.bsaraci.blitzone.Profile;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -17,18 +18,13 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.ImageLoader;
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.drawable.GlideDrawable;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.Target;
 import com.example.bsaraci.blitzone.Blitzone.Blitzone;
 import com.example.bsaraci.blitzone.Start.LogIn;
 import com.example.bsaraci.blitzone.Notifications.Notifications;
@@ -50,8 +46,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -69,6 +63,7 @@ public class Profile extends AppCompatActivity {
     private ArrayList<PhotoChapter> photoChapters;
     private Integer topicId;
     TextView toolbarTitle;
+    ProgressDialog dialog;
 
     private static String root = null;
     private static String imageFolderPath = null;
@@ -107,12 +102,13 @@ public class Profile extends AppCompatActivity {
 
             if (requestCamera == CAMERA_PROFILE_IMAGE_REQUEST) {
                 ImageView imageView = (ImageView) this.findViewById(R.id.profile_picture);
+                dialog = ProgressDialog.show(Profile.this, "", "Uploading profile image ...", true);
                 imageView.setImageBitmap(photoChapter.getBitmap());
-
                 uploadPicture(photoChapter.getBitmap(), RequestURL.AVATAR, null);
             } else if (requestCamera == CAMERA_CHAPTER_IMAGE_REQUEST) {
                 Chapter chap = profilePhotosDataSet.getChapter(chapterClicked);
                 profilePhotosDataSet.addPhotoChapter(photoChapter, chap);
+                dialog = ProgressDialog.show(Profile.this, "", "Uploading chapter image ...", true);
                 uploadPicture(photoChapter.getBitmap(), RequestURL.UPLOAD_USER_CHAPTER, getPhotoChapterParams(chap));
                 mAdapter = new ProfileRecyclerviewAdapter(profilePhotosDataSet,this);
                 mAdapter.notifyDataSetChanged();
@@ -125,15 +121,17 @@ public class Profile extends AppCompatActivity {
 
             if (requestGallery == UPLOAD_PROFILE_IMAGE_FROM_GALLERY) {
                 ImageView imageView1 = (ImageView) this.findViewById(R.id.profile_picture);
+                dialog = ProgressDialog.show(Profile.this, "", "Uploading profile image ...", true);
                 imageView1.setImageBitmap(photoChapter.getBitmap());
                 uploadPicture(photoChapter.getBitmap(), RequestURL.AVATAR, null);
             } else if (requestGallery == UPLOAD_CHAPTER_IMAGE_FROM_GALLERY) {
                 Chapter chap = profilePhotosDataSet.getChapter(chapterClicked);
                 profilePhotosDataSet.addPhotoChapter(photoChapter, chap);
-                uploadPicture(photoChapter.getBitmap(), RequestURL.UPLOAD_USER_CHAPTER, getPhotoChapterParams(chap));
                 mAdapter = new ProfileRecyclerviewAdapter(profilePhotosDataSet,this);
                 mAdapter.notifyDataSetChanged();
                 mRecyclerView.setAdapter(mAdapter);
+                dialog = ProgressDialog.show(Profile.this, "", "Uploading chapter image ...", true);
+                uploadPicture(photoChapter.getBitmap(), RequestURL.UPLOAD_USER_CHAPTER, getPhotoChapterParams(chap));
             }
         }
     }
@@ -184,9 +182,10 @@ public class Profile extends AppCompatActivity {
                     @Override
                     public void uploadFinishedCallback(Integer responseCode) {
                         if (responseCode == HttpURLConnection.HTTP_ENTITY_TOO_LARGE) {
-                            Toast.makeText(Profile.this, "Photo size is too big.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(Profile.this, "Photo size is too big.", Toast.LENGTH_LONG).show();
+                            dialog.dismiss();
                         } else if (responseCode == HttpURLConnection.HTTP_OK) {
-                            Toast.makeText(Profile.this, "Upload complete.", Toast.LENGTH_SHORT).show();
+                            dialog.dismiss();
                         }
                     }
                 },
