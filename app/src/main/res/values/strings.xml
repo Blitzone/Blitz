@@ -34,7 +34,7 @@
 
     <!-- PROFILE -->
     <string name="toolbar_title_profile">Travel Frenzy</string>
-    <string name="points_profile">155</string>
+    <string name="points_profile"> </string>
     <string name="followers_profile">1k</string>
     <string name="textBelow_hlv">Test</string>
     <string name="dayChapter_profile">Travel friend</string>

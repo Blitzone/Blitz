@@ -235,7 +235,8 @@ public class Profile extends AppCompatActivity {
 
     public void removeProfilePicture() {
         ImageView imageView = (ImageView) findViewById(R.id.profile_picture);
-        imageView.setImageResource(R.mipmap.ic_profile_avatar);
+        final ImageView imageView1 = (ImageView) this.findViewById(R.id.profile_picture1);
+        imageView1.setVisibility(View.VISIBLE);
     }
 
     public void blitzoneFromProfileButtonCallback(View view) {
@@ -461,7 +462,6 @@ public class Profile extends AppCompatActivity {
                     public void onItemClick(View view, int position) {
                         requestCamera = CAMERA_CHAPTER_IMAGE_REQUEST;
                         chapterClicked = position;
-                        captureImage();
                         Toast.makeText(Profile.this, "You clicked on : " + chapters.get(position).getName().toString(), Toast.LENGTH_SHORT).show();
                     }
 
@@ -469,7 +469,7 @@ public class Profile extends AppCompatActivity {
                     public void onItemLongClick(View view, int position) {
                         requestGallery = UPLOAD_CHAPTER_IMAGE_FROM_GALLERY;
                         chapterClicked = position;
-                        chooseImageFromGallery();
+                        showChapterPhotoAlertDialogWithListView();
                     }
                 })
         );
@@ -591,7 +591,7 @@ public class Profile extends AppCompatActivity {
         }
     }
 
-    public void showAlertDialogWithListview() {
+    public void showProfilePhotoAlertDialogWithListview() {
         List<String> uploadOptions = new ArrayList<String>();
         uploadOptions.add("Upload a photo from gallery");
         uploadOptions.add("Take photo");
@@ -625,8 +625,39 @@ public class Profile extends AppCompatActivity {
         alertDialogObject.show();
     }
 
+    public void showChapterPhotoAlertDialogWithListView() {
+
+        List<String> uploadOptions = new ArrayList<String>();
+        uploadOptions.add("Upload a photo from gallery");
+        uploadOptions.add("Take photo");
+        uploadOptions.add("Remove photo");
+
+        //Create sequence of items
+        final CharSequence[] Options = uploadOptions.toArray(new String[uploadOptions.size()]);
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+        dialogBuilder.setTitle("Upload an image for this chapter");
+        dialogBuilder.setItems(Options, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int item) {
+
+                if (item == 0) {
+                    requestGallery = UPLOAD_CHAPTER_IMAGE_FROM_GALLERY;
+                    chooseImageFromGallery();
+                } else if (item == 1) {
+                    requestCamera = CAMERA_CHAPTER_IMAGE_REQUEST;
+                    captureImage();
+                } /*else if (item == 2) {
+                    removeProfilePicture();
+                }*/
+            }
+        });
+        //Create alert dialog object via builder
+        AlertDialog alertDialogObject = dialogBuilder.create();
+        //Show the dialog
+        alertDialogObject.show();
+    }
+
     public void profilePictureCallback(View view) {
-        showAlertDialogWithListview();
+        showProfilePhotoAlertDialogWithListview();
     }
 
     public void optionsCallback(View view) {
