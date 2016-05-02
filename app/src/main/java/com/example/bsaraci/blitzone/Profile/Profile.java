@@ -17,6 +17,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,6 +25,10 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.example.bsaraci.blitzone.Blitzone.Blitzone;
 import com.example.bsaraci.blitzone.Start.LogIn;
 import com.example.bsaraci.blitzone.Notifications.Notifications;
@@ -35,7 +40,6 @@ import com.example.bsaraci.blitzone.ServerComm.PhotoUploadRequest;
 import com.example.bsaraci.blitzone.ServerComm.PhotoUploadResponse;
 import com.example.bsaraci.blitzone.ServerComm.RequestQueueSingleton;
 import com.example.bsaraci.blitzone.ServerComm.RequestURL;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -314,11 +318,11 @@ public class Profile extends AppCompatActivity {
             String avatar = RequestURL.IP_ADDRESS + response.get("avatar").toString();
 
             final ImageView imageView = (ImageView) this.findViewById(R.id.profile_picture);
-            ImageLoader imageLoader;
 
-            imageLoader = RequestQueueSingleton.getInstance(this).getImageLoader();
-            imageLoader.get(avatar, ImageLoader.getImageListener(imageView,
-                    R.mipmap.ic_profile_avatar, R.mipmap.ic_profile_avatar));
+            Glide.with(this)
+                    .load(avatar)
+                    .crossFade()
+                    .into(imageView);
 
             TextView blitzCountView = (TextView) findViewById(R.id.number_of_blitz);
             blitzCountView.setText(blitzCount.toString());
@@ -415,7 +419,7 @@ public class Profile extends AppCompatActivity {
             chapters = new ArrayList<Chapter>();
             JSONArray chapterList = (JSONArray) response.get("chapters");
             int chapterListSize = chapterList.length();
-            Bitmap bitmap1 = BitmapFactory.decodeResource(this.getResources(), R.color.mint);
+            Bitmap bitmap1 = BitmapFactory.decodeResource(this.getResources(), R.color.lightGray);
             for (int i = 0; i < chapterListSize; i++) {
                 JSONObject jsonChapter = (JSONObject) chapterList.getJSONObject(i);
                 Chapter chap = new Chapter((int) jsonChapter.get("id"), jsonChapter.get("name").toString());
@@ -527,7 +531,7 @@ public class Profile extends AppCompatActivity {
         params.put("topic", topicId.toString());
         return new JSONObject(params);
     }
-    
+
     public static class GetImageThumbnail {
 
         private static int getPowerOfTwoForSampleRatio(double ratio) {
