@@ -1,6 +1,7 @@
 package com.example.bsaraci.blitzone.Profile;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,12 +22,7 @@ import com.example.bsaraci.blitzone.ServerComm.RequestQueueSingleton;
 
 public class ProfileRecyclerviewAdapter extends RecyclerView.Adapter<ProfileRecyclerviewAdapter.DataObjectHolder> {
 
-    public interface OnItemClickListener {
-        void onItemClick(ProfilePhotosProvider item);
-    }
-
     private ProfilePhotosDataSet mDataset;
-    private ImageLoader imageLoader;
     private Context context;
 
 
@@ -84,29 +80,13 @@ public class ProfileRecyclerviewAdapter extends RecyclerView.Adapter<ProfileRecy
                         }
                     })
                     .into(holder.photoChapterImageView);
-            /*imageLoader = RequestQueueSingleton.getInstance(context).getImageLoader();
-            imageLoader.get(photoChapter1.getUrl(), ImageLoader.getImageListener(holder.photoChapterImageView,
-                    R.color.mint, R.color.mint));*/
         }
         else
         {
             holder.photoChapterImageView.setImageBitmap(photoChapter1.getBitmap());
         }
         holder.chapterTextView.setText(chap.getName());
-        //holder.photoChapterImageView.setImageBitmap(photoChapter1.getBitmap());
     }
-
-    public void addItem(ProfilePhotosProvider dataObj, int index) {
-        Chapter chap = mDataset.getChapter(index);
-        mDataset.addChapter(dataObj.getChapter());
-        mDataset.addPhotoChapter(dataObj.getPhotoChapter(),chap);
-        notifyItemInserted(index);
-    }
-
-    /*public void deleteItem(int index) {
-        mDataset.remove(index);
-        notifyItemRemoved(index);
-    }*/
 
     @Override
     public int getItemCount() {

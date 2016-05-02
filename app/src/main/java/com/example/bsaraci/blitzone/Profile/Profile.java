@@ -81,6 +81,7 @@ public class Profile extends AppCompatActivity {
     private static final int UPLOAD_PROFILE_IMAGE_FROM_GALLERY = 2;
     private static final int CAMERA_CHAPTER_IMAGE_REQUEST = 3;
     private static final int UPLOAD_CHAPTER_IMAGE_FROM_GALLERY = 4;
+    private static final int CAPTURE_IMAGE_FULLSIZE_ACTIVITY_REQUEST_CODE = 5;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -462,7 +463,7 @@ public class Profile extends AppCompatActivity {
                     public void onItemClick(View view, int position) {
                         requestCamera = CAMERA_CHAPTER_IMAGE_REQUEST;
                         chapterClicked = position;
-                        Toast.makeText(Profile.this, "You clicked on : " + chapters.get(position).getName().toString(), Toast.LENGTH_SHORT).show();
+                        showFullSizeImage(photoChapters.get(position).getBitmap());
                     }
 
                     @Override
@@ -665,6 +666,12 @@ public class Profile extends AppCompatActivity {
         Intent intent = new Intent(this, Options.class);
         startActivity(intent);
 
+    }
+
+    public void showFullSizeImage (Bitmap bitmap){
+        Intent intent = new Intent(this,FullSizeImage.class);
+        intent.putExtra("bitmap", bitmap);
+        startActivity(intent);
     }
 
 }
