@@ -1,11 +1,10 @@
 package com.example.bsaraci.blitzone.Profile;
 
-import android.content.Intent;
 import android.graphics.Bitmap;
-import android.media.Image;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -16,19 +15,29 @@ import com.example.bsaraci.blitzone.R;
  */
 public class FullSizeImage extends AppCompatActivity {
     ImageView imageView;
+    TextView chapterFullSize;
+    TextView usernameFullsize;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        imageView = (ImageView)findViewById(R.id.fullSizeImage);
         setContentView(R.layout.full_size_image_main);
+        initView();
+    }
 
-        Intent intent= getIntent();
-        Bundle b = intent.getExtras();
+    private void initView (){
+        imageView = (ImageView)findViewById(R.id.fullSizeImage);
+        chapterFullSize =(TextView)findViewById(R.id.chapterFullSize);
+        usernameFullsize =(TextView)findViewById(R.id.usernameFullSize);
+        byte[] byteArray = getIntent().getByteArrayExtra("bitmapArray");
+        Bitmap bmp = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
+        String chapterName = getIntent().getExtras().getString("chapterName");
+        String username = getIntent().getExtras().getString("username");
+        imageView.setImageBitmap(bmp);
+        chapterFullSize.setText(chapterName);
+        usernameFullsize.setText(username);
+    }
 
-        if(b!=null)
-        {
-            Bitmap bitmap =(Bitmap) b.get("bitmap");
-            imageView.setImageBitmap(bitmap);
-        }
-}
+    public void profileFromFullSize (View view)
+    {
+        finish();
+    }
 }

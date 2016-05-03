@@ -2,6 +2,7 @@ package com.example.bsaraci.blitzone.Profile;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,6 +17,8 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.target.Target;
 import com.example.bsaraci.blitzone.R;
 import com.example.bsaraci.blitzone.ServerComm.RequestQueueSingleton;
@@ -60,7 +63,7 @@ public class ProfileRecyclerviewAdapter extends RecyclerView.Adapter<ProfileRecy
     @Override
     public void onBindViewHolder(final DataObjectHolder holder, int position) {
         Chapter chap = mDataset.getChapter(position);
-        PhotoChapter photoChapter1 = mDataset.getPhotoChapter(chap);
+        final PhotoChapter photoChapter1 = mDataset.getPhotoChapter(chap);
         if (photoChapter1.is_urlUpdated())
         {
             holder.progressBar.setVisibility(View.VISIBLE);
@@ -80,6 +83,18 @@ public class ProfileRecyclerviewAdapter extends RecyclerView.Adapter<ProfileRecy
                         }
                     })
                     .into(holder.photoChapterImageView);
+
+            Glide
+                    .with(this.context)
+                    .load(photoChapter1.getUrl())
+                    .asBitmap()
+                    .into(new SimpleTarget<Bitmap>(300,300) {
+                        @Override
+                        public void onResourceReady(Bitmap resource, GlideAnimation glideAnimation) {
+                            photoChapter1.setBitmap(resource);
+                        }
+                    });
+
         }
         else
         {

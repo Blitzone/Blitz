@@ -463,7 +463,13 @@ public class Profile extends AppCompatActivity {
                     public void onItemClick(View view, int position) {
                         requestCamera = CAMERA_CHAPTER_IMAGE_REQUEST;
                         chapterClicked = position;
-                        showFullSizeImage(photoChapters.get(position).getBitmap());
+                        if (photoChapters.get(position).getBitmap() != null){
+                            showFullSizeImage(photoChapters.get(position).getBitmap(),chapters.get(position).getName());
+                        }
+                        else{
+                            captureImage();
+                        }
+
                     }
 
                     @Override
@@ -668,9 +674,18 @@ public class Profile extends AppCompatActivity {
 
     }
 
-    public void showFullSizeImage (Bitmap bitmap){
-        Intent intent = new Intent(this,FullSizeImage.class);
-        intent.putExtra("bitmap", bitmap);
+    public void showFullSizeImage (Bitmap bitmap, String str){
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        byte[] byteArray = stream.toByteArray();
+
+        TextView usernameView = (TextView) findViewById(R.id.profileName);
+        String username = (String) usernameView.getText();
+
+        Intent intent = new Intent(this, FullSizeImage.class);
+        intent.putExtra("bitmapArray", byteArray);
+        intent.putExtra("chapterName",str);
+        intent.putExtra("username", username);
         startActivity(intent);
     }
 
