@@ -59,36 +59,40 @@ public class ProfileRecyclerviewAdapter extends RecyclerView.Adapter<ProfileRecy
     @Override
     public void onBindViewHolder(final DataObjectHolder holder, int position) {
         final PhotoChapter photoChapter = topic.getPhotoChapterFromPosition(position);
-        holder.progressBar.setVisibility(View.VISIBLE);
-        Glide.with(this.context)
-                .load(photoChapter.getUrl())
-                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                .listener(new RequestListener<String, GlideDrawable>() {
-                    @Override
-                    public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
-                        return false;
-                    }
+        if (photoChapter.getUrl() != null) {
+            holder.progressBar.setVisibility(View.VISIBLE);
+            Glide.with(this.context)
+                    .load(photoChapter.getUrl())
+                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                    .listener(new RequestListener<String, GlideDrawable>() {
+                        @Override
+                        public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+                            return false;
+                        }
 
-                    @Override
-                    public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
-                        holder.progressBar.setVisibility(View.GONE);
-                        return false;
-                    }
-                })
-                .into(holder.photoChapterImageView);
+                        @Override
+                        public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                            holder.progressBar.setVisibility(View.GONE);
+                            return false;
+                        }
+                    })
+                    .into(holder.photoChapterImageView);
 
-        Glide
-                .with(this.context)
-                .load(photoChapter.getUrl())
-                .asBitmap()
-                .into(new SimpleTarget<Bitmap>(300, 300) {
-                    @Override
-                    public void onResourceReady(Bitmap resource, GlideAnimation glideAnimation) {
-                        photoChapter.setPhoto(resource);
-                    }
-                });
-
-        //holder.photoChapterImageView.setImageBitmap(photoChapter.getPhoto());
+            Glide
+                    .with(this.context)
+                    .load(photoChapter.getUrl())
+                    .asBitmap()
+                    .into(new SimpleTarget<Bitmap>(300, 300) {
+                        @Override
+                        public void onResourceReady(Bitmap resource, GlideAnimation glideAnimation) {
+                            photoChapter.setPhoto(resource);
+                        }
+                    });
+        }
+        else
+        {
+            holder.photoChapterImageView.setImageBitmap(photoChapter.getPhoto());
+        }
         holder.chapterTextView.setText(photoChapter.getChapterName());
     }
 
