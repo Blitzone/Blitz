@@ -8,62 +8,71 @@ import android.graphics.Bitmap;
  */
 public class PhotoChapter {
 
-    private Bitmap bitmap;
+    private Integer chapterId;
+    private String chapterName;
+    private Bitmap photo;
     private String url;
-    private boolean _hasPhoto = false;
-    private boolean _urlUpdated = false;
 
-    public boolean is_urlUpdated() {
-        return _urlUpdated;
+    public PhotoChapter(Integer chapterId, Bitmap photo)
+    {
+        this.chapterId = chapterId;
+        this.photo = photo;
     }
 
-    public void set_urlUpdated(boolean _urlUpdated) {
-        this._urlUpdated = _urlUpdated;
+    public PhotoChapter(Integer chapterId)
+    {
+        this.chapterId = chapterId;
     }
 
-    public PhotoChapter(Bitmap bitmap) {
-        this.bitmap = bitmap;
+    public PhotoChapter(Integer chapterId, String chapterName)
+    {
+        this.chapterId = chapterId;
+        this.chapterName = chapterName;
     }
 
-    public PhotoChapter(String url, Bitmap bitmap) {
+    public PhotoChapter(Bitmap photo) {
+        this.photo = photo;
+    }
+
+    public PhotoChapter(String url, Bitmap photo) {
         this.url = url;
-        this.bitmap = bitmap;
-    }
-
-    public PhotoChapter(String url, Bitmap bitmap, boolean _hasPhoto) {
-        this.url = url;
-        this.bitmap = bitmap;
-        this._hasPhoto = _hasPhoto;
+        this.photo = photo;
     }
 
     public PhotoChapter() {}
 
     public void setUrl(String url) {
         this.url = url;
-        this.set_urlUpdated(true);
     }
 
-    public void set_hasPhoto(boolean _hasPhoto) {
-        this._hasPhoto = _hasPhoto;
-    }
-
-    public boolean _hasPhoto() {
-
-        return _hasPhoto;
-    }
 
     public String getUrl() {
         return url;
     }
 
-    public Bitmap getBitmap() {
-        return bitmap;
+    public Bitmap getPhoto() {
+        return photo;
 
     }
 
-    public void setBitmap(Bitmap bitmap) {
-        this.bitmap = bitmap;
-        this.set_hasPhoto(true);
+    public void setPhoto(Bitmap photo) {
+        this.photo = photo;
+    }
+
+    public Integer getChapterId() {
+        return chapterId;
+    }
+
+    public void setChapterId(Integer chapterId) {
+        this.chapterId = chapterId;
+    }
+
+    public String getChapterName() {
+        return chapterName;
+    }
+
+    public void setChapterName(String chapterName) {
+        this.chapterName = chapterName;
     }
 }
 

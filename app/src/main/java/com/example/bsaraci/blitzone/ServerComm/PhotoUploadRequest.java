@@ -2,18 +2,21 @@ package com.example.bsaraci.blitzone.ServerComm;
 
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
+import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
 /**
  * Created by mikel on 4/10/16.
  */
-public class PhotoUploadRequest extends AsyncTask<Bitmap, Void, Integer> {
+public class PhotoUploadRequest extends AsyncTask<Bitmap, Void, JSONObject> {
     private static String attachmentName = "filedata";
     private static String attachmentFileName = "image.png"; //TODO get the real image name here
     private static String crlf = "\r\n";
@@ -36,12 +39,12 @@ public class PhotoUploadRequest extends AsyncTask<Bitmap, Void, Integer> {
     }
 
     @Override
-    protected void onPostExecute(Integer responseCode) {
+    protected void onPostExecute(JSONObject responseCode) {
         delegate.uploadFinishedCallback(responseCode);
     }
 
-    protected Integer doInBackground(Bitmap... bitmapSet) {
-        Integer responseCode = 0;
+    protected JSONObject doInBackground(Bitmap... bitmapSet) {
+        JSONObject response = null;
         for (Bitmap bitmap : bitmapSet) {
             HttpURLConnection httpUrlConnection = null;
             URL url = null;
@@ -97,7 +100,19 @@ public class PhotoUploadRequest extends AsyncTask<Bitmap, Void, Integer> {
                 request.flush();
                 request.close();
 
-                responseCode = httpUrlConnection.getResponseCode();
+                int responseCode = httpUrlConnection.getResponseCode();
+                BufferedReader br = new BufferedReader(new InputStreamReader(httpUrlConnection.getInputStream()));
+                StringBuilder sb = new StringBuilder();
+                String line;
+                while ((line = br.readLine()) != null) {
+                    sb.append(line+"\n");
+                }
+                br.close();
+
+                httpUrlConnection.disconnect();
+
+                response = new JSONObject(sb.toString());
+                response.put("responseCode", responseCode);
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -105,7 +120,7 @@ public class PhotoUploadRequest extends AsyncTask<Bitmap, Void, Integer> {
 
         }
 
-        return responseCode;
+        return response;
 
     }
 }

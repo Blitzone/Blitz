@@ -62,11 +62,8 @@ public class Profile extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
-    private ProfilePhotosDataSet profilePhotosDataSet = new ProfilePhotosDataSet();
 
-    private ArrayList<Chapter> chapters;
-    private ArrayList<PhotoChapter> photoChapters;
-    private Integer topicId;
+    private Topic topic;
     TextView toolbarTitle;
     ProgressDialog dialog;
 
@@ -104,52 +101,54 @@ public class Profile extends AppCompatActivity {
 
         if (resultCode == RESULT_OK && requestCode == requestCamera) {
 
-            PhotoChapter photoChapter = photoSaveFromCamera();
+            Bitmap photo = photoSaveFromCamera();
 
             if (requestCamera == CAMERA_PROFILE_IMAGE_REQUEST) {
                 ImageView imageView = (ImageView) this.findViewById(R.id.profile_picture);
                 dialog = ProgressDialog.show(Profile.this, "", "Uploading profile image ...", true);
-                imageView.setImageBitmap(photoChapter.getBitmap());
-                uploadPicture(photoChapter.getBitmap(), RequestURL.AVATAR, null);
+                imageView.setImageBitmap(photo);
+                uploadPicture(photo, RequestURL.AVATAR, null);
             } else if (requestCamera == CAMERA_CHAPTER_IMAGE_REQUEST) {
-                Chapter chap = profilePhotosDataSet.getChapter(chapterClicked);
-                profilePhotosDataSet.addPhotoChapter(photoChapter, chap);
+                PhotoChapter photoChapter = topic.getPhotoChapterFromPosition(chapterClicked);
+                photoChapter.setPhoto(photo);
+                Integer chapterId = photoChapter.getChapterId();
+
                 dialog = ProgressDialog.show(Profile.this, "", "Uploading chapter image ...", true);
-                uploadPicture(photoChapter.getBitmap(), RequestURL.UPLOAD_USER_CHAPTER, getPhotoChapterParams(chap));
-                mAdapter = new ProfileRecyclerviewAdapter(profilePhotosDataSet,this);
+                uploadPicture(photo, RequestURL.UPLOAD_USER_CHAPTER, getPhotoChapterFromChapterParams(chapterId));
+                mAdapter = new ProfileRecyclerviewAdapter(topic, this);
                 mAdapter.notifyDataSetChanged();
                 mRecyclerView.setAdapter(mAdapter);
             }
         } else if (requestCode == requestGallery && resultCode == RESULT_OK && null != data && data.getData() != null) {
             Uri selectedImage = data.getData();
 
-            PhotoChapter photoChapter = photoSaveFromGallery(selectedImage);
+            Bitmap photo = photoSaveFromGallery(selectedImage);
 
             if (requestGallery == UPLOAD_PROFILE_IMAGE_FROM_GALLERY) {
                 ImageView imageView1 = (ImageView) this.findViewById(R.id.profile_picture);
                 dialog = ProgressDialog.show(Profile.this, "", "Uploading profile image ...", true);
-                imageView1.setImageBitmap(photoChapter.getBitmap());
-                uploadPicture(photoChapter.getBitmap(), RequestURL.AVATAR, null);
+                imageView1.setImageBitmap(photo);
+                uploadPicture(photo, RequestURL.AVATAR, null);
             } else if (requestGallery == UPLOAD_CHAPTER_IMAGE_FROM_GALLERY) {
-                Chapter chap = profilePhotosDataSet.getChapter(chapterClicked);
-                profilePhotosDataSet.addPhotoChapter(photoChapter, chap);
+                PhotoChapter photoChapter = topic.getPhotoChapterFromPosition(chapterClicked);
+                photoChapter.setPhoto(photo);
+                Integer chapterId = photoChapter.getChapterId();
+
                 dialog = ProgressDialog.show(Profile.this, "", "Uploading chapter image ...", true);
-                uploadPicture(photoChapter.getBitmap(), RequestURL.UPLOAD_USER_CHAPTER, getPhotoChapterParams(chap));
-                mAdapter = new ProfileRecyclerviewAdapter(profilePhotosDataSet,this);
+                uploadPicture(photo, RequestURL.UPLOAD_USER_CHAPTER, getPhotoChapterFromChapterParams(chapterId));
+                mAdapter = new ProfileRecyclerviewAdapter(topic, this);
                 mAdapter.notifyDataSetChanged();
                 mRecyclerView.setAdapter(mAdapter);
             }
         }
     }
 
-    private PhotoChapter photoSaveFromCamera() {
+    private Bitmap photoSaveFromCamera() {
         Bitmap bitmap = null;
-        PhotoChapter photoChapter1 = null;
 
         try {
             GetImageThumbnail getImageThumbnail = new GetImageThumbnail();
             bitmap = getImageThumbnail.getThumbnail(fileUri, this);
-            photoChapter1 = new PhotoChapter(bitmap);
             ByteArrayOutputStream bytes = new ByteArrayOutputStream();
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
 
@@ -160,44 +159,62 @@ public class Profile extends AppCompatActivity {
             // TODO Auto-generated catch block
             e1.printStackTrace();
         }
-        return photoChapter1;
+        return bitmap;
     }
 
-    private PhotoChapter photoSaveFromGallery(Uri selectedImage) {
+    private Bitmap photoSaveFromGallery(Uri selectedImage) {
         Bitmap bitmap = null;
-        PhotoChapter photoChapter1 = null;
 
         try {
             //Getting the Bitmap from Gallery
             bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), selectedImage);
 //          ByteArrayOutputStream bytes = new ByteArrayOutputStream();
 //          bitmap1.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
-            photoChapter1 = new PhotoChapter(bitmap);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        return photoChapter1;
+        return bitmap;
     }
 
     private void uploadPicture(Bitmap bitmap, String url, JSONObject params) {
+        final String uploadUrl = url;
         PhotoUploadRequest r = new PhotoUploadRequest(
-                url,
+                uploadUrl,
                 new JWTManager(getApplicationContext()),
                 new PhotoUploadResponse() {
                     @Override
-                    public void uploadFinishedCallback(Integer responseCode) {
-                        if (responseCode == HttpURLConnection.HTTP_ENTITY_TOO_LARGE) {
-                            Toast.makeText(Profile.this, "Photo size is too big.", Toast.LENGTH_LONG).show();
-                            dialog.dismiss();
-                        } else if (responseCode == HttpURLConnection.HTTP_OK) {
-                            dialog.dismiss();
+                    public void uploadFinishedCallback(JSONObject response) {
+                        try
+                        {
+                            if ((int) response.get("responseCode") == HttpURLConnection.HTTP_ENTITY_TOO_LARGE) {
+                                Toast.makeText(Profile.this, "Photo size is too big.", Toast.LENGTH_LONG).show();
+                                dialog.dismiss();
+                            } else if ((int)response.get("responseCode") == HttpURLConnection.HTTP_OK) {
+                                if (uploadUrl == RequestURL.UPLOAD_USER_CHAPTER)
+                                {
+                                    String imageUrl = RequestURL.IP_ADDRESS + response.getString("imageUrl");
+                                    PhotoChapter photoChapter = topic.getPhotoChapterFromPosition(chapterClicked);
+                                    photoChapter.setUrl(imageUrl);
+                                    notifyDatasetChanged();
+                                }
+                                dialog.dismiss();
+                            }
+                        } catch(JSONException e)
+                        {
+                            e.printStackTrace();
                         }
                     }
                 },
                 params
         );
         r.execute(bitmap);
+    }
+
+    private void notifyDatasetChanged() {
+        mAdapter = new ProfileRecyclerviewAdapter(topic, this);
+        mAdapter.notifyDataSetChanged();
+        mRecyclerView.setAdapter(mAdapter);
     }
 
     public void captureImage() {
@@ -392,10 +409,12 @@ public class Profile extends AppCompatActivity {
 
     private void updateTopic(JSONObject response) {
         try {
-            String topic = response.get("name").toString();
-            topicId = (Integer) response.get("id");
+            String topicName    = response.get("name").toString();
+            Integer topicId     = (Integer)response.get("id");
+            topic = new Topic(topicId, topicName);
+
             TextView topicText = (TextView) findViewById(R.id.profile_toolbar_title);
-            topicText.setText(topic);
+            topicText.setText(topic.getName());
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -438,23 +457,19 @@ public class Profile extends AppCompatActivity {
     private void updateChapters(JSONObject response) {
 
         try {
-            photoChapters = new ArrayList<PhotoChapter>();
-            chapters = new ArrayList<Chapter>();
             JSONArray chapterList = (JSONArray) response.get("chapters");
             int chapterListSize = chapterList.length();
-            Bitmap bitmap1 = BitmapFactory.decodeResource(this.getResources(), R.color.lightGray);
+            Bitmap bitmap = BitmapFactory.decodeResource(this.getResources(), R.color.lightGray);
             for (int i = 0; i < chapterListSize; i++) {
                 JSONObject jsonChapter = (JSONObject) chapterList.getJSONObject(i);
-                Chapter chap = new Chapter((int) jsonChapter.get("id"), jsonChapter.get("name").toString());
-                chapters.add(i, chap);
-                PhotoChapter photoChapter = new PhotoChapter(bitmap1);
-                photoChapters.add(i, photoChapter);
+                Integer chapterId = (Integer) jsonChapter.get("id");
+                String chapterName = jsonChapter.get("name").toString();
+                topic.addPhotoChapter(chapterId, chapterName);
+                topic.addPhotoByChapterId(chapterId, bitmap);
             }
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        profilePhotosDataSet.addChapters(chapters);
-        profilePhotosDataSet.initPhotoChapters(photoChapters);
         mRecyclerView = (RecyclerView) findViewById(R.id.hlvProfile);
         mLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         mRecyclerView.setLayoutManager(mLayoutManager);
@@ -463,8 +478,9 @@ public class Profile extends AppCompatActivity {
                     public void onItemClick(View view, int position) {
                         requestCamera = CAMERA_CHAPTER_IMAGE_REQUEST;
                         chapterClicked = position;
-                        if (photoChapters.get(position).getBitmap() != null){
-                            showFullSizeImage(photoChapters.get(position).getBitmap(),chapters.get(position).getName());
+                        PhotoChapter p = topic.getPhotoChapters().get(position);
+                        if (p.getPhoto() != null){
+                            showFullSizeImage(p.getPhoto(), p.getChapterName());
                         }
                         else{
                             captureImage();
@@ -480,7 +496,7 @@ public class Profile extends AppCompatActivity {
                     }
                 })
         );
-        mAdapter = new ProfileRecyclerviewAdapter(profilePhotosDataSet,this);
+        mAdapter = new ProfileRecyclerviewAdapter(topic, this);
         mRecyclerView.setAdapter(mAdapter);
         getPhotoChapters();
     }
@@ -509,7 +525,7 @@ public class Profile extends AppCompatActivity {
         MRequest mRequest = new MRequest(
                 RequestURL.GET_USER_CHAPTERS,
                 Request.Method.POST,
-                getPhotoChapterParams(topicId), //Put the parameters of the request here (JSONObject format)
+                getPhotoChaptersFromTopicParams(topic.getId()), //Put the parameters of the request here (JSONObject format)
                 listener,
                 errorListener,
                 jwtManager
@@ -526,10 +542,10 @@ public class Profile extends AppCompatActivity {
             int photoChapterListSize = photoChapterList.length();
             for (int i = 0; i < photoChapterListSize; i++) {
                 JSONObject jsonPhotoChapter = (JSONObject) photoChapterList.getJSONObject(i);
-                Chapter chap = profilePhotosDataSet.getChapterById((int) jsonPhotoChapter.get("chapter"));
-                PhotoChapter photoChapter1 = profilePhotosDataSet.getPhotoChapter(chap);
-                photoChapter1.setUrl(RequestURL.IP_ADDRESS + jsonPhotoChapter.get("image").toString());
-                mAdapter = new ProfileRecyclerviewAdapter(profilePhotosDataSet,this);
+                Integer chapterId = (Integer) jsonPhotoChapter.get("chapter");
+                PhotoChapter photoChapter = topic.getPhotoChapterFromChapterId(chapterId);
+                photoChapter.setUrl(RequestURL.IP_ADDRESS + jsonPhotoChapter.get("image").toString());
+                mAdapter = new ProfileRecyclerviewAdapter(topic, this);
                 mAdapter.notifyDataSetChanged();
                 mRecyclerView.setAdapter(mAdapter);
             }
@@ -541,20 +557,20 @@ public class Profile extends AppCompatActivity {
 
     private JSONObject getChaptersParams() {
         Map<String, String> params = new HashMap<String, String>();
-        params.put("topic", topicId.toString());
+        params.put("topic", topic.getId().toString());
 
         return new JSONObject(params);
     }
 
-    private JSONObject getPhotoChapterParams(Chapter chap) {
+    private JSONObject getPhotoChapterFromChapterParams(Integer chapterId) {
 
         Map<String, String> params = new HashMap<String, String>();
-        params.put("chapter", chap.getId().toString());
+        params.put("chapter", chapterId.toString());
 
         return new JSONObject(params);
     }
 
-    private JSONObject getPhotoChapterParams(Integer topicId) {
+    private JSONObject getPhotoChaptersFromTopicParams(Integer topicId) {
         Map<String, String> params = new HashMap<String, String>();
         params.put("topic", topicId.toString());
         return new JSONObject(params);
