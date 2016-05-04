@@ -100,7 +100,7 @@ public class ProfileRecyclerviewAdapter extends RecyclerView.Adapter<ProfileRecy
                 .with(context)
                 .load(url)
                 .asBitmap()
-                .into(new SimpleTarget<Bitmap>(300, 300) {
+                .into(new SimpleTarget<Bitmap>(600, 600) {
                     @Override
                     public void onResourceReady(Bitmap resource, GlideAnimation glideAnimation) {
                         photoChapter.setPhoto(resource);
