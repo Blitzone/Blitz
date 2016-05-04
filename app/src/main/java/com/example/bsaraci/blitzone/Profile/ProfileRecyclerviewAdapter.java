@@ -61,33 +61,8 @@ public class ProfileRecyclerviewAdapter extends RecyclerView.Adapter<ProfileRecy
         final PhotoChapter photoChapter = topic.getPhotoChapterFromPosition(position);
         if (photoChapter.getUrl() != null) {
             holder.progressBar.setVisibility(View.VISIBLE);
-            Glide.with(this.context)
-                    .load(photoChapter.getUrl())
-                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                    .listener(new RequestListener<String, GlideDrawable>() {
-                        @Override
-                        public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
-                            return false;
-                        }
-
-                        @Override
-                        public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
-                            holder.progressBar.setVisibility(View.GONE);
-                            return false;
-                        }
-                    })
-                    .into(holder.photoChapterImageView);
-
-            Glide
-                    .with(this.context)
-                    .load(photoChapter.getUrl())
-                    .asBitmap()
-                    .into(new SimpleTarget<Bitmap>(300, 300) {
-                        @Override
-                        public void onResourceReady(Bitmap resource, GlideAnimation glideAnimation) {
-                            photoChapter.setPhoto(resource);
-                        }
-                    });
+            loadWithGlide(this.context, photoChapter.getUrl(), holder.progressBar, holder.photoChapterImageView);
+            setBitmapWithGlide(this.context, photoChapter.getUrl(), photoChapter);
         }
         else
         {
@@ -101,5 +76,36 @@ public class ProfileRecyclerviewAdapter extends RecyclerView.Adapter<ProfileRecy
         return topic.getPhotoChapters().size();
     }
 
+    public void loadWithGlide(Context context, String url, final ProgressBar pg, ImageView imageView){
+        Glide.with(context)
+                .load(url)
+                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                .listener(new RequestListener<String, GlideDrawable>() {
+                    @Override
+                    public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                        pg.setVisibility(View.GONE);
+                        return false;
+                    }
+                })
+                .into(imageView);
+    }
+
+    public void setBitmapWithGlide(Context context, String url, final PhotoChapter photoChapter){
+        Glide
+                .with(context)
+                .load(url)
+                .asBitmap()
+                .into(new SimpleTarget<Bitmap>(300, 300) {
+                    @Override
+                    public void onResourceReady(Bitmap resource, GlideAnimation glideAnimation) {
+                        photoChapter.setPhoto(resource);
+                    }
+                });
+    }
 }
 

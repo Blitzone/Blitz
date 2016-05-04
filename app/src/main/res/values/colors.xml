@@ -8,6 +8,7 @@
     <color name="green">#52bf90</color>
     <color name="transparentGreen">#203d9f3d</color>
     <color name="white">#ffffff</color>
+    <color name="transparentWhite">#90ffffff</color>
     <color name="indicator">#ffffff</color>
 
 </resources>

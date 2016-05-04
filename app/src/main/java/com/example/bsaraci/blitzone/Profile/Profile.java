@@ -30,6 +30,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.example.bsaraci.blitzone.Blitzone.Blitzone;
 import com.example.bsaraci.blitzone.Start.LogIn;
 import com.example.bsaraci.blitzone.Notifications.Notifications;
@@ -106,8 +107,8 @@ public class Profile extends AppCompatActivity {
             if (requestCamera == CAMERA_PROFILE_IMAGE_REQUEST) {
                 ImageView imageView = (ImageView) this.findViewById(R.id.profile_picture);
                 dialog = ProgressDialog.show(Profile.this, "", "Uploading profile image ...", true);
-                imageView.setImageBitmap(photo);
                 uploadPicture(photo, RequestURL.AVATAR, null);
+                imageView.setImageBitmap(photo);
             } else if (requestCamera == CAMERA_CHAPTER_IMAGE_REQUEST) {
                 PhotoChapter photoChapter = topic.getPhotoChapterFromPosition(chapterClicked);
                 photoChapter.setPhoto(photo);
@@ -127,8 +128,8 @@ public class Profile extends AppCompatActivity {
             if (requestGallery == UPLOAD_PROFILE_IMAGE_FROM_GALLERY) {
                 ImageView imageView1 = (ImageView) this.findViewById(R.id.profile_picture);
                 dialog = ProgressDialog.show(Profile.this, "", "Uploading profile image ...", true);
-                imageView1.setImageBitmap(photo);
                 uploadPicture(photo, RequestURL.AVATAR, null);
+                imageView1.setImageBitmap(photo);
             } else if (requestGallery == UPLOAD_CHAPTER_IMAGE_FROM_GALLERY) {
                 PhotoChapter photoChapter = topic.getPhotoChapterFromPosition(chapterClicked);
                 photoChapter.setPhoto(photo);
@@ -476,23 +477,15 @@ public class Profile extends AppCompatActivity {
         mRecyclerView.addOnItemTouchListener(
                 new RecyclerItemClickListener(this, mRecyclerView, new RecyclerItemClickListener.OnItemClickListener() {
                     public void onItemClick(View view, int position) {
-                        requestCamera = CAMERA_CHAPTER_IMAGE_REQUEST;
                         chapterClicked = position;
-                        PhotoChapter p = topic.getPhotoChapters().get(position);
-                        if (p.getPhoto() != null){
-                            showFullSizeImage(p.getPhoto(), p.getChapterName());
-                        }
-                        else{
-                            captureImage();
-                        }
-
+                        showChapterPhotoAlertDialogWithListView();
                     }
 
                     @Override
                     public void onItemLongClick(View view, int position) {
-                        requestGallery = UPLOAD_CHAPTER_IMAGE_FROM_GALLERY;
+                        requestCamera = CAMERA_CHAPTER_IMAGE_REQUEST;
                         chapterClicked = position;
-                        showChapterPhotoAlertDialogWithListView();
+                        captureImage();
                     }
                 })
         );
@@ -688,21 +681,6 @@ public class Profile extends AppCompatActivity {
         Intent intent = new Intent(this, Options.class);
         startActivity(intent);
 
-    }
-
-    public void showFullSizeImage (Bitmap bitmap, String str){
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
-        byte[] byteArray = stream.toByteArray();
-
-        TextView usernameView = (TextView) findViewById(R.id.profileName);
-        String username = (String) usernameView.getText();
-
-        Intent intent = new Intent(this, FullSizeImage.class);
-        intent.putExtra("bitmapArray", byteArray);
-        intent.putExtra("chapterName",str);
-        intent.putExtra("username", username);
-        startActivity(intent);
     }
 
 }
