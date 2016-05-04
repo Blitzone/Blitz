@@ -50,22 +50,27 @@ public class StartActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
         getTopic();
-        initiateSplashScreen();
+
     }
 
 
     private void initiateSplashScreen(){
-        topicText = (TextView) findViewById(R.id.topicStart);
-        chapter1 = (TextView) findViewById(R.id.chapter1);
-        chapter1.setText("Party Hard");
-        chapter2 = (TextView) findViewById(R.id.chapter2);
-        chapter2.setText("Group Study");
-        chapter3 = (TextView) findViewById(R.id.chapter3);
-        chapter3.setText("Exam Day");
-        chapter4 = (TextView) findViewById(R.id.chapter4);
-        chapter4.setText("Selfie with professor");
-        chapter5 = (TextView) findViewById(R.id.chapter5);
-        chapter5.setText("Hardest part");
+        try {
+            topicText = (TextView) findViewById(R.id.topicStart);
+            chapter1 = (TextView) findViewById(R.id.chapter1);
+            chapter1.setText(topic.getPhotoChapterFromPosition(0).getChapterName());
+            chapter2 = (TextView) findViewById(R.id.chapter2);
+            chapter2.setText(topic.getPhotoChapterFromPosition(1).getChapterName());
+            chapter3 = (TextView) findViewById(R.id.chapter3);
+            chapter3.setText(topic.getPhotoChapterFromPosition(2).getChapterName());
+            chapter4 = (TextView) findViewById(R.id.chapter4);
+            chapter4.setText(topic.getPhotoChapterFromPosition(3).getChapterName());
+            chapter5 = (TextView) findViewById(R.id.chapter5);
+            chapter5.setText(topic.getPhotoChapterFromPosition(4).getChapterName());
+        } catch (IndexOutOfBoundsException e)
+        {
+            ;
+        }
 
         animateTextViews(topicText);
         animateTextViews(chapter1);
@@ -73,6 +78,7 @@ public class StartActivity extends Activity {
         animateTextViews(chapter3);
         animateTextViews(chapter4);
         animateTextViews(chapter5);
+
         splashTimeOut();
     }
 
@@ -313,5 +319,6 @@ public class StartActivity extends Activity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        initiateSplashScreen();
     }
 }
