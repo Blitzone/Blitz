@@ -15,7 +15,7 @@ import java.util.List;
 public class Options extends AppCompatActivity{
     private RecyclerView mRecyclerView;
     private SimpleAdapter mAdapter;
-    private String [] data = {"1","2","3"};
+    private String [] data = {"Change username","Change password","Log out"};
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -36,11 +36,11 @@ public class Options extends AppCompatActivity{
                 new ArrayList<SimpleSectionedRecyclerViewAdapter.Section>();
 
         //Sections
-        sections.add(new SimpleSectionedRecyclerViewAdapter.Section(0,"Section 1"));
-        sections.add(new SimpleSectionedRecyclerViewAdapter.Section(5,"Section 2"));
-        sections.add(new SimpleSectionedRecyclerViewAdapter.Section(12,"Section 3"));
+        sections.add(new SimpleSectionedRecyclerViewAdapter.Section(0,"Account"));
+        sections.add(new SimpleSectionedRecyclerViewAdapter.Section(2,"Log out"));
+        /*sections.add(new SimpleSectionedRecyclerViewAdapter.Section(12,"Section 3"));
         sections.add(new SimpleSectionedRecyclerViewAdapter.Section(14,"Section 4"));
-        sections.add(new SimpleSectionedRecyclerViewAdapter.Section(20,"Section 5"));
+        sections.add(new SimpleSectionedRecyclerViewAdapter.Section(20,"Section 5"));*/
 
         //Add your adapter to the sectionAdapter
         SimpleSectionedRecyclerViewAdapter.Section[] dummy = new SimpleSectionedRecyclerViewAdapter.Section[sections.size()];
