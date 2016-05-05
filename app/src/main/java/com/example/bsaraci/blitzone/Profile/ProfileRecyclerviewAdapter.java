@@ -50,7 +50,7 @@ public class ProfileRecyclerviewAdapter extends RecyclerView.Adapter<ProfileRecy
 
     @Override
     public DataObjectHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.hlv_inflate, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.hlv_profile_item, parent, false);
 
         DataObjectHolder dataObjectHolder = new DataObjectHolder(view);
         return dataObjectHolder;
@@ -100,7 +100,7 @@ public class ProfileRecyclerviewAdapter extends RecyclerView.Adapter<ProfileRecy
                 .with(context)
                 .load(url)
                 .asBitmap()
-                .into(new SimpleTarget<Bitmap>(600, 600) {
+                .into(new SimpleTarget<Bitmap>(700, 700) {
                     @Override
                     public void onResourceReady(Bitmap resource, GlideAnimation glideAnimation) {
                         photoChapter.setPhoto(resource);

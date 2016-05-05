@@ -13,6 +13,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.android.volley.Request;
+import com.android.volley.Response;
 import com.android.volley.Response.Listener;
 import com.android.volley.Response.ErrorListener;
 import com.android.volley.VolleyError;
@@ -32,29 +33,32 @@ import java.util.Map;
 
 
 public class  LogIn  extends AppCompatActivity {
-    private EditText username;
-    private EditText pass;
+    private EditText usernameEditText;
+    private EditText passwordEditText;
     private ProgressBar spinner;
+    String username;
+    Integer blitzNumber;
 
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
         loginEnabled();
+        getProfileData();
     }
 
     public void loginHomeButtonCallback(View view)
     {
         spinnerTurning();
-            final Intent intent = new Intent(this, Profile.class);
 
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        final Intent intent = new Intent(this, Profile.class);
 
-            //Build the request
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
+        //Build the request
 
             //Url
-
             //Function onResponse is executed after the server responds to the requests.
             Listener<JSONObject> listener = new Listener<JSONObject>() {
                 @Override
@@ -66,7 +70,6 @@ public class  LogIn  extends AppCompatActivity {
                         {
                             JWTManager jwtManager = new JWTManager(getApplicationContext());
                             jwtManager.setToken(response.getString("token"));
-
                             startActivity(intent);
                         }
                         catch (JSONException e)
@@ -122,7 +125,7 @@ public class  LogIn  extends AppCompatActivity {
     {
         Button b = (Button)findViewById(R.id.log_in_home_button);
 
-        if (username.getText().toString().trim().length()>0 && pass.getText().toString().trim().length()>0)
+        if (usernameEditText.getText().toString().trim().length()>0 && passwordEditText.getText().toString().trim().length()>0)
         {
             b.setEnabled(true);
         }
@@ -149,11 +152,11 @@ public class  LogIn  extends AppCompatActivity {
             }
         };
 
-        username = (EditText)findViewById(R.id.username_login);
-        pass = (EditText)findViewById(R.id.password_login);
+        usernameEditText = (EditText)findViewById(R.id.username_login);
+        passwordEditText = (EditText)findViewById(R.id.password_login);
 
-        username.addTextChangedListener(textWatcher);
-        pass.addTextChangedListener(textWatcher);
+        usernameEditText.addTextChangedListener(textWatcher);
+        passwordEditText.addTextChangedListener(textWatcher);
 
 
     }
@@ -173,6 +176,54 @@ public class  LogIn  extends AppCompatActivity {
     public void spinnerStop (){
         spinner=(ProgressBar)findViewById(R.id.progressBar);
         spinner.setVisibility(View.GONE);
+    }
+
+    private void updateProfile(JSONObject response) {
+        try {
+            String username1 = response.get("user").toString();
+            //Boolean isBanned = response.get("is_banned").toString().equals("true");
+            Integer blitzCount = (Integer) response.get("blitzCount");
+            //String avatar = RequestURL.IP_ADDRESS + response.get("avatar").toString();
+            username=username1;
+            blitzNumber=blitzCount;
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void getProfileData() {
+
+        Response.Listener<JSONObject> listener = new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                updateProfile(response);
+            }
+        };
+
+        //Function to be executed in case of an error
+        Response.ErrorListener errorListener = new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("Error", error.toString());
+            }
+        };
+
+        JWTManager jwtManager = new JWTManager(getApplicationContext());
+        //Put everything in the request
+        MRequest mRequest = new MRequest(
+                RequestURL.PROFILE,
+                Request.Method.GET,
+                null, //Put the parameters of the request here (JSONObject format)
+                listener,
+                errorListener,
+                jwtManager
+        );
+
+        //Send the request to execute
+        RequestQueueSingleton.getInstance(this).addToRequestQueue(mRequest);
+
     }
 
 }

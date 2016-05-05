@@ -1,188 +1,240 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_weight="4">
 
-    <include
-        android:id="@+id/toolbar_of_profile"
-        layout="@layout/toolbar"
-        android:layout_height="wrap_content"
-        android:layout_width="match_parent"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
-    <TextView
+    <RelativeLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="@string/toolbar_title_profile"
-        android:textSize="20sp"
-        android:id="@+id/profile_toolbar_title"
-        android:textColor="@color/white"
-        android:layout_alignBottom="@+id/blitzone_from_profile"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="8dp"/>
+        android:layout_height="wrap_content">
 
-    <ImageButton
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:id="@+id/blitzone_from_profile"
-        android:background="@mipmap/ic_blitz"
-        android:onClick="blitzoneFromProfileButtonCallback"
-        android:layout_alignBottom="@+id/toolbar_of_profile"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:scaleType="center"
-        android:layout_margin="10dp"/>
+        <include
+            android:id="@+id/toolbar_of_profile"
+            layout="@layout/toolbar"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
 
-    <ImageButton
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:id="@+id/notifications_from_profile"
-        android:background="@mipmap/ic_notification"
-        android:onClick="notificationsFromProfileButtonCallback"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:scaleType="center"
-        android:layout_margin="10dp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="@string/toolbar_title_profile"
+            android:textSize="18sp"
+            android:id="@+id/profile_toolbar_title"
+            android:textColor="@color/mint"
+            android:layout_alignBottom="@+id/blitzone_from_profile"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="8dp"
+            android:textStyle="bold"/>
 
-    <com.example.bsaraci.blitzone.Profile.RoundedImageView
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:id="@+id/profile_picture"
-        android:background="@android:color/transparent"
-        android:onClick="profilePictureCallback"
-        android:layout_below="@+id/notifications_from_profile"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="15dp"
-        app:civ_border_width="1dp"
-        app:civ_border_color="@color/lightGray"
-        android:visibility="visible"/>
+        <ImageButton
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:id="@+id/blitzone_from_profile"
+            android:background="@mipmap/ic_mint_blitz"
+            android:onClick="blitzoneFromProfileButtonCallback"
+            android:scaleType="center"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="8dp"/>
 
-    <com.example.bsaraci.blitzone.Profile.RoundedImageView
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:id="@+id/profile_picture1"
-        android:src="@color/lightGray"
-        android:layout_below="@+id/notifications_from_profile"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="15dp"
-        app:civ_border_width="1dp"
-        app:civ_border_color="@color/lightGray"
-        android:visibility="visible"/>
+        <ImageButton
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:id="@+id/notifications_from_profile"
+            android:background="@mipmap/ic_mint_notifications"
+            android:onClick="notificationsFromProfileButtonCallback"
+            android:scaleType="center"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="8dp"/>
 
-    <ImageView
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:background="@mipmap/ic_gray_blitz"
-        android:id="@+id/blitz_won"
-        android:layout_above="@+id/number_of_blitz"
-        android:layout_toRightOf="@+id/blitzone_from_profile"
-        android:layout_toEndOf="@+id/blitzone_from_profile" />
+        <View style="@style/DividerToolbar"
+            android:id="@+id/divider3"
+            android:layout_below="@+id/toolbar_of_profile"
+            android:layout_centerHorizontal="true" />
+    </RelativeLayout>
 
-    <ImageView
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:background="@mipmap/ic_gray_followers"
-        android:id="@+id/followers"
-        android:layout_alignTop="@+id/blitz_won"
-        android:layout_toLeftOf="@+id/notifications_from_profile"
-        android:layout_toStartOf="@+id/notifications_from_profile" />
-
-    <TextView
-        android:layout_width="40dp"
-        android:layout_height="20dp"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="@string/points_profile"
-        android:id="@+id/number_of_blitz"
-        android:textSize="15sp"
-        android:gravity="center"
-        android:layout_alignBottom="@+id/profile_picture"
-        android:layout_alignLeft="@+id/blitz_won"
-        android:layout_alignStart="@+id/blitz_won"
-        android:layout_marginBottom="27dp" />
-
-    <TextView
-        android:layout_width="40dp"
-        android:layout_height="20dp"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="@string/followers_profile"
-        android:id="@+id/number_of_followers"
-        android:textSize="15sp"
-        android:gravity="center"
-        android:layout_below="@+id/followers"
-        android:layout_alignLeft="@+id/followers"
-        android:layout_alignStart="@+id/followers" />
-
-    <View style="@style/Divider"
-        android:id="@+id/divider1"
-        android:layout_below="@+id/profileName"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="50dp"/>
-
-    <View style="@style/Divider"
-        android:id="@+id/divider2"
-        android:layout_below="@+id/profileName"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="5dp"/>
-
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/hlvProfile"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="400dp"
-        android:background="@android:color/transparent"
-        android:divider="#E0E0E0"
-        android:fadingEdgeLength="10dp"
-        android:requiresFadingEdge="horizontal"
-        android:layout_gravity="center"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/divider1" />
+        android:layout_height="120dp">
 
-    <TextView
+        <com.example.bsaraci.blitzone.Profile.RoundedImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:id="@+id/profile_picture"
+            android:background="@android:color/transparent"
+            android:onClick="profilePictureCallback"
+            app:civ_border_width="1dp"
+            app:civ_border_color="@color/lightGray"
+            android:visibility="visible"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"/>
+
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@mipmap/ic_gray_blitz"
+            android:id="@+id/blitz_won"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="30dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"/>
+
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@mipmap/ic_gray_followers"
+            android:id="@+id/followers"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="30dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginEnd="10dp"/>
+
+        <TextView
+            android:layout_width="40dp"
+            android:layout_height="20dp"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="@string/points_profile"
+            android:id="@+id/number_of_blitz"
+            android:textSize="15sp"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:layout_below="@+id/blitz_won"
+            android:layout_alignLeft="@+id/blitz_won"
+            android:layout_alignStart="@+id/blitz_won" />
+
+        <TextView
+            android:layout_width="40dp"
+            android:layout_height="20dp"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="@string/followers_profile"
+            android:id="@+id/number_of_followers"
+            android:textSize="15sp"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:layout_alignTop="@+id/number_of_likes"
+            android:layout_alignLeft="@+id/followers"
+            android:layout_alignStart="@+id/followers" />
+
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:id="@+id/likesIconProfile"
+            android:src="@mipmap/ic_gray_like"
+            android:layout_above="@+id/number_of_likes"
+            android:layout_toRightOf="@+id/blitz_won"
+            android:layout_toEndOf="@+id/blitz_won"
+            android:layout_marginLeft="15dp"
+            android:layout_marginStart="15dp"/>
+
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:id="@+id/dislikeIconProfile"
+            android:src="@mipmap/ic_gray_dislike"
+            android:layout_alignTop="@+id/followers"
+            android:layout_toLeftOf="@+id/followers"
+            android:layout_toStartOf="@+id/followers"
+            android:layout_marginRight="15dp"
+            android:layout_marginEnd="15dp"/>
+
+        <TextView
+            android:layout_width="40dp"
+            android:layout_height="20dp"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="@string/likes_profile"
+            android:id="@+id/number_of_likes"
+            android:textSize="15sp"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:layout_alignTop="@+id/number_of_blitz"
+            android:layout_alignLeft="@+id/likesIconProfile"
+            android:layout_alignStart="@+id/likesIconProfile" />
+
+        <TextView
+            android:layout_width="40dp"
+            android:layout_height="20dp"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="@string/dislikes_profile"
+            android:id="@+id/number_of_dislikes"
+            android:textSize="15sp"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:layout_below="@+id/dislikeIconProfile"
+            android:layout_alignLeft="@+id/dislikeIconProfile"
+            android:layout_alignStart="@+id/dislikeIconProfile" />
+
+
+    </RelativeLayout>
+
+    <RelativeLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text=""
-        android:id="@+id/profileName"
-        android:layout_marginTop="4dp"
-        android:textSize="15sp"
-        android:layout_below="@+id/number_of_blitz"
-        android:layout_centerHorizontal="true" />
+        android:layout_height="wrap_content">
 
-    <ImageButton
-        android:layout_width="45dp"
-        android:layout_height="45dp"
-        android:id="@+id/optionsButton"
-        android:background="@mipmap/ic_options_icon"
-        android:layout_alignTop="@+id/divider2"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:onClick="optionsCallback"/>
+        <View style="@style/Divider"
+            android:id="@+id/divider1"
+            android:layout_alignBottom="@+id/optionsButton"
+            android:layout_centerHorizontal="true"  />
 
-    <ImageButton
-        android:layout_width="45dp"
-        android:layout_height="45dp"
-        android:id="@+id/shareButton"
-        android:background="@mipmap/ic_share_icon"
-        android:layout_alignTop="@+id/divider2"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        <View style="@style/Divider"
+            android:id="@+id/divider2"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true" />
 
-    <ImageButton
-        android:layout_width="45dp"
-        android:layout_height="45dp"
-        android:id="@+id/photoButton"
-        android:background="@mipmap/ic_photo_button"
-        android:layout_alignTop="@+id/divider2"
-        android:layout_centerHorizontal="true" />
+        <ImageButton
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:id="@+id/optionsButton"
+            android:background="@mipmap/ic_options_icon"
+            android:onClick="optionsCallback"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
 
-</RelativeLayout>
+        <ImageButton
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:id="@+id/shareButton"
+            android:background="@mipmap/ic_share_icon"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <ImageButton
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:id="@+id/photoButton"
+            android:background="@mipmap/ic_photo_button"
+            android:layout_centerHorizontal="true" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/hlvProfile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:fadingEdgeLength="5dp"
+            android:requiresFadingEdge="horizontal"
+            android:layout_gravity="center"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+    </RelativeLayout>
+</LinearLayout>

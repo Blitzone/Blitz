@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="40dp">
+    android:layout_height="50dp">
 
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="50dp"
         android:padding="5dp"
-        android:text="Text"
-        android:gravity="left|center"
-        android:id="@+id/rowText" />
-</LinearLayout>
+        android:text="@string/row_text_options"
+        android:textSize="15sp"
+        android:gravity="start|center"
+        android:id="@+id/rowText"
+        android:textColor="@color/boldGray"
+        android:textStyle="bold"/>
+</RelativeLayout>

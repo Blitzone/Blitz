@@ -253,9 +253,6 @@ public class Profile extends AppCompatActivity {
     }
 
     public void removeProfilePicture() {
-        ImageView imageView = (ImageView) findViewById(R.id.profile_picture);
-        final ImageView imageView1 = (ImageView) this.findViewById(R.id.profile_picture1);
-        imageView1.setVisibility(View.VISIBLE);
     }
 
     public void blitzoneFromProfileButtonCallback(View view) {
@@ -268,36 +265,6 @@ public class Profile extends AppCompatActivity {
         Intent intent = new Intent(this, Notifications.class);
 
         startActivity(intent);
-    }
-
-    public void disconnectCallback() {
-
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-        alertDialogBuilder.setMessage("Are you sure you want to log out ?");
-
-        alertDialogBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface arg0, int arg1) {
-                Intent intent = new Intent(Profile.this, LogIn.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-
-                JWTManager jwtManager = new JWTManager(getApplicationContext());
-                jwtManager.delToken();
-
-                startActivity(intent);
-            }
-        });
-
-        alertDialogBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                onResume();
-            }
-        });
-
-        AlertDialog alertDialog = alertDialogBuilder.create();
-        alertDialog.show();
     }
 
     private void getProfileData() {
@@ -342,7 +309,6 @@ public class Profile extends AppCompatActivity {
             String avatar = RequestURL.IP_ADDRESS + response.get("avatar").toString();
 
             final ImageView imageView = (ImageView) this.findViewById(R.id.profile_picture);
-            final ImageView imageView1 = (ImageView) this.findViewById(R.id.profile_picture1);
 
             Glide.with(this)
                     .load(avatar)
@@ -353,7 +319,6 @@ public class Profile extends AppCompatActivity {
                         @Override
                         public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> animation) {
                             super.onResourceReady(resource, animation);
-                            imageView1.setVisibility(View.GONE);
                             //never called
                         }
 
@@ -368,7 +333,7 @@ public class Profile extends AppCompatActivity {
             TextView blitzCountView = (TextView) findViewById(R.id.number_of_blitz);
             blitzCountView.setText(blitzCount.toString());
 
-            TextView usernameView = (TextView) findViewById(R.id.profileName);
+            TextView usernameView = (TextView) findViewById(R.id.profile_toolbar_title);
             usernameView.setText(username);
 
         } catch (JSONException e) {
@@ -414,8 +379,6 @@ public class Profile extends AppCompatActivity {
             Integer topicId     = (Integer)response.get("id");
             topic = new Topic(topicId, topicName);
 
-            TextView topicText = (TextView) findViewById(R.id.profile_toolbar_title);
-            topicText.setText(topic.getName());
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -612,13 +575,12 @@ public class Profile extends AppCompatActivity {
         uploadOptions.add("Upload a photo from gallery");
         uploadOptions.add("Take photo");
         uploadOptions.add("Remove photo");
-        uploadOptions.add("Log out");
 
 
         //Create sequence of items
         final CharSequence[] Options = uploadOptions.toArray(new String[uploadOptions.size()]);
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
-        dialogBuilder.setTitle("Options");
+        dialogBuilder.setTitle("Change profile picture");
         dialogBuilder.setItems(Options, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int item) {
 
@@ -630,8 +592,6 @@ public class Profile extends AppCompatActivity {
                     captureImage();
                 } else if (item == 2) {
                     removeProfilePicture();
-                } else if (item == 3) {
-                    disconnectCallback();
                 }
             }
         });
@@ -651,7 +611,7 @@ public class Profile extends AppCompatActivity {
         //Create sequence of items
         final CharSequence[] Options = uploadOptions.toArray(new String[uploadOptions.size()]);
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
-        dialogBuilder.setTitle("Upload an image for this chapter");
+        dialogBuilder.setTitle("Change chapter picture");
         dialogBuilder.setItems(Options, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int item) {
 

@@ -33,16 +33,34 @@
         <activity
             android:name=".Start.LogIn"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustPan|stateHidden"></activity>
+            android:windowSoftInputMode="adjustPan|stateHidden">
+
+        </activity>
         <activity
             android:name=".Start.SignUp"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustPan|stateHidden"></activity>
-        <activity android:name=".Blitzone.Blitzone"></activity>
-        <activity android:name=".Search.Search"></activity>
-        <activity android:name=".Profile.Profile"></activity>
-        <activity android:name=".Notifications.Notifications"></activity>
-        <activity android:name=".Options.Options"></activity>
+            android:windowSoftInputMode="adjustPan|stateHidden">
+
+        </activity>
+        <activity
+            android:name=".Blitzone.Blitzone">
+
+        </activity>
+        <activity
+            android:name=".Search.Search">
+
+        </activity>
+        <activity
+            android:name=".Profile.Profile"
+            android:windowSoftInputMode="adjustPan|stateHidden">
+
+        </activity>
+        <activity android:name=".Notifications.Notifications">
+
+        </activity>
+        <activity android:name=".Options.Options">
+
+        </activity>
         <!-- ATTENTION: This was auto-generated to add Google Play services to your project for
              App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information. -->
         <meta-data

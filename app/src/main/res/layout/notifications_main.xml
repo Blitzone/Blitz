@@ -13,23 +13,30 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="@string/toolbar_title_notifications"
-        android:textSize="20sp"
+        android:textSize="18sp"
         android:id="@+id/notifications_toolbar_title"
-        android:textColor="@color/white"
-        android:layout_alignBottom="@+id/toolbar_of_notifications"
+        android:textColor="@color/mint"
+        android:layout_alignBottom="@+id/profile_from_notifications"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="15dp"/>
+        android:layout_marginBottom="8dp"
+        android:textStyle="bold"/>
 
     <ImageButton
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:id="@+id/profile_from_notifications"
-        android:background="@mipmap/ic_back"
+        android:background="@mipmap/ic_mint_back_icon"
         android:onClick="profileFromNotificationsButtonCallback"
+        android:scaleType="center"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_margin="10dp"
-        android:scaleType="center"/>
+        android:layout_marginTop="8dp"/>
+
+    <View style="@style/DividerToolbar"
+        android:id="@+id/divider3"
+        android:layout_below="@+id/toolbar_of_notifications"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
 </RelativeLayout>
