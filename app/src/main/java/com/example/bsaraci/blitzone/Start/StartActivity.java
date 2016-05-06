@@ -249,63 +249,26 @@ public class StartActivity extends Activity {
 
     private void updateTopic(JSONObject response) {
         try {
-            String topicName    = response.get("name").toString();
-            Integer topicId     = (Integer)response.get("id");
+            JSONObject jsonTopic = (JSONObject)response.get("topic");
+            JSONArray jsonChapterList = (JSONArray)response.get("chapters");
+
+            Integer topicId     = (Integer)jsonTopic.get("id");
+            String topicName    = jsonTopic.getString("name");
             topic = new Topic(topicId, topicName);
 
             TextView topicText = (TextView) findViewById(R.id.topicStart);
             topicText.setText(topic.getName());
+
+            updateChapters(jsonChapterList);
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-        getChapters();
     }
 
-    private JSONObject getChaptersParams() {
-        Map<String, String> params = new HashMap<String, String>();
-        params.put("topic", topic.getId().toString());
-
-        return new JSONObject(params);
-    }
-
-    private void getChapters() {
-
-        Response.Listener<JSONObject> listener = new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                updateChapters(response);
-            }
-        };
-
-        //Function to be executed in case of an error
-        Response.ErrorListener errorListener = new Response.ErrorListener() {
-
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.e("Error", error.toString());
-            }
-        };
-
-        JWTManager jwtManager = new JWTManager(getApplicationContext());
-        //Put everything in the request
-
-        MRequest mRequest = new MRequest(
-                RequestURL.CHAPTERS,
-                Request.Method.POST,
-                getChaptersParams(), //Put the parameters of the request here (JSONObject format)
-                listener,
-                errorListener,
-                jwtManager
-        );
-
-        RequestQueueSingleton.getInstance(this).addToRequestQueue(mRequest);
-    }
-
-    private void updateChapters(JSONObject response) {
+    private void updateChapters(JSONArray chapterList) {
 
         try {
-            JSONArray chapterList = (JSONArray) response.get("chapters");
             int chapterListSize = chapterList.length();
             Bitmap bitmap = BitmapFactory.decodeResource(this.getResources(), R.color.lightGray);
             for (int i = 0; i < chapterListSize; i++) {
