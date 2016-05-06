@@ -69,7 +69,7 @@ public class StartActivity extends Activity {
             chapter5.setText(topic.getPhotoChapterFromPosition(4).getChapterName());
         } catch (IndexOutOfBoundsException e)
         {
-            ;
+
         }
 
         animateTextViews(topicText);

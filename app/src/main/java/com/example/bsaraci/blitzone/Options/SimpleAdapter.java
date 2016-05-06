@@ -2,6 +2,7 @@ package com.example.bsaraci.blitzone.Options;
 
 import android.app.Fragment;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -39,9 +40,11 @@ public class SimpleAdapter extends RecyclerView.Adapter<SimpleAdapter.SimpleView
 
     public static class SimpleViewHolder extends RecyclerView.ViewHolder {
         public final TextView title;
+        private final Context context;
 
         public SimpleViewHolder(View view) {
             super(view);
+            context = view.getContext();
             title = (TextView) view.findViewById(R.id.rowText);
         }
     }
@@ -64,6 +67,8 @@ public class SimpleAdapter extends RecyclerView.Adapter<SimpleAdapter.SimpleView
         holder.title.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+
             }
         });
     }

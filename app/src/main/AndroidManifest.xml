@@ -61,6 +61,12 @@
         <activity android:name=".Options.Options">
 
         </activity>
+        <activity android:name=".Options.ActivityChangeUsername">
+
+        </activity>
+        <activity android:name=".Options.ActivityChangePassword">
+
+        </activity>
         <!-- ATTENTION: This was auto-generated to add Google Play services to your project for
              App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information. -->
         <meta-data
