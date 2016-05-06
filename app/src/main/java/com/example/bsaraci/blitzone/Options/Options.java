@@ -1,12 +1,14 @@
 package com.example.bsaraci.blitzone.Options;
 
 import android.app.AlertDialog;
+import android.support.v4.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -62,7 +64,13 @@ public class Options extends AppCompatActivity{
                     public void onItemClick(View view, int position) {
                         if(position==3){
                             disconnectCallback();
-                    }
+                        }
+                        else if(position==1){
+                            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                            FragmentChangeUsername fragmentDemo = FragmentChangeUsername.newInstance(data[position-1]);
+                            ft.replace(R.id.placeHolder, fragmentDemo);
+                            ft.commit();
+                        }
                     }
 
                     @Override
@@ -134,6 +142,13 @@ public class Options extends AppCompatActivity{
             pg.dismiss();
         }
 
+    }
+
+    public void switchContent(int id, Fragment fragment) {
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(id, fragment, fragment.toString());
+        ft.addToBackStack(null);
+        ft.commit();
     }
 }
 
