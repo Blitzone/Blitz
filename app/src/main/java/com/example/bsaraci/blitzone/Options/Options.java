@@ -28,11 +28,14 @@ public class Options extends AppCompatActivity{
     private SimpleAdapter mAdapter;
     private String [] data = {"Change username","Change password","Log out"};
     private ProgressDialog pg;
+    private String username;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.options_main);
+
+        username = getIntent().getExtras().getString("username");
 
         mRecyclerView = (RecyclerView) findViewById(R.id.list);
         mRecyclerView.setHasFixedSize(true);
@@ -147,6 +150,7 @@ public class Options extends AppCompatActivity{
             if (position == 1) {
                 intent = new Intent(Options.this, ActivityChangeUsername.class);
                 intent.putExtra("toolbarTitle", toolbarTitle);
+                intent.putExtra("username",username);
                 startActivity(intent);
             } else if (position == 2) {
                 intent = new Intent(Options.this, ActivityChangePassword.class);

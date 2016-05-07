@@ -72,6 +72,7 @@ public class Profile extends AppCompatActivity {
     private static String imageFolderPath = null;
     private String imageName = null;
     private static Uri fileUri = null;
+    private String username;
     private int chapterClicked = 0;
     private int requestCamera = 0;
     private int requestGallery = 0;
@@ -79,7 +80,6 @@ public class Profile extends AppCompatActivity {
     private static final int UPLOAD_PROFILE_IMAGE_FROM_GALLERY = 2;
     private static final int CAMERA_CHAPTER_IMAGE_REQUEST = 3;
     private static final int UPLOAD_CHAPTER_IMAGE_FROM_GALLERY = 4;
-    private static final int CAPTURE_IMAGE_FULLSIZE_ACTIVITY_REQUEST_CODE = 5;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,6 +92,14 @@ public class Profile extends AppCompatActivity {
         toolbarTitle = (TextView) findViewById(R.id.profile_toolbar_title);
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        getProfileData();
+        getTopic();
+
     }
 
 
@@ -303,7 +311,7 @@ public class Profile extends AppCompatActivity {
 
     private void updateProfile(JSONObject response) {
         try {
-            String username = response.get("user").toString();
+            String usernameFromServer = response.get("user").toString();
             Boolean isBanned = response.get("is_banned").toString().equals("true");
             Integer blitzCount = (Integer) response.get("blitzCount");
             String avatar = RequestURL.IP_ADDRESS + response.get("avatar").toString();
@@ -334,7 +342,8 @@ public class Profile extends AppCompatActivity {
             blitzCountView.setText(blitzCount.toString());
 
             TextView usernameView = (TextView) findViewById(R.id.profile_toolbar_title);
-            usernameView.setText(username);
+            usernameView.setText(usernameFromServer);
+            username=toolbarTitle.getText().toString();
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -602,6 +611,7 @@ public class Profile extends AppCompatActivity {
     public void optionsCallback(View view) {
 
         Intent intent = new Intent(this, Options.class);
+        intent.putExtra("username",username);
         startActivity(intent);
 
     }
