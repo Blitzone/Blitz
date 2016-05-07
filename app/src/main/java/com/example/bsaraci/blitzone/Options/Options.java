@@ -26,7 +26,7 @@ import java.util.List;
 public class Options extends AppCompatActivity{
     private RecyclerView mRecyclerView;
     private SimpleAdapter mAdapter;
-    private String [] data = {"Change username","Change password","Log out"};
+    private String [] data = {"Change username","Change password","Log out","Visit website"};
     private ProgressDialog pg;
     private String username;
 
@@ -52,8 +52,8 @@ public class Options extends AppCompatActivity{
 
         //Sections
         sections.add(new SimpleSectionedRecyclerViewAdapter.Section(0,"Account"));
-       /* sections.add(new SimpleSectionedRecyclerViewAdapter.Section(2,"Log out"));
-        sections.add(new SimpleSectionedRecyclerViewAdapter.Section(12,"Section 3"));
+        sections.add(new SimpleSectionedRecyclerViewAdapter.Section(3,"About"));
+        /*sections.add(new SimpleSectionedRecyclerViewAdapter.Section(12,"Section 3"));
         sections.add(new SimpleSectionedRecyclerViewAdapter.Section(14,"Section 4"));
         sections.add(new SimpleSectionedRecyclerViewAdapter.Section(20,"Section 5"));*/
 

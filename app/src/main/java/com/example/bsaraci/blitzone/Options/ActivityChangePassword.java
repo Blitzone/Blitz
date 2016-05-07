@@ -80,8 +80,8 @@ public class ActivityChangePassword extends AppCompatActivity {
                             {
                                 e.printStackTrace();
                             }
-
                             Toast.makeText(ActivityChangePassword.this,"Password changed successfully",Toast.LENGTH_LONG).show();
+                            finish();
 
                         }
                         else if (response.get("statusCode").equals(HttpURLConnection.HTTP_BAD_REQUEST))

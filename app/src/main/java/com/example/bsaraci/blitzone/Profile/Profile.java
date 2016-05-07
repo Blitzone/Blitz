@@ -98,7 +98,6 @@ public class Profile extends AppCompatActivity {
     public void onResume(){
         super.onResume();
         getProfileData();
-        getTopic();
 
     }
 

@@ -77,9 +77,8 @@ public class ActivityChangeUsername extends AppCompatActivity {
                             {
                                 e.printStackTrace();
                             }
-
-                        Toast.makeText(ActivityChangeUsername.this,"Username changed successfully",Toast.LENGTH_LONG).show();
-
+                                Toast.makeText(ActivityChangeUsername.this,"Username changed successfully",Toast.LENGTH_LONG).show();
+                                finish();
                         }
                         else if (response.get("statusCode").equals(HttpURLConnection.HTTP_CONFLICT))
                         {
