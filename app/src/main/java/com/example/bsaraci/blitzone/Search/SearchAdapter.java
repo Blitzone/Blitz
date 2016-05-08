@@ -19,15 +19,15 @@ import java.util.ArrayList;
 public class SearchAdapter extends RecyclerView.Adapter<SearchViewHolder> implements Filterable{
 
     Context c;
-    ArrayList<SearchModel> players,filterList;
+    ArrayList<SearchModel> users,filterList;
     CustomFilter filter;
 
 
-    public SearchAdapter(Context ctx,ArrayList<SearchModel> players)
+    public SearchAdapter(Context ctx,ArrayList<SearchModel> users)
     {
         this.c=ctx;
-        this.players=players;
-        this.filterList=players;
+        this.users=users;
+        this.filterList=users;
     }
 
 
@@ -47,16 +47,16 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchViewHolder> implem
     public void onBindViewHolder(SearchViewHolder holder, int position) {
 
         //BIND DATA
-        holder.posTxt.setText(players.get(position).getPos());
-        holder.nameTxt.setText(players.get(position).getName());
-        holder.img.setImageResource(players.get(position).getImg());
+        holder.posTxt.setText(users.get(position).getPos());
+        holder.nameTxt.setText(users.get(position).getName());
+        holder.img.setImageResource(users.get(position).getImg());
 
 
         //IMPLEMENT CLICK LISTENET
         holder.setItemClickListener(new ItemClickListener() {
             @Override
             public void onItemClick(View v, int pos) {
-                Snackbar.make(v, players.get(pos).getName(), Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(v, users.get(pos).getName(), Snackbar.LENGTH_SHORT).show();
             }
         });
 
@@ -65,7 +65,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchViewHolder> implem
     //GET TOTAL NUM OF PLAYERS
     @Override
     public int getItemCount() {
-        return players.size();
+        return users.size();
     }
 
     //RETURN FILTER OBJ

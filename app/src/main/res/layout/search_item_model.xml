@@ -2,7 +2,7 @@
 <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal"
+    android:orientation="vertical"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <RelativeLayout
@@ -37,19 +37,10 @@
             android:text="Add"
             android:textColor="@color/mint"
             android:id="@+id/posTxt"
-            android:layout_alignBaseline="@+id/nameTxt"
-            android:layout_alignBottom="@+id/nameTxt"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
             android:textStyle="bold"
-            android:layout_marginRight="10dp"
-            android:layout_marginEnd="10dp"/>
-
-        <View style="@style/DividerSearchList"
-            android:id="@+id/divider3"
-            android:layout_below="@+id/nameTxt"
-            android:layout_alignLeft="@+id/nameTxt"
-            android:layout_alignStart="@+id/nameTxt" />
+            android:layout_alignTop="@+id/nameTxt"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
 
     </RelativeLayout>
 

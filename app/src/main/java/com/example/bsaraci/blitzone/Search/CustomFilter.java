@@ -58,7 +58,7 @@ public class CustomFilter extends Filter{
     @Override
     protected void publishResults(CharSequence constraint, FilterResults results) {
 
-        adapter.players= (ArrayList<SearchModel>) results.values;
+        adapter.users= (ArrayList<SearchModel>) results.values;
 
         //REFRESH
         adapter.notifyDataSetChanged();

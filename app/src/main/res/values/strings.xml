@@ -48,8 +48,7 @@
     <!--*****************************************************************************-->
 
     <!-- SEARCH -->
-    <string name="toolbar_title_search">Search</string>
-    <string name="searchHint_search">Search</string>
+    <string name="toolbar_title_search">Discover</string>
     <!--*****************************************************************************-->
 
     <!-- OPTIONS -->

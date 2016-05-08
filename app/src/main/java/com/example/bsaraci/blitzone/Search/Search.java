@@ -11,11 +11,13 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.bsaraci.blitzone.R;
 
@@ -26,17 +28,34 @@ public class Search extends AppCompatActivity
     Toolbar searchToolbar ;
     TextView toolbarTitle;
     SearchView sv;
+    RecyclerView rv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.search_main);
         searchToolbar = (Toolbar) findViewById(R.id.toolbar_of_profile);
-        toolbarTitle = (TextView) findViewById(R.id.profile_toolbar_title);
-        
+        toolbarTitle = (TextView) findViewById(R.id.search_toolbar_title);
+        rv= (RecyclerView) findViewById(R.id.myRecycler);
+        rv.setVisibility(View.GONE);
         sv= (SearchView) findViewById(R.id.mSearch);
-        RecyclerView rv= (RecyclerView) findViewById(R.id.myRecycler);
+        sv.setOnSearchClickListener(new View.OnClickListener() {
 
+            @Override
+            public void onClick(View v) {
+                toolbarTitle.setVisibility(View.GONE);
+                rv.setVisibility(View.VISIBLE);
+
+            }
+        });
+        sv.setOnCloseListener(new SearchView.OnCloseListener() {
+            @Override
+            public boolean onClose() {
+                toolbarTitle.setVisibility(View.VISIBLE);
+                rv.setVisibility(View.GONE);
+                return false;
+            }
+        });
         //SET ITS PROPETRIES
         rv.setLayoutManager(new LinearLayoutManager(this));
         rv.setItemAnimator(new DefaultItemAnimator());
@@ -46,9 +65,16 @@ public class Search extends AppCompatActivity
         rv.setAdapter(adapter);
 
         //SEARCH
+        sv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(Search.this,"text",Toast.LENGTH_LONG).show();
+            }
+        });
         sv.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
+
                 return false;
             }
 
@@ -64,72 +90,72 @@ public class Search extends AppCompatActivity
 
     }
 
-    //ADD PLAYERS TO ARRAYLIST
+    //ADD USERS TO ARRAYLIST
     private ArrayList<SearchModel> getSearchModels()
     {
-        ArrayList<SearchModel> players=new ArrayList<>();
+        ArrayList<SearchModel> users=new ArrayList<>();
         SearchModel p=new SearchModel();
-        p.setName("Ander Herera");
+        p.setName("teasaraci");
         p.setPos("Add");
         p.setImg(R.color.lightGray);
-        players.add(p);
+        users.add(p);
 
         p=new SearchModel();
-        p.setName("David De Geaa");
+        p.setName("sarasaraci");
         p.setPos("Add");
         p.setImg(R.color.lightGray);
-        players.add(p);
+        users.add(p);
 
         p=new SearchModel();
-        p.setName("Michael Carrick");
+        p.setName("enderballa");
         p.setPos("Add");
         p.setImg(R.color.lightGray);
-        players.add(p);
+        users.add(p);
 
         p=new SearchModel();
-        p.setName("Juan Mata");
+        p.setName("sidrodritorja");
         p.setPos("Add");
         p.setImg(R.color.lightGray);
-        players.add(p);
+        users.add(p);
 
         p=new SearchModel();
-        p.setName("Diego Costa");
+        p.setName("jonagolemi");
         p.setPos("Add");
         p.setImg(R.color.lightGray);
-        players.add(p);
+        users.add(p);
 
         p=new SearchModel();
-        p.setName("Andrea");
+        p.setName("andreamaka");
         p.setPos("Add");
         p.setImg(R.color.lightGray);
-        players.add(p);
+        users.add(p);
 
         p=new SearchModel();
-        p.setName("Brajan");
+        p.setName("julivuka");
         p.setPos("Add");
         p.setImg(R.color.lightGray);
-        players.add(p);
+        users.add(p);
 
         p=new SearchModel();
-        p.setName("Mikel");
+        p.setName("mikelvuka");
         p.setPos("Add");
         p.setImg(R.color.lightGray);
-        players.add(p);
+        users.add(p);
 
         p=new SearchModel();
-        p.setName("Juli");
+        p.setName("testuser1");
         p.setPos("Add");
         p.setImg(R.color.lightGray);
-        players.add(p);
+        users.add(p);
 
         p=new SearchModel();
-        p.setName("Tea");
+        p.setName("testuser2");
         p.setPos("Add");
         p.setImg(R.color.lightGray);
-        players.add(p);
+        users.add(p);
 
 
-        return players;
+        return users;
     }
 
 
