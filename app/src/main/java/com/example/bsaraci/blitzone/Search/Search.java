@@ -31,8 +31,8 @@ public class Search extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.search_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        searchToolbar = (Toolbar) findViewById(R.id.toolbar_of_profile);
+        toolbarTitle = (TextView) findViewById(R.id.profile_toolbar_title);
         
         sv= (SearchView) findViewById(R.id.mSearch);
         RecyclerView rv= (RecyclerView) findViewById(R.id.myRecycler);
@@ -70,62 +70,62 @@ public class Search extends AppCompatActivity
         ArrayList<SearchModel> players=new ArrayList<>();
         SearchModel p=new SearchModel();
         p.setName("Ander Herera");
-        p.setPos("Midfielder");
-        p.setImg(R.mipmap.ic_app_icon);
+        p.setPos("Add");
+        p.setImg(R.color.lightGray);
         players.add(p);
 
         p=new SearchModel();
         p.setName("David De Geaa");
-        p.setPos("Goalkeeper");
-        p.setImg(R.mipmap.ic_app_icon);
+        p.setPos("Add");
+        p.setImg(R.color.lightGray);
         players.add(p);
 
         p=new SearchModel();
         p.setName("Michael Carrick");
-        p.setPos("Midfielder");
-        p.setImg(R.mipmap.ic_app_icon);
+        p.setPos("Add");
+        p.setImg(R.color.lightGray);
         players.add(p);
 
         p=new SearchModel();
         p.setName("Juan Mata");
-        p.setPos("Playmaker");
-        p.setImg(R.mipmap.ic_app_icon);
+        p.setPos("Add");
+        p.setImg(R.color.lightGray);
         players.add(p);
 
         p=new SearchModel();
         p.setName("Diego Costa");
-        p.setPos("Striker");
-        p.setImg(R.mipmap.ic_app_icon);
+        p.setPos("Add");
+        p.setImg(R.color.lightGray);
         players.add(p);
 
         p=new SearchModel();
         p.setName("Andrea");
-        p.setPos("Playmaker");
-        p.setImg(R.mipmap.ic_app_icon);
+        p.setPos("Add");
+        p.setImg(R.color.lightGray);
         players.add(p);
 
         p=new SearchModel();
         p.setName("Brajan");
-        p.setPos("Playmaker");
-        p.setImg(R.mipmap.ic_app_icon);
+        p.setPos("Add");
+        p.setImg(R.color.lightGray);
         players.add(p);
 
         p=new SearchModel();
         p.setName("Mikel");
-        p.setPos("Playmaker");
-        p.setImg(R.mipmap.ic_app_icon);
+        p.setPos("Add");
+        p.setImg(R.color.lightGray);
         players.add(p);
 
         p=new SearchModel();
         p.setName("Juli");
-        p.setPos("Playmaker");
-        p.setImg(R.mipmap.ic_app_icon);
+        p.setPos("Add");
+        p.setImg(R.color.lightGray);
         players.add(p);
 
         p=new SearchModel();
-        p.setName("Oscar");
-        p.setPos("Playmaker");
-        p.setImg(R.mipmap.ic_app_icon);
+        p.setName("Tea");
+        p.setPos("Add");
+        p.setImg(R.color.lightGray);
         players.add(p);
 
 

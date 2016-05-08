@@ -1,33 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
-    tools:context="com.tutorials.hp.customrecyclerfiltering.MainActivity">
-
-    <android.support.design.widget.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary" />
-
-    </android.support.design.widget.AppBarLayout>
-
-    <include layout="@layout/content_search" />
-
-</android.support.design.widget.CoordinatorLayout>
-
-<!--
-<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <RelativeLayout
@@ -39,25 +14,28 @@
             android:id="@+id/toolbar_of_search"
             layout="@layout/mint_toolbar"/>
 
-        <EditText
-            android:layout_width="300dp"
+        <android.support.v7.widget.SearchView
+            android:id="@+id/mSearch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:defaultQueryHint="Search for users"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/divider3"
+            android:layout_toEndOf="@+id/divider3">
+        </android.support.v7.widget.SearchView>
+
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:hint="@string/toolbar_title_search"
+            android:text=""
             android:textSize="18sp"
             android:id="@+id/search_toolbar_title"
             android:textColor="@color/white"
-            android:textColorHint="@color/transparentWhite"
-            android:textStyle="bold|italic"
-            android:background="@drawable/search_edit_text"
-            android:layout_marginLeft="15dp"
-            android:layout_marginStart="15dp"
-            android:padding="5dp"
-            android:ellipsize="end"
-            android:layout_alignTop="@+id/divider3"
-            android:layout_toRightOf="@+id/divider3"
-            android:layout_toEndOf="@+id/divider3"
-            android:layout_marginTop="12dp"/>
+            android:layout_alignBottom="@+id/blitzone_from_search"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="8dp"
+            android:textStyle="bold"/>
 
         <ImageButton
             android:layout_width="40dp"
@@ -84,47 +62,14 @@
         android:layout_height="match_parent"
         android:id="@+id/container">
 
-        <TextView
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/myRecycler"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Chapter 1"
-            android:id="@+id/textView1"
-            android:layout_marginTop="170dp"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:gravity="center"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:textColor="@color/mint"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Chapter 2"
-            android:id="@+id/textView2"
-            android:layout_marginTop="30dp"
-            android:layout_below="@+id/textView1"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:gravity="center"
-            android:layout_centerHorizontal="true"
-            android:textColor="@color/mint"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Chapter 3"
-            android:id="@+id/textView3"
-            android:layout_marginTop="30dp"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:gravity="center"
-            android:layout_centerHorizontal="true"
-            android:layout_below="@+id/textView2"
-            android:textColor="@color/mint"/>
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
 
     </RelativeLayout>
 
 
 </LinearLayout>
--->
