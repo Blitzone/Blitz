@@ -49,6 +49,7 @@ import org.json.JSONObject;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -56,6 +57,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 
 public class Profile extends AppCompatActivity {
@@ -68,17 +70,10 @@ public class Profile extends AppCompatActivity {
     TextView toolbarTitle;
     ProgressDialog dialog;
 
-    private static String root = null;
-    private static String imageFolderPath = null;
-    private String imageName = null;
-    private static Uri fileUri = null;
     private String username;
     private int chapterClicked = 0;
-    private int requestCamera = 0;
     private int requestGallery = 0;
-    private static final int CAMERA_PROFILE_IMAGE_REQUEST = 1;
     private static final int UPLOAD_PROFILE_IMAGE_FROM_GALLERY = 2;
-    private static final int CAMERA_CHAPTER_IMAGE_REQUEST = 3;
     private static final int UPLOAD_CHAPTER_IMAGE_FROM_GALLERY = 4;
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,7 +88,6 @@ public class Profile extends AppCompatActivity {
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
     }
-
     @Override
     public void onResume(){
         super.onResume();
@@ -107,27 +101,7 @@ public class Profile extends AppCompatActivity {
         // TODO Auto-generated method stub
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (resultCode == RESULT_OK && requestCode == requestCamera) {
-
-            Bitmap photo = photoSaveFromCamera();
-
-            if (requestCamera == CAMERA_PROFILE_IMAGE_REQUEST) {
-                ImageView imageView = (ImageView) this.findViewById(R.id.profile_picture);
-                dialog = ProgressDialog.show(Profile.this, "", "Uploading profile image ...", true);
-                uploadPicture(photo, RequestURL.AVATAR, null);
-                imageView.setImageBitmap(photo);
-            } else if (requestCamera == CAMERA_CHAPTER_IMAGE_REQUEST) {
-                PhotoChapter photoChapter = topic.getPhotoChapterFromPosition(chapterClicked);
-                photoChapter.setPhoto(photo);
-                Integer chapterId = photoChapter.getChapterId();
-
-                dialog = ProgressDialog.show(Profile.this, "", "Uploading chapter image ...", true);
-                uploadPicture(photo, RequestURL.UPLOAD_USER_CHAPTER, getPhotoChapterFromChapterParams(chapterId));
-                mAdapter = new ProfileRecyclerviewAdapter(topic, this);
-                mAdapter.notifyDataSetChanged();
-                mRecyclerView.setAdapter(mAdapter);
-            }
-        } else if (requestCode == requestGallery && resultCode == RESULT_OK && null != data && data.getData() != null) {
+        if (requestCode == requestGallery && resultCode == RESULT_OK && null != data && data.getData() != null) {
             Uri selectedImage = data.getData();
 
             Bitmap photo = photoSaveFromGallery(selectedImage);
@@ -151,24 +125,6 @@ public class Profile extends AppCompatActivity {
         }
     }
 
-    private Bitmap photoSaveFromCamera() {
-        Bitmap bitmap = null;
-
-        try {
-            GetImageThumbnail getImageThumbnail = new GetImageThumbnail();
-            bitmap = getImageThumbnail.getThumbnail(fileUri, this);
-            ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
-
-        } catch (FileNotFoundException e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
-        } catch (IOException e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
-        }
-        return bitmap;
-    }
 
     private Bitmap photoSaveFromGallery(Uri selectedImage) {
         Bitmap bitmap = null;
@@ -223,33 +179,6 @@ public class Profile extends AppCompatActivity {
         mAdapter = new ProfileRecyclerviewAdapter(topic, this);
         mAdapter.notifyDataSetChanged();
         mRecyclerView.setAdapter(mAdapter);
-    }
-
-    public void captureImage() {
-
-        ImageView imageView = (ImageView) findViewById(R.id.profile_picture);
-
-        // fetching the root directory
-        root = Environment.getExternalStorageDirectory().toString()
-                + "/Your_Folder";
-
-        // Creating folders for Image
-        imageFolderPath = root + "/Blitzmade";
-        File imagesFolder = new File(imageFolderPath);
-        imagesFolder.mkdirs();
-
-        // Generating file name
-        imageName = "test.png";
-
-        // Creating image here
-
-        File image = new File(imageFolderPath, imageName);
-        fileUri = Uri.fromFile(image);
-        imageView.setTag(imageFolderPath + File.separator + imageName);
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
-        startActivityForResult(takePictureIntent, requestCamera);
-
     }
 
     public void chooseImageFromGallery() {
@@ -424,9 +353,7 @@ public class Profile extends AppCompatActivity {
 
                     @Override
                     public void onItemLongClick(View view, int position) {
-                        requestCamera = CAMERA_CHAPTER_IMAGE_REQUEST;
-                        chapterClicked = position;
-                        captureImage();
+
                     }
                 })
         );
@@ -503,48 +430,9 @@ public class Profile extends AppCompatActivity {
         return new JSONObject(params);
     }
 
-    public static class GetImageThumbnail {
-
-        private static int getPowerOfTwoForSampleRatio(double ratio) {
-            int k = Integer.highestOneBit((int) Math.floor(ratio));
-            if (k == 0)
-                return 1;
-            else
-                return k;
-        }
-
-        public Bitmap getThumbnail(Uri uri, Context context) throws FileNotFoundException, IOException {
-            InputStream input = context.getContentResolver().openInputStream(uri);
-
-            BitmapFactory.Options onlyBoundsOptions = new BitmapFactory.Options();
-            onlyBoundsOptions.inJustDecodeBounds = true;
-            onlyBoundsOptions.inDither = true;// optional
-            onlyBoundsOptions.inPreferredConfig = Bitmap.Config.ARGB_8888;// optional
-            BitmapFactory.decodeStream(input, null, onlyBoundsOptions);
-            input.close();
-            if ((onlyBoundsOptions.outWidth == -1) || (onlyBoundsOptions.outHeight == -1))
-                return null;
-
-            int originalSize = (onlyBoundsOptions.outHeight > onlyBoundsOptions.outWidth) ? onlyBoundsOptions.outHeight
-                    : onlyBoundsOptions.outWidth;
-
-            double ratio = (originalSize > 400) ? (originalSize / 350) : 1.0;
-
-            BitmapFactory.Options bitmapOptions = new BitmapFactory.Options();
-            bitmapOptions.inSampleSize = getPowerOfTwoForSampleRatio(ratio);
-            bitmapOptions.inDither = true;// optional
-            bitmapOptions.inPreferredConfig = Bitmap.Config.ARGB_8888;// optional
-            input = context.getContentResolver().openInputStream(uri);
-            Bitmap bitmap = BitmapFactory.decodeStream(input, null, bitmapOptions);
-            input.close();
-            return bitmap;
-        }
-    }
-
     public void showProfilePhotoAlertDialogWithListview() {
         List<String> uploadOptions = new ArrayList<String>();
         uploadOptions.add("Upload a photo from gallery");
-        uploadOptions.add("Take photo");
         uploadOptions.add("Remove photo");
 
 
@@ -558,10 +446,7 @@ public class Profile extends AppCompatActivity {
                 if (item == 0) {
                     requestGallery = UPLOAD_PROFILE_IMAGE_FROM_GALLERY;
                     chooseImageFromGallery();
-                } else if (item == 1) {
-                    requestCamera = CAMERA_PROFILE_IMAGE_REQUEST;
-                    captureImage();
-                } else if (item == 2) {
+                }  else if (item == 1) {
                     removeProfilePicture();
                 }
             }
@@ -576,7 +461,6 @@ public class Profile extends AppCompatActivity {
 
         List<String> uploadOptions = new ArrayList<String>();
         uploadOptions.add("Upload a photo from gallery");
-        uploadOptions.add("Take photo");
         uploadOptions.add("Remove photo");
 
         //Create sequence of items
@@ -589,9 +473,6 @@ public class Profile extends AppCompatActivity {
                 if (item == 0) {
                     requestGallery = UPLOAD_CHAPTER_IMAGE_FROM_GALLERY;
                     chooseImageFromGallery();
-                } else if (item == 1) {
-                    requestCamera = CAMERA_CHAPTER_IMAGE_REQUEST;
-                    captureImage();
                 } /*else if (item == 2) {
                     removeProfilePicture();
                 }*/

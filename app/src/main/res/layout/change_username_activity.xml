@@ -6,7 +6,7 @@
 
     <include
         android:id="@+id/toolbar_change_username"
-        layout="@layout/click_list_activity_toolbar">
+        layout="@layout/mint_toolbar">
 
     </include>
 
@@ -35,11 +35,11 @@
         android:layout_marginTop="8dp"
         android:onClick="optionsFromChangeUsername"/>
 
-    <View style="@style/DividerToolbar"
+    <View style="@style/DividerBackIcon"
         android:id="@+id/divider3"
-        android:layout_below="@+id/toolbar_change_username"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignTop="@+id/options_from_username_change"
+        android:layout_toRightOf="@+id/options_from_username_change"
+        android:layout_toEndOf="@+id/options_from_username_change" />
 
     <EditText
         android:layout_width="300dp"
