@@ -12,7 +12,7 @@
 
         <include
             android:id="@+id/toolbar_of_search"
-            layout="@layout/mint_toolbar"/>
+            layout="@layout/toolbar"/>
 
         <android.support.v7.widget.SearchView
             android:id="@+id/mSearch"
@@ -20,11 +20,12 @@
             android:layout_height="wrap_content"
             android:foregroundGravity="center"
             app:defaultQueryHint="Search for users"
+            app:queryBackground="@drawable/search_edit_text"
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
-            android:layout_toRightOf="@+id/divider3"
-            android:layout_toEndOf="@+id/divider3">
+            android:layout_toRightOf="@+id/divider1"
+            android:layout_toEndOf="@+id/divider1">
         </android.support.v7.widget.SearchView>
 
         <TextView
@@ -34,7 +35,7 @@
             android:text="@string/toolbar_title_search"
             android:textSize="18sp"
             android:id="@+id/search_toolbar_title"
-            android:textColor="@color/white"
+            android:textColor="@color/mint"
             android:layout_alignBottom="@+id/blitzone_from_search"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="8dp"
@@ -44,7 +45,7 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:id="@+id/blitzone_from_search"
-            android:background="@mipmap/ic_white_back"
+            android:background="@mipmap/ic_mint_back_icon"
             android:onClick="blitzoneFromSearchButtonCallback"
             android:scaleType="center"
             android:layout_alignParentTop="true"
@@ -52,11 +53,17 @@
             android:layout_alignParentStart="true"
             android:layout_marginTop="8dp"/>
 
-        <View style="@style/DividerBackIcon"
-            android:id="@+id/divider3"
+        <View style="@style/MintDividerBackIcon"
+            android:id="@+id/divider1"
             android:layout_centerVertical="true"
             android:layout_toRightOf="@+id/blitzone_from_search"
             android:layout_toEndOf="@+id/blitzone_from_search" />
+
+        <View style="@style/DividerToolbar"
+            android:id="@+id/divider2"
+            android:layout_below="@+id/toolbar_of_search"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
 
     </RelativeLayout>
 
@@ -70,7 +77,75 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
+            android:layout_alignParentStart="true"
+            android:visibility="gone"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Chapter 1"
+            android:id="@+id/chapter1"
+            android:layout_marginTop="170dp"
+            android:textColor="@color/mint"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:layout_below="@+id/myRecycler"
+            android:layout_alignLeft="@+id/chapter2"
+            android:layout_alignStart="@+id/chapter2"
+            android:onClick="chapterOneCallback"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Chapter 2"
+            android:id="@+id/chapter2"
+            android:layout_below="@+id/chapter1"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:textColor="@color/mint"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:textSize="18sp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Chapter 3"
+            android:id="@+id/chapter3"
+            android:layout_below="@+id/chapter2"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:textColor="@color/mint"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:textSize="18sp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Chapter 4"
+            android:id="@+id/chapter4"
+            android:layout_below="@+id/chapter3"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:textColor="@color/mint"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:textSize="18sp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Chapter 5"
+            android:id="@+id/chapter5"
+            android:layout_below="@+id/chapter4"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:textColor="@color/mint"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:textSize="18sp"/>
 
     </RelativeLayout>
 

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/toolbarLayout">
+
+        <include
+            android:id="@+id/toolbar_of_gridView_search"
+            layout="@layout/toolbar"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text=""
+            android:textSize="18sp"
+            android:id="@+id/gridView_search_toolbar_title"
+            android:textColor="@color/mint"
+            android:layout_alignBottom="@+id/search_from_gridViewSearch"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="8dp"
+            android:textStyle="bold"/>
+
+        <ImageButton
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:id="@+id/search_from_gridViewSearch"
+            android:background="@mipmap/ic_mint_back_icon"
+            android:onClick="searchFromGridViewSearch"
+            android:scaleType="center"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="8dp"/>
+
+        <View style="@style/MintDividerBackIcon"
+            android:id="@+id/divider1"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/search_from_gridViewSearch"
+            android:layout_toEndOf="@+id/search_from_gridViewSearch" />
+
+        <View style="@style/DividerToolbar"
+        android:id="@+id/divider2"
+        android:layout_below="@+id/toolbar_of_gridView_search"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <GridView
+            android:id="@+id/gridView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:columnWidth="100dp"
+            android:gravity="center"
+            android:numColumns="3"
+            android:stretchMode="columnWidth"
+            android:verticalSpacing="2dp"
+            android:horizontalSpacing="2dp"
+            android:focusable="true"
+            android:clickable="true"/>
+
+    </RelativeLayout>
+</LinearLayout>

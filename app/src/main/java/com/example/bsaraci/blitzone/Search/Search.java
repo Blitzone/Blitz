@@ -29,15 +29,22 @@ public class Search extends AppCompatActivity
     TextView toolbarTitle;
     SearchView sv;
     RecyclerView rv;
+    TextView chapter1,chapter2,chapter3,chapter4,chapter5;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.search_main);
-        searchToolbar = (Toolbar) findViewById(R.id.toolbar_of_profile);
+        searchToolbar = (Toolbar) findViewById(R.id.toolbar_of_search);
         toolbarTitle = (TextView) findViewById(R.id.search_toolbar_title);
+        chapter1 = (TextView)findViewById(R.id.chapter1);
+        chapter2 = (TextView)findViewById(R.id.chapter2);
+        chapter3 = (TextView)findViewById(R.id.chapter3);
+        chapter4 = (TextView)findViewById(R.id.chapter4);
+        chapter5 = (TextView)findViewById(R.id.chapter5);
+
         rv= (RecyclerView) findViewById(R.id.myRecycler);
-        rv.setVisibility(View.GONE);
         sv= (SearchView) findViewById(R.id.mSearch);
         sv.setOnSearchClickListener(new View.OnClickListener() {
 
@@ -45,6 +52,12 @@ public class Search extends AppCompatActivity
             public void onClick(View v) {
                 toolbarTitle.setVisibility(View.GONE);
                 rv.setVisibility(View.VISIBLE);
+                chapter1.setVisibility(View.GONE);
+                chapter2.setVisibility(View.GONE);
+                chapter3.setVisibility(View.GONE);
+                chapter4.setVisibility(View.GONE);
+                chapter5.setVisibility(View.GONE);
+
 
             }
         });
@@ -53,6 +66,11 @@ public class Search extends AppCompatActivity
             public boolean onClose() {
                 toolbarTitle.setVisibility(View.VISIBLE);
                 rv.setVisibility(View.GONE);
+                chapter1.setVisibility(View.VISIBLE);
+                chapter2.setVisibility(View.VISIBLE);
+                chapter3.setVisibility(View.VISIBLE);
+                chapter4.setVisibility(View.VISIBLE);
+                chapter5.setVisibility(View.VISIBLE);
                 return false;
             }
         });
@@ -162,5 +180,11 @@ public class Search extends AppCompatActivity
     public void blitzoneFromSearchButtonCallback (View view)
     {
         finish();
+    }
+
+    public void chapterOneCallback (View view){
+        Intent intent = new Intent(Search.this,GridViewSearch.class);
+        intent.putExtra("toolbarTitle",chapter1.getText());
+        startActivity(intent);
     }
 }
