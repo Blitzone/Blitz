@@ -1,12 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <declare-styleable name="HLV">
-        <attr name="dividerWidth" format="dimension" />
-        <attr name="android:divider" />
-        <attr name="android:requiresFadingEdge" />
-        <attr name="android:fadingEdgeLength" />
-    </declare-styleable>
-
     <declare-styleable name="RoundedImageView">
         <attr name="civ_border_width" format="dimension" />
         <attr name="civ_border_color" format="color" />
