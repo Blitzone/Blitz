@@ -53,12 +53,19 @@ public class Search extends AppCompatActivity
     ImageButton backIcon;
     View dividerBackIcon;
     Boolean isVisible;
+    final static int TOTAL_SEARCH_USERS = 30;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.search_main);
+        initiateComponents();
+        getTopic();
+        initiateRV();
+    }
+
+    public void initiateComponents(){
         searchToolbar = (Toolbar) findViewById(R.id.toolbar_of_search);
         setSupportActionBar(searchToolbar);
         backIcon = (ImageButton)findViewById(R.id.blitzone_from_search);
@@ -66,21 +73,14 @@ public class Search extends AppCompatActivity
         toolbarTitle = (TextView) findViewById(R.id.search_toolbar_title);
         rvContainer = (RelativeLayout) findViewById(R.id.container);
         isVisible=true;
-        getTopic();
-
+    }
+    public void initiateRV(){
         rv= (RecyclerView) findViewById(R.id.myRecycler);
-        //SET ITS PROPETRIES
         rv.setLayoutManager(new LinearLayoutManager(this));
         rv.setItemAnimator(new DefaultItemAnimator());
-
-        //ADAPTER
         adapter=new SearchAdapter(this,getSearchModels());
         rv.setAdapter(adapter);
-
-        //SEARCH
-
     }
-
     public void initiateTextViews(Boolean isVisible){
         try{
             chapter1 = (TextView)findViewById(R.id.chapter1);
@@ -152,13 +152,11 @@ public class Search extends AppCompatActivity
         MenuItem searchMenuItem = menu.findItem(R.id.action_search);
 
         // Associate searchable configuration with the SearchView
-        SearchManager searchManager =
-                (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         sv= (SearchView) menu.findItem(R.id.action_search).getActionView();
         changeSearchViewTextColor(sv);
         sv.setQueryHint("Search for users");
-        sv.setSearchableInfo(
-                searchManager.getSearchableInfo(getComponentName()));
+        sv.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
 
         MenuItemCompat.setOnActionExpandListener(searchMenuItem, new MenuItemCompat.OnActionExpandListener() {
 
@@ -166,8 +164,8 @@ public class Search extends AppCompatActivity
             public boolean onMenuItemActionExpand(MenuItem item) {
                 // Set styles for expanded state here
                 toolbarTitle.setVisibility(View.GONE);
-                rv.setVisibility(View.VISIBLE);
-                isVisible=false;
+                rv.setVisibility(View.GONE);
+                isVisible = false;
                 initiateTextViews(isVisible);
                 backIcon.setVisibility(View.GONE);
                 dividerBackIcon.setVisibility(View.GONE);
@@ -179,7 +177,7 @@ public class Search extends AppCompatActivity
                 // Set styles for collapsed state here
                 toolbarTitle.setVisibility(View.VISIBLE);
                 rv.setVisibility(View.GONE);
-                isVisible=true;
+                isVisible = true;
                 initiateTextViews(isVisible);
                 backIcon.setVisibility(View.VISIBLE);
                 dividerBackIcon.setVisibility(View.VISIBLE);
@@ -197,11 +195,26 @@ public class Search extends AppCompatActivity
             public boolean onQueryTextChange(String query) {
                 //FILTER AS YOU TYPE
                 adapter.getFilter().filter(query);
+                rv.setVisibility(View.VISIBLE);
                 return false;
             }
         });
 
         return true;
+    }
+
+    //ADD USERS TO ARRAYLIST
+    private ArrayList<SearchModel> getSearchModels()
+    {
+        ArrayList<SearchModel> users=new ArrayList<>();
+        for (int i =0 ; i<TOTAL_SEARCH_USERS; i++){
+            SearchModel p=new SearchModel();
+            p.setName("User " +(i+1));
+            p.setPos("Add");
+            p.setImg(R.color.lightGray);
+            users.add(p);
+        }
+        return users;
     }
 
     private void changeSearchViewTextColor(View view) {
@@ -217,75 +230,6 @@ public class Search extends AppCompatActivity
             }
         }
     }
-
-    //ADD USERS TO ARRAYLIST
-    private ArrayList<SearchModel> getSearchModels()
-    {
-        ArrayList<SearchModel> users=new ArrayList<>();
-        SearchModel p=new SearchModel();
-        p.setName("teasaraci");
-        p.setPos("Add");
-        p.setImg(R.color.lightGray);
-        users.add(p);
-
-        p=new SearchModel();
-        p.setName("sarasaraci");
-        p.setPos("Add");
-        p.setImg(R.color.lightGray);
-        users.add(p);
-
-        p=new SearchModel();
-        p.setName("enderballa");
-        p.setPos("Add");
-        p.setImg(R.color.lightGray);
-        users.add(p);
-
-        p=new SearchModel();
-        p.setName("sidrodritorja");
-        p.setPos("Add");
-        p.setImg(R.color.lightGray);
-        users.add(p);
-
-        p=new SearchModel();
-        p.setName("jonagolemi");
-        p.setPos("Add");
-        p.setImg(R.color.lightGray);
-        users.add(p);
-
-        p=new SearchModel();
-        p.setName("andreamaka");
-        p.setPos("Add");
-        p.setImg(R.color.lightGray);
-        users.add(p);
-
-        p=new SearchModel();
-        p.setName("julivuka");
-        p.setPos("Add");
-        p.setImg(R.color.lightGray);
-        users.add(p);
-
-        p=new SearchModel();
-        p.setName("mikelvuka");
-        p.setPos("Add");
-        p.setImg(R.color.lightGray);
-        users.add(p);
-
-        p=new SearchModel();
-        p.setName("testuser1");
-        p.setPos("Add");
-        p.setImg(R.color.lightGray);
-        users.add(p);
-
-        p=new SearchModel();
-        p.setName("testuser2");
-        p.setPos("Add");
-        p.setImg(R.color.lightGray);
-        users.add(p);
-
-
-        return users;
-    }
-
 
     public void blitzoneFromSearchButtonCallback (View view)
     {

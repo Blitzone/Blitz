@@ -3,16 +3,13 @@ import android.widget.Filter;
 
 import java.util.ArrayList;
 
-/**
- * Created by Hp on 3/17/2016.
- */
 public class CustomFilter extends Filter{
 
     SearchAdapter adapter;
     ArrayList<SearchModel> filterList;
 
 
-    public CustomFilter(ArrayList<SearchModel> filterList,SearchAdapter adapter)
+    public CustomFilter(ArrayList<SearchModel> filterList, SearchAdapter adapter)
     {
         this.adapter=adapter;
         this.filterList=filterList;
@@ -29,7 +26,7 @@ public class CustomFilter extends Filter{
         {
             //CHANGE TO UPPER
             constraint=constraint.toString().toUpperCase();
-            //STORE OUR FILTERED PLAYERS
+            //STORE OUR FILTERED USERS
             ArrayList<SearchModel> filteredSearchModels=new ArrayList<>();
 
             for (int i=0;i<filterList.size();i++)
@@ -37,7 +34,7 @@ public class CustomFilter extends Filter{
                 //CHECK
                 if(filterList.get(i).getName().toUpperCase().contains(constraint))
                 {
-                    //ADD PLAYER TO FILTERED PLAYERS
+                    //ADD USER TO FILTERED USERS
                     filteredSearchModels.add(filterList.get(i));
                 }
             }

@@ -13,9 +13,6 @@ import com.example.bsaraci.blitzone.R;
 
 import java.util.ArrayList;
 
-/**
- * Created by Hp on 3/17/2016.
- */
 public class SearchAdapter extends RecyclerView.Adapter<SearchViewHolder> implements Filterable{
 
     Context c;
@@ -33,10 +30,9 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchViewHolder> implem
 
     @Override
     public SearchViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        //CONVERT XML TO VIEW ONBJ
+
         View v= LayoutInflater.from(parent.getContext()).inflate(R.layout.search_item_model,null);
 
-        //HOLDER
         SearchViewHolder holder=new SearchViewHolder(v);
 
         return holder;
@@ -52,7 +48,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchViewHolder> implem
         holder.img.setImageResource(users.get(position).getImg());
 
 
-        //IMPLEMENT CLICK LISTENET
+        //IMPLEMENT CLICK LISTENER
         holder.setItemClickListener(new ItemClickListener() {
             @Override
             public void onItemClick(View v, int pos) {

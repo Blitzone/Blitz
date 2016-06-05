@@ -11,6 +11,8 @@ import android.widget.TextView;
 
 import com.example.bsaraci.blitzone.R;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 
 /**
@@ -39,6 +41,7 @@ public class GridViewAdapter extends ArrayAdapter {
             row = inflater.inflate(layoutResourceId, parent, false);
             holder = new ViewHolder();
             holder.image = (ImageView) row.findViewById(R.id.image);
+            holder.username = (TextView) row.findViewById(R.id.usernameGridView);
             row.setTag(holder);
         } else {
             holder = (ViewHolder) row.getTag();
@@ -46,10 +49,12 @@ public class GridViewAdapter extends ArrayAdapter {
 
         GridItem item = data.get(position);
         holder.image.setImageResource(item.getImage());
+        holder.username.setText(item.getUsername());
         return row;
     }
 
     static class ViewHolder {
         ImageView image;
+        TextView username;
     }
 }

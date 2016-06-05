@@ -26,7 +26,7 @@ public class SearchViewHolder extends RecyclerView.ViewHolder implements View.On
         this.nameTxt= (TextView) itemView.findViewById(R.id.nameTxt);
         this.posTxt= (TextView) itemView.findViewById(R.id.posTxt);
 
-        //Set the click of only one element of the row. This case the image
+        //Set the click of only one element of the row. In this case the add button
         posTxt.setOnClickListener(this);
     }
 

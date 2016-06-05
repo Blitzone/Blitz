@@ -26,6 +26,7 @@ public class GridViewSearch extends AppCompatActivity {
     TextView toolbarTitle;
     GridView gridView;
     GridViewAdapter gridAdapter;
+    ArrayList<GridItem> items;
 
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -42,17 +43,17 @@ public class GridViewSearch extends AppCompatActivity {
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-                Toast.makeText(GridViewSearch.this,"test",Toast.LENGTH_LONG).show();
+                Toast.makeText(GridViewSearch.this,items.get(position).getUsername(),Toast.LENGTH_LONG).show();
             }
         });
     }
 
     private ArrayList<GridItem> getData() {
-        final ArrayList<GridItem> imageItems = new ArrayList<>();
+        items = new ArrayList<>();
         for (int i = 0; i < 42; i++) {
-            imageItems.add(new GridItem(R.color.lightGray));
+            items.add(new GridItem(R.color.lightGray,"username "+(i+1)+""));
         }
-        return imageItems;
+        return items;
     }
 
     public void searchFromGridViewSearch (View view){finish();}
