@@ -6,10 +6,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.graphics.Typeface;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -23,12 +20,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AutoCompleteTextView;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -44,7 +38,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 
 public class Search extends AppCompatActivity
@@ -55,11 +48,11 @@ public class Search extends AppCompatActivity
     RecyclerView rv;
     TextView chapter1,chapter2,chapter3,chapter4,chapter5;
     Topic topic;
-    RelativeLayout chapterContainer;
     RelativeLayout rvContainer;
     SearchAdapter adapter;
     ImageButton backIcon;
     View dividerBackIcon;
+    Boolean isVisible;
 
 
     @Override
@@ -71,8 +64,8 @@ public class Search extends AppCompatActivity
         backIcon = (ImageButton)findViewById(R.id.blitzone_from_search);
         dividerBackIcon = (View)findViewById(R.id.divider1);
         toolbarTitle = (TextView) findViewById(R.id.search_toolbar_title);
-        chapterContainer = (RelativeLayout) findViewById(R.id.chapterContainer);
         rvContainer = (RelativeLayout) findViewById(R.id.container);
+        isVisible=true;
         getTopic();
 
         rv= (RecyclerView) findViewById(R.id.myRecycler);
@@ -88,23 +81,53 @@ public class Search extends AppCompatActivity
 
     }
 
-    public void initiateTextViews(){
+    public void initiateTextViews(Boolean isVisible){
         try{
             chapter1 = (TextView)findViewById(R.id.chapter1);
             chapter1.setText(topic.getPhotoChapterFromPosition(0).getChapterName());
             chapterCallback(chapter1);
+            if(isVisible){
+                visibleTextView(chapter1);
+            }
+            else{
+                invisibleTextView(chapter1);
+            }
             chapter2 = (TextView)findViewById(R.id.chapter2);
             chapter2.setText(topic.getPhotoChapterFromPosition(1).getChapterName());
             chapterCallback(chapter2);
+            if(isVisible){
+                visibleTextView(chapter2);
+            }
+            else{
+                invisibleTextView(chapter2);
+            }
             chapter3 = (TextView)findViewById(R.id.chapter3);
             chapter3.setText(topic.getPhotoChapterFromPosition(2).getChapterName());
             chapterCallback(chapter3);
+            if(isVisible){
+                visibleTextView(chapter3);
+            }
+            else{
+                invisibleTextView(chapter3);
+            }
             chapter4 = (TextView)findViewById(R.id.chapter4);
             chapter4.setText(topic.getPhotoChapterFromPosition(3).getChapterName());
             chapterCallback(chapter4);
+            if(isVisible){
+                visibleTextView(chapter4);
+            }
+            else{
+                invisibleTextView(chapter4);
+            }
             chapter5 = (TextView)findViewById(R.id.chapter5);
             chapter5.setText(topic.getPhotoChapterFromPosition(4).getChapterName());
             chapterCallback(chapter5);
+            if(isVisible){
+                visibleTextView(chapter5);
+            }
+            else{
+                invisibleTextView(chapter5);
+            }
 
         }
         catch (IndexOutOfBoundsException e){
@@ -113,12 +136,12 @@ public class Search extends AppCompatActivity
 
     }
 
-    public void invisibleLayout(RelativeLayout relativeLayout){
-        relativeLayout.setVisibility(View.GONE);
+    public void invisibleTextView(TextView tv){
+        tv.setVisibility(View.GONE);
     }
 
-    public void visibleLayout(RelativeLayout relativeLayout){
-       relativeLayout.setVisibility(View.VISIBLE);
+    public void visibleTextView(TextView tv){
+        tv.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -144,9 +167,10 @@ public class Search extends AppCompatActivity
                 // Set styles for expanded state here
                 toolbarTitle.setVisibility(View.GONE);
                 rv.setVisibility(View.VISIBLE);
+                isVisible=false;
+                initiateTextViews(isVisible);
                 backIcon.setVisibility(View.GONE);
                 dividerBackIcon.setVisibility(View.GONE);
-                invisibleLayout(chapterContainer);
                 return true;
             }
 
@@ -155,7 +179,8 @@ public class Search extends AppCompatActivity
                 // Set styles for collapsed state here
                 toolbarTitle.setVisibility(View.VISIBLE);
                 rv.setVisibility(View.GONE);
-                visibleLayout(chapterContainer);
+                isVisible=true;
+                initiateTextViews(isVisible);
                 backIcon.setVisibility(View.VISIBLE);
                 dividerBackIcon.setVisibility(View.VISIBLE);
                 return true;
@@ -386,6 +411,6 @@ public class Search extends AppCompatActivity
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        initiateTextViews();
+        initiateTextViews(isVisible);
     }
 }
