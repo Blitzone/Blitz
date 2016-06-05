@@ -3,9 +3,9 @@
 
     <item
         android:id="@+id/action_search"
-        android:icon="@mipmap/ic_search"
+        android:icon="@mipmap/ic_mint_search_icon"
         android:title="Search"
         app:actionViewClass="android.support.v7.widget.SearchView"
-        app:showAsAction="always|collapseActionView" />
+        app:showAsAction="ifRoom|collapseActionView" />
 
 </menu>

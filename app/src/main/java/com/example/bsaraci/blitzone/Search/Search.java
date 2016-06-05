@@ -1,9 +1,13 @@
 package com.example.bsaraci.blitzone.Search;
 
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.MenuItemCompat;
@@ -18,6 +22,10 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AutoCompleteTextView;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -36,6 +44,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 
 public class Search extends AppCompatActivity
@@ -47,6 +56,10 @@ public class Search extends AppCompatActivity
     TextView chapter1,chapter2,chapter3,chapter4,chapter5;
     Topic topic;
     RelativeLayout chapterContainer;
+    RelativeLayout rvContainer;
+    SearchAdapter adapter;
+    ImageButton backIcon;
+    View dividerBackIcon;
 
 
     @Override
@@ -54,53 +67,24 @@ public class Search extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.search_main);
         searchToolbar = (Toolbar) findViewById(R.id.toolbar_of_search);
+        setSupportActionBar(searchToolbar);
+        backIcon = (ImageButton)findViewById(R.id.blitzone_from_search);
+        dividerBackIcon = (View)findViewById(R.id.divider1);
         toolbarTitle = (TextView) findViewById(R.id.search_toolbar_title);
         chapterContainer = (RelativeLayout) findViewById(R.id.chapterContainer);
+        rvContainer = (RelativeLayout) findViewById(R.id.container);
         getTopic();
 
         rv= (RecyclerView) findViewById(R.id.myRecycler);
-        sv= (SearchView) findViewById(R.id.mSearch);
-        sv.setOnSearchClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                toolbarTitle.setVisibility(View.GONE);
-                rv.setVisibility(View.VISIBLE);
-                visibleLayout(chapterContainer);
-            }
-        });
-        sv.setOnCloseListener(new SearchView.OnCloseListener() {
-            @Override
-            public boolean onClose() {
-                toolbarTitle.setVisibility(View.VISIBLE);
-                rv.setVisibility(View.GONE);
-                invisibleLayout(chapterContainer);
-                return false;
-            }
-        });
         //SET ITS PROPETRIES
         rv.setLayoutManager(new LinearLayoutManager(this));
         rv.setItemAnimator(new DefaultItemAnimator());
 
         //ADAPTER
-        final SearchAdapter adapter=new SearchAdapter(this,getSearchModels());
+        adapter=new SearchAdapter(this,getSearchModels());
         rv.setAdapter(adapter);
 
         //SEARCH
-        sv.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String query) {
-                //FILTER AS YOU TYPE
-                adapter.getFilter().filter(query);
-                return false;
-            }
-        });
 
     }
 
@@ -135,6 +119,78 @@ public class Search extends AppCompatActivity
 
     public void visibleLayout(RelativeLayout relativeLayout){
        relativeLayout.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_search, menu);
+
+        MenuItem searchMenuItem = menu.findItem(R.id.action_search);
+
+        // Associate searchable configuration with the SearchView
+        SearchManager searchManager =
+                (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        sv= (SearchView) menu.findItem(R.id.action_search).getActionView();
+        changeSearchViewTextColor(sv);
+        sv.setQueryHint("Search for users");
+        sv.setSearchableInfo(
+                searchManager.getSearchableInfo(getComponentName()));
+
+        MenuItemCompat.setOnActionExpandListener(searchMenuItem, new MenuItemCompat.OnActionExpandListener() {
+
+            @Override
+            public boolean onMenuItemActionExpand(MenuItem item) {
+                // Set styles for expanded state here
+                toolbarTitle.setVisibility(View.GONE);
+                rv.setVisibility(View.VISIBLE);
+                backIcon.setVisibility(View.GONE);
+                dividerBackIcon.setVisibility(View.GONE);
+                invisibleLayout(chapterContainer);
+                return true;
+            }
+
+            @Override
+            public boolean onMenuItemActionCollapse(MenuItem item) {
+                // Set styles for collapsed state here
+                toolbarTitle.setVisibility(View.VISIBLE);
+                rv.setVisibility(View.GONE);
+                visibleLayout(chapterContainer);
+                backIcon.setVisibility(View.VISIBLE);
+                dividerBackIcon.setVisibility(View.VISIBLE);
+                return true;
+            }
+        });
+
+        sv.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String query) {
+                //FILTER AS YOU TYPE
+                adapter.getFilter().filter(query);
+                return false;
+            }
+        });
+
+        return true;
+    }
+
+    private void changeSearchViewTextColor(View view) {
+        if (view != null) {
+            if (view instanceof TextView) {
+                ((TextView) view).setTextColor(Color.DKGRAY);
+                return;
+            } else if (view instanceof ViewGroup) {
+                ViewGroup viewGroup = (ViewGroup) view;
+                for (int i = 0; i < viewGroup.getChildCount(); i++) {
+                    changeSearchViewTextColor(viewGroup.getChildAt(i));
+                }
+            }
+        }
     }
 
     //ADD USERS TO ARRAYLIST

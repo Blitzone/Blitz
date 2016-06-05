@@ -2,7 +2,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <RelativeLayout
@@ -14,19 +13,6 @@
             android:id="@+id/toolbar_of_search"
             layout="@layout/toolbar"/>
 
-        <android.support.v7.widget.SearchView
-            android:id="@+id/mSearch"
-            android:layout_width="50dp"
-            android:layout_height="wrap_content"
-            android:foregroundGravity="center"
-            app:defaultQueryHint="Search for users"
-            app:queryBackground="@drawable/search_edit_text"
-            android:layout_centerVertical="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:layout_toRightOf="@+id/divider1"
-            android:layout_toEndOf="@+id/divider1">
-        </android.support.v7.widget.SearchView>
 
         <TextView
             android:layout_width="wrap_content"
@@ -53,7 +39,8 @@
             android:layout_alignParentStart="true"
             android:layout_marginTop="8dp"/>
 
-        <View style="@style/MintDividerBackIcon"
+        <View
+            style="@style/MintDividerBackIcon"
             android:id="@+id/divider1"
             android:layout_centerVertical="true"
             android:layout_toRightOf="@+id/blitzone_from_search"
@@ -92,7 +79,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text=""
+        android:text="1"
         android:id="@+id/chapter1"
         android:textColor="@color/mint"
         android:gravity="center"
@@ -104,7 +91,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text=""
+        android:text="2"
         android:id="@+id/chapter2"
         android:textColor="@color/mint"
         android:gravity="center"
