@@ -39,6 +39,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Search extends AppCompatActivity
 {
@@ -53,7 +55,7 @@ public class Search extends AppCompatActivity
     ImageButton backIcon;
     View dividerBackIcon;
     Boolean isVisible;
-    final static int TOTAL_SEARCH_USERS = 30;
+    String query;
 
 
     @Override
@@ -62,7 +64,7 @@ public class Search extends AppCompatActivity
         setContentView(R.layout.search_main);
         initiateComponents();
         getTopic();
-        initiateRV();
+
     }
 
     public void initiateComponents(){
@@ -74,11 +76,11 @@ public class Search extends AppCompatActivity
         rvContainer = (RelativeLayout) findViewById(R.id.container);
         isVisible=true;
     }
-    public void initiateRV(){
+    public void initiateRV(ArrayList<SearchModel> searchModels){
         rv= (RecyclerView) findViewById(R.id.myRecycler);
         rv.setLayoutManager(new LinearLayoutManager(this));
         rv.setItemAnimator(new DefaultItemAnimator());
-        adapter=new SearchAdapter(this,getSearchModels());
+        adapter=new SearchAdapter(this,searchModels);
         rv.setAdapter(adapter);
     }
     public void initiateTextViews(Boolean isVisible){
@@ -163,6 +165,8 @@ public class Search extends AppCompatActivity
             @Override
             public boolean onMenuItemActionExpand(MenuItem item) {
                 // Set styles for expanded state here
+                query="";
+                getSearchUserList();
                 toolbarTitle.setVisibility(View.GONE);
                 rv.setVisibility(View.GONE);
                 isVisible = false;
@@ -192,9 +196,11 @@ public class Search extends AppCompatActivity
             }
 
             @Override
-            public boolean onQueryTextChange(String query) {
+            public boolean onQueryTextChange(String q) {
                 //FILTER AS YOU TYPE
-                adapter.getFilter().filter(query);
+//              adapter.getFilter().filter(query);
+                query=q;
+                getSearchUserList();
                 rv.setVisibility(View.VISIBLE);
                 return false;
             }
@@ -203,19 +209,64 @@ public class Search extends AppCompatActivity
         return true;
     }
 
-    //ADD USERS TO ARRAYLIST
-    private ArrayList<SearchModel> getSearchModels()
-    {
-        ArrayList<SearchModel> users=new ArrayList<>();
-        for (int i =0 ; i<TOTAL_SEARCH_USERS; i++){
-            SearchModel p=new SearchModel();
-            p.setName("User " +(i+1));
-            p.setPos("Add");
-            p.setImg(R.color.lightGray);
-            users.add(p);
-        }
-        return users;
+    private JSONObject getSearchUserParams(String query){
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("query", query);
+        return new JSONObject(params);
     }
+
+
+    private void getSearchUserList(){
+        Response.Listener<JSONObject> listener = new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                updateSearchList(response);
+            }
+        };
+
+        //Function to be executed in case of an error
+        Response.ErrorListener errorListener = new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("Error", error.toString());
+            }
+        };
+
+        JWTManager jwtManager = new JWTManager(getApplicationContext());
+        //Put everything in the request
+
+        MRequest mRequest = new MRequest(
+                RequestURL.SEARCH_USER,
+                Request.Method.POST,
+                getSearchUserParams(query), //Put the parameters of the request here (JSONObject format)
+                listener,
+                errorListener,
+                jwtManager
+        );
+
+        RequestQueueSingleton.getInstance(Search.this).addToRequestQueue(mRequest);
+    }
+
+    private void updateSearchList(JSONObject searchUser) {
+
+        try {
+            ArrayList<SearchModel> users=new ArrayList<>();
+            JSONArray searchUserList=(JSONArray)searchUser.getJSONArray("userList");
+            int searchUserListSize = searchUserList.length();
+            for (int i = 0; i < searchUserListSize; i++) {
+                SearchModel p=new SearchModel();
+                p.setName(((JSONObject)searchUserList.get(i)).getString("user"));
+                p.setPos("Add");
+                p.setImg(R.color.lightGray);
+                users.add(p);
+            }
+            initiateRV(users);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     private void changeSearchViewTextColor(View view) {
         if (view != null) {

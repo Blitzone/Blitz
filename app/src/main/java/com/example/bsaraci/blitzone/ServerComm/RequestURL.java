@@ -18,6 +18,7 @@ public class RequestURL {
     public static final String CHAPTERS                 = IP_ADDRESS + "/images/chapters/";
     public static final String CHANGE_USERNAME          = IP_ADDRESS + "/accounts/changeUsername/";
     public static final String CHANGE_PASSWORD          = IP_ADDRESS + "/accounts/changePassword/";
+    public static final String SEARCH_USER              = IP_ADDRESS + "/accounts/searchUser/";
 
     public static boolean _needsAuth(String url)
     {
@@ -33,6 +34,7 @@ public class RequestURL {
             case CHAPTERS:              return false;
             case CHANGE_USERNAME:       return true;
             case CHANGE_PASSWORD:       return true;
+            case SEARCH_USER:           return true;
             default:                    return false;
         }
     }
