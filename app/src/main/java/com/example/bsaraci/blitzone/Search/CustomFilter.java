@@ -32,7 +32,7 @@ public class CustomFilter extends Filter{
             for (int i=0;i<filterList.size();i++)
             {
                 //CHECK
-                if(filterList.get(i).getName().toUpperCase().contains(constraint))
+                if(filterList.get(i).getUser().getUsername().toUpperCase().contains(constraint))
                 {
                     //ADD USER TO FILTERED USERS
                     filteredSearchModels.add(filterList.get(i));

@@ -57,7 +57,6 @@ public class Search extends AppCompatActivity
     Boolean isVisible;
     String query;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -256,11 +255,12 @@ public class Search extends AppCompatActivity
             int searchUserListSize = searchUserList.length();
             if(!query.equals("")){
             for (int i = 0; i < searchUserListSize; i++) {
-
+                    User u = new User();
                     SearchModel p=new SearchModel();
-                    p.setName(((JSONObject)searchUserList.get(i)).getString("user"));
+                    p.setUser(u);
+                    p.getUser().setUsername(((JSONObject) searchUserList.get(i)).getString("user"));
                     p.setPos("Add");
-                    p.setImg(R.color.lightGray);
+                    p.getUser().setProfilePictureUrl(RequestURL.IP_ADDRESS + ((JSONObject) searchUserList.get(i)).getString("avatar"));
                     users.add(p);
             }
             }

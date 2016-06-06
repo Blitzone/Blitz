@@ -5,17 +5,8 @@ package com.example.bsaraci.blitzone.Search;
  */
 public class SearchModel {
 
-    private String name;
+    private User user;
     private String pos;
-    private int img;
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 
     public String getPos() {
         return pos;
@@ -25,11 +16,11 @@ public class SearchModel {
         this.pos = pos;
     }
 
-    public int getImg() {
-        return img;
+    public User getUser() {
+        return user;
     }
 
-    public void setImg(int img) {
-        this.img = img;
+    public void setUser(User user) {
+        this.user = user;
     }
 }
