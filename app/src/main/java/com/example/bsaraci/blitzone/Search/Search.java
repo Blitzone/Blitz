@@ -165,8 +165,7 @@ public class Search extends AppCompatActivity
             @Override
             public boolean onMenuItemActionExpand(MenuItem item) {
                 // Set styles for expanded state here
-                query="";
-                getSearchUserList();
+                initiateRV(new ArrayList<SearchModel>());
                 toolbarTitle.setVisibility(View.GONE);
                 rv.setVisibility(View.GONE);
                 isVisible = false;
