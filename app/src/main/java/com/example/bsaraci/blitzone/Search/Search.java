@@ -200,6 +200,7 @@ public class Search extends AppCompatActivity
 //              adapter.getFilter().filter(query);
                 query=q;
                 getSearchUserList();
+                Log.i("bla","bla");
                 rv.setVisibility(View.VISIBLE);
                 return false;
             }
@@ -253,12 +254,15 @@ public class Search extends AppCompatActivity
             ArrayList<SearchModel> users=new ArrayList<>();
             JSONArray searchUserList=(JSONArray)searchUser.getJSONArray("userList");
             int searchUserListSize = searchUserList.length();
+            if(!query.equals("")){
             for (int i = 0; i < searchUserListSize; i++) {
-                SearchModel p=new SearchModel();
-                p.setName(((JSONObject)searchUserList.get(i)).getString("user"));
-                p.setPos("Add");
-                p.setImg(R.color.lightGray);
-                users.add(p);
+
+                    SearchModel p=new SearchModel();
+                    p.setName(((JSONObject)searchUserList.get(i)).getString("user"));
+                    p.setPos("Add");
+                    p.setImg(R.color.lightGray);
+                    users.add(p);
+            }
             }
             initiateRV(users);
         } catch (JSONException e) {
