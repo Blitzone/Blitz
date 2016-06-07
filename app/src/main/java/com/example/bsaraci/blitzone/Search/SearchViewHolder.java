@@ -22,7 +22,7 @@ public class SearchViewHolder extends RecyclerView.ViewHolder implements View.On
     public SearchViewHolder(View itemView) {
         super(itemView);
 
-        this.img= (ImageView) itemView.findViewById(R.id.playerImage);
+        this.img= (ImageView) itemView.findViewById(R.id.userImage);
         this.nameTxt= (TextView) itemView.findViewById(R.id.nameTxt);
         this.posTxt= (TextView) itemView.findViewById(R.id.posTxt);
 

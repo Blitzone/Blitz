@@ -13,7 +13,7 @@
         <com.example.bsaraci.blitzone.Profile.RoundedImageView
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:id="@+id/playerImage"
+            android:id="@+id/userImage"
             android:src="@mipmap/ic_app_icon" />
 
         <TextView
@@ -26,9 +26,9 @@
             android:layout_marginStart="17dp"
             android:textSize="15sp"
             android:textStyle="bold"
-            android:layout_alignBottom="@+id/playerImage"
-            android:layout_toRightOf="@+id/playerImage"
-            android:layout_toEndOf="@+id/playerImage"
+            android:layout_alignBottom="@+id/userImage"
+            android:layout_toRightOf="@+id/userImage"
+            android:layout_toEndOf="@+id/userImage"
             android:layout_marginBottom="15dp" />
 
         <TextView

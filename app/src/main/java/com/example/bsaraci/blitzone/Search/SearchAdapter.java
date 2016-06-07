@@ -58,14 +58,12 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchViewHolder> implem
         //BIND DATA
         holder.posTxt.setText(users.get(position).getPos());
         holder.nameTxt.setText(users.get(position).getUser().getUsername());
-        if(u.getProfilePictureUrl()!=null){
-            loadWithGlide(this.c, u.getProfilePictureUrl(), holder.img);
-            setBitmapWithGlide(this.c, u.getProfilePictureUrl(), u);
+        if (u.getProfilePictureUrl() != null){
+            u.loadProfilePicture(c,u.getProfilePictureUrl(),holder.img);
         }
 
         else
         {
-            holder.img.setImageBitmap(u.getProfilePicture());
         }
 
 
@@ -102,7 +100,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchViewHolder> implem
                 .with(context)
                 .load(url)
                 .asBitmap()
-                .into(new SimpleTarget<Bitmap>(80, 80) {
+                .into(new SimpleTarget<Bitmap>() {
                     @Override
                     public void onResourceReady(Bitmap resource, GlideAnimation glideAnimation) {
                         u.setProfilePicture(resource);

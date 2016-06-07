@@ -56,6 +56,7 @@ public class Search extends AppCompatActivity
     View dividerBackIcon;
     Boolean isVisible;
     String query;
+    User u;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -255,7 +256,7 @@ public class Search extends AppCompatActivity
             int searchUserListSize = searchUserList.length();
             if(!query.equals("")){
             for (int i = 0; i < searchUserListSize; i++) {
-                    User u = new User();
+                    u = new User();
                     SearchModel p=new SearchModel();
                     p.setUser(u);
                     p.getUser().setUsername(((JSONObject) searchUserList.get(i)).getString("user"));

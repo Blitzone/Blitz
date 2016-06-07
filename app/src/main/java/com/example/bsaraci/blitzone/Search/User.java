@@ -1,6 +1,20 @@
 package com.example.bsaraci.blitzone.Search;
 
+import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
+import android.widget.ImageView;
+import android.widget.Toast;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.target.Target;
+import com.example.bsaraci.blitzone.R;
 
 import java.net.URL;
 
@@ -20,7 +34,7 @@ public class User {
         this.username = username;
     }
 
-    public Bitmap getProfilePicture() {
+    public Bitmap getProfilePicture(Context context, String url) {
         return profilePicture;
     }
 
@@ -50,5 +64,27 @@ public class User {
 
     public void setProfilePictureUrl(String profilePictureUrl) {
         this.profilePictureUrl = profilePictureUrl;
+    }
+
+    public void loadProfilePicture(final Context c, String url, ImageView imageView){
+        Glide.with(c)
+                .load(url)
+                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                .placeholder(R.color.white)
+                .dontAnimate()
+                .into(new GlideDrawableImageViewTarget(imageView) {
+                    @Override
+                    public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> animation) {
+                        super.onResourceReady(resource, animation);
+                        //never called
+                    }
+
+                    @Override
+                    public void onLoadFailed(Exception e, Drawable errorDrawable) {
+                        super.onLoadFailed(e, errorDrawable);
+                        Toast.makeText(c, "Error loading profile picture", Toast.LENGTH_SHORT).show();
+                        //never called
+                    }
+                });
     }
 }
