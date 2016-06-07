@@ -66,7 +66,7 @@ public class User {
         this.profilePictureUrl = profilePictureUrl;
     }
 
-    public void loadProfilePicture(final Context c, String url, ImageView imageView){
+    public void loadPicture(final Context c, String url, ImageView imageView){
         Glide.with(c)
                 .load(url)
                 .diskCacheStrategy(DiskCacheStrategy.SOURCE)

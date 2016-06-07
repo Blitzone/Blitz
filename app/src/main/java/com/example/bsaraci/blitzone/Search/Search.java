@@ -56,6 +56,8 @@ public class Search extends AppCompatActivity
     View dividerBackIcon;
     Boolean isVisible;
     String query;
+    int chapterId1,chapterId2,chapterId3,chapterId4,chapterId5;
+    int topicId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,8 +86,10 @@ public class Search extends AppCompatActivity
     }
     public void initiateTextViews(Boolean isVisible){
         try{
+            topicId=topic.getId();
             chapter1 = (TextView)findViewById(R.id.chapter1);
             chapter1.setText(topic.getPhotoChapterFromPosition(0).getChapterName());
+            chapterId1=topic.getPhotoChapterFromPosition(0).getChapterId();
             chapterCallback(chapter1);
             if(isVisible){
                 visibleTextView(chapter1);
@@ -95,6 +99,7 @@ public class Search extends AppCompatActivity
             }
             chapter2 = (TextView)findViewById(R.id.chapter2);
             chapter2.setText(topic.getPhotoChapterFromPosition(1).getChapterName());
+            chapterId2=topic.getPhotoChapterFromPosition(1).getChapterId();
             chapterCallback(chapter2);
             if(isVisible){
                 visibleTextView(chapter2);
@@ -104,6 +109,7 @@ public class Search extends AppCompatActivity
             }
             chapter3 = (TextView)findViewById(R.id.chapter3);
             chapter3.setText(topic.getPhotoChapterFromPosition(2).getChapterName());
+            chapterId3=topic.getPhotoChapterFromPosition(2).getChapterId();
             chapterCallback(chapter3);
             if(isVisible){
                 visibleTextView(chapter3);
@@ -113,6 +119,7 @@ public class Search extends AppCompatActivity
             }
             chapter4 = (TextView)findViewById(R.id.chapter4);
             chapter4.setText(topic.getPhotoChapterFromPosition(3).getChapterName());
+            chapterId4=topic.getPhotoChapterFromPosition(3).getChapterId();
             chapterCallback(chapter4);
             if(isVisible){
                 visibleTextView(chapter4);
@@ -122,6 +129,7 @@ public class Search extends AppCompatActivity
             }
             chapter5 = (TextView)findViewById(R.id.chapter5);
             chapter5.setText(topic.getPhotoChapterFromPosition(4).getChapterName());
+            chapterId5=topic.getPhotoChapterFromPosition(4).getChapterId();
             chapterCallback(chapter5);
             if(isVisible){
                 visibleTextView(chapter5);
@@ -199,7 +207,6 @@ public class Search extends AppCompatActivity
 //              adapter.getFilter().filter(query);
                 query=q;
                 getSearchUserList();
-                Log.i("bla","bla");
                 rv.setVisibility(View.VISIBLE);
                 return false;
             }
@@ -297,6 +304,8 @@ public class Search extends AppCompatActivity
                 public void onClick(View v) {
                     Intent intent = new Intent(Search.this, GridViewSearch.class);
                     intent.putExtra("toolbarTitle", chapter1.getText());
+                    intent.putExtra("chapterId",chapterId1);
+                    intent.putExtra("topicId",topicId);
                     startActivity(intent);
                 }
             });
@@ -307,6 +316,8 @@ public class Search extends AppCompatActivity
                 public void onClick(View v) {
                     Intent intent = new Intent(Search.this, GridViewSearch.class);
                     intent.putExtra("toolbarTitle", chapter2.getText());
+                    intent.putExtra("chapterId",chapterId2);
+                    intent.putExtra("topicId",topicId);
                     startActivity(intent);
                 }
             });
@@ -317,6 +328,8 @@ public class Search extends AppCompatActivity
                 public void onClick(View v) {
                     Intent intent = new Intent(Search.this, GridViewSearch.class);
                     intent.putExtra("toolbarTitle", chapter3.getText());
+                    intent.putExtra("chapterId",chapterId3);
+                    intent.putExtra("topicId",topicId);
                     startActivity(intent);
                 }
             });
@@ -327,6 +340,8 @@ public class Search extends AppCompatActivity
                 public void onClick(View v) {
                     Intent intent = new Intent(Search.this, GridViewSearch.class);
                     intent.putExtra("toolbarTitle", chapter4.getText());
+                    intent.putExtra("chapterId",chapterId4);
+                    intent.putExtra("topicId",topicId);
                     startActivity(intent);
                 }
             });
@@ -338,6 +353,8 @@ public class Search extends AppCompatActivity
                 public void onClick(View v) {
                     Intent intent = new Intent(Search.this, GridViewSearch.class);
                     intent.putExtra("toolbarTitle", chapter5.getText());
+                    intent.putExtra("chapterId",chapterId5);
+                    intent.putExtra("topicId",topicId);
                     startActivity(intent);
                 }
             });

@@ -1,7 +1,6 @@
 package com.example.bsaraci.blitzone.Search;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -9,17 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.load.resource.drawable.GlideDrawable;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.animation.GlideAnimation;
-import com.bumptech.glide.request.target.SimpleTarget;
-import com.bumptech.glide.request.target.Target;
-import com.example.bsaraci.blitzone.Profile.PhotoChapter;
 import com.example.bsaraci.blitzone.R;
 
 import java.util.ArrayList;
@@ -55,11 +44,11 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchViewHolder> implem
 
         //BIND DATA
         holder.posTxt.setText(users.get(position).getPos());
-        holder.nameTxt.setText(users.get(position).getUser().getUsername());
         String url = (users.get(position).getUser().getProfilePictureUrl());
         String username = (users.get(position).getUser().getUsername());
         if (url!= null){
-            users.get(position).getUser().loadProfilePicture(c,url,holder.img);
+            users.get(position).getUser().loadPicture(c, url, holder.img);
+            holder.nameTxt.setText(username);
         }
 
         else
@@ -78,39 +67,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchViewHolder> implem
 
     }
 
-    public void loadWithGlide(Context context, String url, ImageView imageView){
-        Glide.with(context)
-                .load(url)
-                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                .listener(new RequestListener<String, GlideDrawable>() {
-                    @Override
-                    public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
-                        return false;
-                    }
-
-                    @Override
-                    public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
-                        return false;
-                    }
-                })
-                .into(imageView);
-    }
-
-    public void setBitmapWithGlide(Context context, String url, final User u){
-        Glide
-                .with(context)
-                .load(url)
-                .asBitmap()
-                .into(new SimpleTarget<Bitmap>() {
-                    @Override
-                    public void onResourceReady(Bitmap resource, GlideAnimation glideAnimation) {
-                        u.setProfilePicture(resource);
-                    }
-                });
-    }
-
-
-    //GET TOTAL NUM OF PLAYERS
+    //GET TOTAL NUM OF USERS
     @Override
     public int getItemCount() {
         return users.size();

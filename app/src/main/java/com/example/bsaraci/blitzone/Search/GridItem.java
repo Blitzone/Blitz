@@ -1,32 +1,39 @@
 package com.example.bsaraci.blitzone.Search;
 
+import android.graphics.Bitmap;
+
+import com.example.bsaraci.blitzone.Profile.PhotoChapter;
+
+import java.net.URL;
+
 /**
  * Created by bsaraci on 5/9/2016.
  */
 public class GridItem {
-    private int image;
-    private String username;
+    private String url;
+    private User user;
 
-    public GridItem(int image, String username) {
+    public GridItem(String url, User user) {
         super();
-        this.image = image;
-        this.username = username;
+        this.url = url;
+        this.user = user;
     }
 
-    public String getUsername() {
-        return username;
+    public GridItem() {
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public User getUser() {
+        return user;
     }
 
-    public int  getImage() {
-        return image;
+    public void setUser(User username) {
+        this.user = username;
     }
 
-    public void setImage(int  image) {
-        this.image = image;
+    public String getUrl() {return url;}
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 
 }

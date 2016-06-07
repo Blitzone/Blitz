@@ -24,6 +24,10 @@ public class Topic
         this.photoChapters = new ArrayList<PhotoChapter>();
     }
 
+    public Topic(Integer id){
+        this.id=id;
+    }
+
     public void addPhotoChapter(int chapterId, String chapterName)
     {
         this.photoChapters.add(new PhotoChapter(chapterId, chapterName));

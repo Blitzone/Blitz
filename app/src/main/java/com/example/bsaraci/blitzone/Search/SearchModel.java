@@ -8,6 +8,14 @@ public class SearchModel {
     private User user;
     private String pos;
 
+    public SearchModel() {
+    }
+
+    public SearchModel(User user, String pos) {
+        this.user = user;
+        this.pos = pos;
+    }
+
     public String getPos() {
         return pos;
     }

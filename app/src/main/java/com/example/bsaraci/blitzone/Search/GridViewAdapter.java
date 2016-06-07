@@ -48,8 +48,16 @@ public class GridViewAdapter extends ArrayAdapter {
         }
 
         GridItem item = data.get(position);
-        holder.image.setImageResource(item.getImage());
-        holder.username.setText(item.getUsername());
+        String url = item.getUrl();
+        String username = item.getUser().getUsername();
+
+        if(url!=null){
+            item.getUser().loadPicture(context,url,holder.image);
+            holder.username.setText(username);
+        }
+        else {
+            holder.image.setImageResource(R.color.boldGray);
+        }
         return row;
     }
 
