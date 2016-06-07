@@ -27,7 +27,6 @@ import java.util.ArrayList;
 public class SearchAdapter extends RecyclerView.Adapter<SearchViewHolder> implements Filterable{
 
     Context c;
-    User u;
     ArrayList<SearchModel> users,filterList;
     CustomFilter filter;
 
@@ -37,7 +36,6 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchViewHolder> implem
         this.c=ctx;
         this.users=users;
         this.filterList=users;
-        u=new User();
     }
 
 
@@ -58,12 +56,15 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchViewHolder> implem
         //BIND DATA
         holder.posTxt.setText(users.get(position).getPos());
         holder.nameTxt.setText(users.get(position).getUser().getUsername());
-        if (u.getProfilePictureUrl() != null){
-            u.loadProfilePicture(c,u.getProfilePictureUrl(),holder.img);
+        String url = (users.get(position).getUser().getProfilePictureUrl());
+        String username = (users.get(position).getUser().getUsername());
+        if (url!= null){
+            users.get(position).getUser().loadProfilePicture(c,url,holder.img);
         }
 
         else
         {
+            holder.img.setImageResource(R.color.boldGray);
         }
 
 

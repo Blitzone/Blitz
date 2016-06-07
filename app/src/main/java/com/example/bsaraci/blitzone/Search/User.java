@@ -70,7 +70,7 @@ public class User {
         Glide.with(c)
                 .load(url)
                 .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                .placeholder(R.color.white)
+                .placeholder(R.color.lightGray)
                 .dontAnimate()
                 .into(new GlideDrawableImageViewTarget(imageView) {
                     @Override
@@ -82,7 +82,6 @@ public class User {
                     @Override
                     public void onLoadFailed(Exception e, Drawable errorDrawable) {
                         super.onLoadFailed(e, errorDrawable);
-                        Toast.makeText(c, "Error loading profile picture", Toast.LENGTH_SHORT).show();
                         //never called
                     }
                 });

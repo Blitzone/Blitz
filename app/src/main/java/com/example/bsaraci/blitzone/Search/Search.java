@@ -56,7 +56,6 @@ public class Search extends AppCompatActivity
     View dividerBackIcon;
     Boolean isVisible;
     String query;
-    User u;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -255,15 +254,15 @@ public class Search extends AppCompatActivity
             JSONArray searchUserList=(JSONArray)searchUser.getJSONArray("userList");
             int searchUserListSize = searchUserList.length();
             if(!query.equals("")){
-            for (int i = 0; i < searchUserListSize; i++) {
-                    u = new User();
+                for (int i = 0; i < searchUserListSize; i++) {
+                    User u = new User();
                     SearchModel p=new SearchModel();
                     p.setUser(u);
                     p.getUser().setUsername(((JSONObject) searchUserList.get(i)).getString("user"));
                     p.setPos("Add");
                     p.getUser().setProfilePictureUrl(RequestURL.IP_ADDRESS + ((JSONObject) searchUserList.get(i)).getString("avatar"));
                     users.add(p);
-            }
+                }
             }
             initiateRV(users);
         } catch (JSONException e) {
