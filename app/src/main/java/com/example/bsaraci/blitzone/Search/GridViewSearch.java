@@ -114,9 +114,11 @@ public class GridViewSearch extends AppCompatActivity {
             int photoChapterGridSize = photoChapterGrid.length();
             for (int i = 0; i < photoChapterGridSize; i++) {
                 JSONObject jsonPhotoChapter = (JSONObject) photoChapterGrid.getJSONObject(i);
+                JSONObject jsonUser = (JSONObject) jsonPhotoChapter.getJSONObject("user");
+                String username=jsonUser.getString("user");
                 GridItem gridItem = new GridItem();
                 User u = new User();
-                u.setUsername("username");
+                u.setUsername(username);
                 gridItem.setUrl(RequestURL.IP_ADDRESS + jsonPhotoChapter.getString("image"));
                 gridItem.setUser(u);
                 items.add(gridItem);
