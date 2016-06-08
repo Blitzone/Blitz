@@ -53,7 +53,8 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:id="@+id/container">
 
         <GridView
             android:id="@+id/gridView"
@@ -69,6 +70,15 @@
             android:clickable="true"
             android:listSelector="@android:color/transparent"
             android:scrollbars="none"/>
+
+        <ImageView
+            android:id="@+id/expandedImage"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="invisible"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:scaleType="centerCrop" />
 
     </RelativeLayout>
 </LinearLayout>

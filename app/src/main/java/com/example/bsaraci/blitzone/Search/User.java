@@ -14,6 +14,7 @@ import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.target.Target;
+import com.example.bsaraci.blitzone.Profile.PhotoChapter;
 import com.example.bsaraci.blitzone.R;
 
 import java.net.URL;
