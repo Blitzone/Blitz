@@ -6,22 +6,24 @@ package com.example.bsaraci.blitzone.Search;
 public class SearchModel {
 
     private User user;
-    private String pos;
+    private String add;
+    private String remove;
 
     public SearchModel() {
     }
 
-    public SearchModel(User user, String pos) {
+    public SearchModel(User user, String add, String remove) {
         this.user = user;
-        this.pos = pos;
+        this.add = add;
+        this.remove=remove;
     }
 
-    public String getPos() {
-        return pos;
+    public String getAdd() {
+        return add;
     }
 
-    public void setPos(String pos) {
-        this.pos = pos;
+    public void setAdd(String add) {
+        this.add = add;
     }
 
     public User getUser() {
@@ -31,4 +33,8 @@ public class SearchModel {
     public void setUser(User user) {
         this.user = user;
     }
+
+    public String getRemove() {return remove;}
+
+    public void setRemove(String remove) {this.remove = remove;}
 }

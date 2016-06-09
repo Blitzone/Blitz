@@ -36,11 +36,23 @@
             android:layout_height="wrap_content"
             android:text="Add"
             android:textColor="@color/mint"
-            android:id="@+id/posTxt"
+            android:id="@+id/addUser"
             android:textStyle="bold"
             android:layout_alignTop="@+id/nameTxt"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Remove"
+            android:textColor="@android:color/holo_red_dark"
+            android:id="@+id/removeUser"
+            android:textStyle="bold"
+            android:layout_alignTop="@+id/nameTxt"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:visibility="invisible"/>
 
     </RelativeLayout>
 

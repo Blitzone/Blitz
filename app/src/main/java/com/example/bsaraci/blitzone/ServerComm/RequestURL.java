@@ -21,6 +21,7 @@ public class RequestURL {
     public static final String SEARCH_USER              = IP_ADDRESS + "/accounts/searchUser/";
     public static final String GRID_SEARCH_PHOTOS       = IP_ADDRESS + "/images/searchPhotoChapters/";
     public static final String FOLLOW_USER              = IP_ADDRESS + "/accounts/addFollow/";
+    public static final String UNFOLLOW_USER            = IP_ADDRESS + "/accounts/delFollow/";
 
     public static boolean _needsAuth(String url)
     {
@@ -39,6 +40,7 @@ public class RequestURL {
             case SEARCH_USER:           return true;
             case GRID_SEARCH_PHOTOS:    return true;
             case FOLLOW_USER:           return true;
+            case UNFOLLOW_USER:          return true;
             default:                    return false;
         }
     }

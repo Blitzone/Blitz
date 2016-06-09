@@ -1,7 +1,6 @@
 package com.example.bsaraci.blitzone.Search;
 
 import android.content.Context;
-import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -54,15 +53,16 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchViewHolder> implem
 
     //DATA BOUND TO VIEWS
     @Override
-    public void onBindViewHolder(SearchViewHolder holder, int position) {
+    public void onBindViewHolder(final SearchViewHolder holder, int position) {
 
         //BIND DATA
-        holder.posTxt.setText(users.get(position).getPos());
+        holder.addUserText.setText(users.get(position).getAdd());
+        holder.removeUserText.setText(users.get(position).getRemove());
         String url = (users.get(position).getUser().getProfilePictureUrl());
         username = (users.get(position).getUser().getUsername());
         if (url!= null){
             users.get(position).getUser().loadPicture(c, url, holder.img);
-            holder.nameTxt.setText(username);
+            holder.usernameText.setText(username);
         }
 
         else
@@ -75,7 +75,18 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchViewHolder> implem
         holder.setItemClickListener(new ItemClickListener() {
             @Override
             public void onItemClick(View v, int pos) {
-               getFollowUser();
+                if (v == holder.addUserText){
+                    getFollowUser();
+                    holder.addUserText.setVisibility(View.INVISIBLE);
+                    holder.removeUserText.setVisibility(View.VISIBLE);
+                    notifyDataSetChanged();
+                }
+                else if(v == holder.removeUserText){
+                    getUnfollowUser();
+                    holder.removeUserText.setVisibility(View.INVISIBLE);
+                    holder.addUserText.setVisibility(View.VISIBLE);
+                    notifyDataSetChanged();
+                }
             }
         });
 
@@ -102,6 +113,46 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchViewHolder> implem
         Map<String, String> params = new HashMap<String, String>();
         params.put("followedUser", username);
         return new JSONObject(params);
+    }
+
+    private JSONObject getUnfollowUserParams(String username){
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("followedUser", username);
+        return new JSONObject(params);
+    }
+
+
+
+    private void getUnfollowUser(){
+        Response.Listener<JSONObject> listener = new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                Toast.makeText(c,response.toString(),Toast.LENGTH_LONG).show();
+            }
+        };
+
+        //Function to be executed in case of an error
+        Response.ErrorListener errorListener = new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("Error", error.toString());
+            }
+        };
+
+        JWTManager jwtManager = new JWTManager(c);
+        //Put everything in the request
+
+        MRequest mRequest = new MRequest(
+                RequestURL.UNFOLLOW_USER,
+                Request.Method.POST,
+                getUnfollowUserParams(username), //Put the parameters of the request here (JSONObject format)
+                listener,
+                errorListener,
+                jwtManager
+        );
+
+        RequestQueueSingleton.getInstance(c).addToRequestQueue(mRequest);
     }
 
     private void getFollowUser(){

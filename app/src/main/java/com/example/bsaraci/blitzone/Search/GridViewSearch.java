@@ -20,6 +20,7 @@ import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -59,6 +60,9 @@ public class GridViewSearch extends AppCompatActivity {
     Integer chapterId;
     private Animator mCurrentAnimator;
     private int mShortAnimationDuration;
+    ImageButton likeIcon;
+    ImageButton dislikeIcon;
+    ImageButton blitzIcon;
 
 
     protected void onCreate(Bundle savedInstanceState){
@@ -76,6 +80,9 @@ public class GridViewSearch extends AppCompatActivity {
         gridViewToolbar = (Toolbar) findViewById(R.id.toolbar_of_gridView_search);
         toolbarTitle = (TextView) findViewById(R.id.gridView_search_toolbar_title);
         toolbarTitle.setText(title);
+        likeIcon = (ImageButton)findViewById(R.id.like);
+        dislikeIcon = (ImageButton) findViewById(R.id.dislike);
+        blitzIcon = (ImageButton) findViewById(R.id.blitz);
         mShortAnimationDuration = getResources().getInteger(android.R.integer.config_shortAnimTime);
     }
 
@@ -86,13 +93,13 @@ public class GridViewSearch extends AppCompatActivity {
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
                 String url = gridItems.get(position).getUrl();
-                zoomImageFromThumb(v, url);
+                zoomImageFromThumb(likeIcon,dislikeIcon,blitzIcon,v, url);
             }
         });
 
     }
 
-    private void zoomImageFromThumb(final View thumbView, String url) {
+    private void zoomImageFromThumb(final View likeIcon, final View dislikeIcon, final View blitzIcon, final View thumbView, String url) {
         // If there's an animation in progress, cancel it
         // immediately and proceed with this one.
         if (mCurrentAnimator != null) {
@@ -165,6 +172,9 @@ public class GridViewSearch extends AppCompatActivity {
         // thumbnail.
         thumbView.setAlpha(0f);
         expandedImageView.setVisibility(View.VISIBLE);
+        likeIcon.setVisibility(View.VISIBLE);
+        dislikeIcon.setVisibility(View.VISIBLE);
+        blitzIcon.setVisibility(View.VISIBLE);
 
         // Set the pivot point for SCALE_X and SCALE_Y transformations
         // to the top-left corner of the zoomed-in view (the default
@@ -231,6 +241,9 @@ public class GridViewSearch extends AppCompatActivity {
                     public void onAnimationEnd(Animator animation) {
                         thumbView.setAlpha(1f);
                         expandedImageView.setVisibility(View.GONE);
+                        likeIcon.setVisibility(View.GONE);
+                        dislikeIcon.setVisibility(View.GONE);
+                        blitzIcon.setVisibility(View.GONE);
                         mCurrentAnimator = null;
                     }
 

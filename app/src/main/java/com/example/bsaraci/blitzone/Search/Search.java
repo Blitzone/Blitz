@@ -266,7 +266,8 @@ public class Search extends AppCompatActivity
                     SearchModel p=new SearchModel();
                     p.setUser(u);
                     p.getUser().setUsername(((JSONObject) searchUserList.get(i)).getString("user"));
-                    p.setPos("Add");
+                    p.setAdd("Add");
+                    p.setRemove("Remove");
                     p.getUser().setProfilePictureUrl(RequestURL.IP_ADDRESS + ((JSONObject) searchUserList.get(i)).getString("avatar"));
                     users.add(p);
                 }

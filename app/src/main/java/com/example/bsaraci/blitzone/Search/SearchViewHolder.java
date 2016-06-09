@@ -14,7 +14,7 @@ public class SearchViewHolder extends RecyclerView.ViewHolder implements View.On
 
     //OUR VIEWS
     ImageView img;
-    TextView nameTxt,posTxt;
+    TextView usernameText, addUserText, removeUserText;
 
     ItemClickListener itemClickListener;
 
@@ -23,11 +23,13 @@ public class SearchViewHolder extends RecyclerView.ViewHolder implements View.On
         super(itemView);
 
         this.img= (ImageView) itemView.findViewById(R.id.userImage);
-        this.nameTxt= (TextView) itemView.findViewById(R.id.nameTxt);
-        this.posTxt= (TextView) itemView.findViewById(R.id.posTxt);
+        this.usernameText = (TextView) itemView.findViewById(R.id.nameTxt);
+        this.addUserText = (TextView) itemView.findViewById(R.id.addUser);
+        this.removeUserText = (TextView) itemView.findViewById(R.id.removeUser);
 
         //Set the click of only one element of the row. In this case the add button
-        posTxt.setOnClickListener(this);
+        addUserText.setOnClickListener(this);
+        removeUserText.setOnClickListener(this);
     }
 
     @Override
