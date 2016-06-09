@@ -49,9 +49,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Created by bsaraci on 5/9/2016.
- */
+
 public class GridViewSearch extends AppCompatActivity {
     Toolbar gridViewToolbar ;
     TextView toolbarTitle;
@@ -78,7 +76,7 @@ public class GridViewSearch extends AppCompatActivity {
         gridViewToolbar = (Toolbar) findViewById(R.id.toolbar_of_gridView_search);
         toolbarTitle = (TextView) findViewById(R.id.gridView_search_toolbar_title);
         toolbarTitle.setText(title);
-        mShortAnimationDuration = getResources().getInteger(android.R.integer.config_longAnimTime);
+        mShortAnimationDuration = getResources().getInteger(android.R.integer.config_shortAnimTime);
     }
 
     public void initiateGrid(final ArrayList<GridItem> gridItems){
