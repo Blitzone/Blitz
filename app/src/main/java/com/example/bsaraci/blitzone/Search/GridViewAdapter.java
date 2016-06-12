@@ -41,7 +41,6 @@ public class GridViewAdapter extends ArrayAdapter {
             row = inflater.inflate(layoutResourceId, parent, false);
             holder = new ViewHolder();
             holder.image = (ImageView) row.findViewById(R.id.image);
-            holder.username = (TextView) row.findViewById(R.id.usernameGridView);
             row.setTag(holder);
         } else {
             holder = (ViewHolder) row.getTag();
@@ -49,11 +48,9 @@ public class GridViewAdapter extends ArrayAdapter {
 
         GridItem item = data.get(position);
         String url = item.getUrl();
-        String username = item.getUser().getUsername();
 
         if(url!=null){
             item.getUser().loadPicture(context,url,holder.image);
-            holder.username.setText(username);
         }
         else {
             holder.image.setImageResource(R.color.boldGray);
@@ -63,6 +60,5 @@ public class GridViewAdapter extends ArrayAdapter {
 
     static class ViewHolder {
         ImageView image;
-        TextView username;
     }
 }

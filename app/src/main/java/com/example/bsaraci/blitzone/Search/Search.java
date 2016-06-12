@@ -203,8 +203,6 @@ public class Search extends AppCompatActivity
 
             @Override
             public boolean onQueryTextChange(String q) {
-                //FILTER AS YOU TYPE
-//              adapter.getFilter().filter(query);
                 query=q;
                 getSearchUserList();
                 rv.setVisibility(View.VISIBLE);
@@ -429,4 +427,5 @@ public class Search extends AppCompatActivity
         }
         initiateTextViews(isVisible);
     }
+
 }

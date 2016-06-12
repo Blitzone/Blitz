@@ -1,15 +1,19 @@
 package com.example.bsaraci.blitzone.Blitzone;
 
+import android.media.Image;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.example.bsaraci.blitzone.Profile.RoundedImageView;
 import com.example.bsaraci.blitzone.R;
+import com.example.bsaraci.blitzone.Search.ItemClickListener;
 
 import java.util.List;
 
@@ -69,7 +73,7 @@ public class RecycleviewAdapter extends  RecyclerView.Adapter<RecyclerView.ViewH
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof DailyViewHolder) {
 
             ViewDataProvider viewDataProvider= (ViewDataProvider) list.get(position);
@@ -77,9 +81,52 @@ public class RecycleviewAdapter extends  RecyclerView.Adapter<RecyclerView.ViewH
             ((DailyViewHolder) holder).mProfile.setImageResource(viewDataProvider.getProfilePicture());
             ((DailyViewHolder) holder).mUsername.setText(viewDataProvider.getUsername());
             ((DailyViewHolder) holder).mBlitz.setImageResource(viewDataProvider.getBlitz());
+            ((DailyViewHolder) holder).mBlitzClicked.setImageResource(viewDataProvider.getBlitzClicked());
+            ((DailyViewHolder) holder).mLike.setImageResource(viewDataProvider.getLike());
+            ((DailyViewHolder) holder).mLikeClicked.setImageResource(viewDataProvider.getLikeClicked());
+            ((DailyViewHolder) holder).mDislike.setImageResource(viewDataProvider.getDislike());
+            ((DailyViewHolder) holder).mDislikeClicked.setImageResource(viewDataProvider.getDislikeClicked());
             ((DailyViewHolder) holder).mPoints.setText(viewDataProvider.getPoints());
             ((DailyViewHolder) holder).mChallenge.setText(viewDataProvider.getChallengeOfTheDay());
             ((DailyViewHolder) holder).mHour.setText(viewDataProvider.getHour());
+
+            ((DailyViewHolder) holder).setItemClickListener(new ItemClickListener() {
+                @Override
+                public void onItemClick(View v, int pos) {
+                    if (v == ((DailyViewHolder) holder).mBlitz) {
+                        v.setVisibility(View.GONE);
+                        ((DailyViewHolder) holder).mBlitzClicked.setVisibility(View.VISIBLE);
+                    }
+                    else if (v == ((DailyViewHolder) holder).mBlitzClicked){
+                        v.setVisibility(View.GONE);
+                        ((DailyViewHolder) holder).mBlitz.setVisibility(View.VISIBLE);
+                    }
+
+                    else if (v == ((DailyViewHolder) holder).mLike ){
+                        v.setVisibility(View.GONE);
+                        ((DailyViewHolder) holder).mDislike.setVisibility(View.GONE);
+                        ((DailyViewHolder) holder).mLikeClicked.setVisibility(View.VISIBLE);
+                    }
+
+                    else if (v == ((DailyViewHolder) holder).mLikeClicked ){
+                        v.setVisibility(View.GONE);
+                        ((DailyViewHolder) holder).mDislike.setVisibility(View.VISIBLE);
+                        ((DailyViewHolder) holder).mLike.setVisibility(View.VISIBLE);
+                    }
+
+                    else if (v == ((DailyViewHolder) holder).mDislike ){
+                        v.setVisibility(View.GONE);
+                        ((DailyViewHolder) holder).mLike.setVisibility(View.GONE);
+                        ((DailyViewHolder) holder).mDislikeClicked.setVisibility(View.VISIBLE);
+                    }
+
+                    else if (v == ((DailyViewHolder) holder).mDislikeClicked ){
+                        v.setVisibility(View.GONE);
+                        ((DailyViewHolder) holder).mLike.setVisibility(View.VISIBLE);
+                        ((DailyViewHolder) holder).mDislike.setVisibility(View.VISIBLE);
+                    }
+                }
+            });
 
         } else {
             ((ProgressViewHolder) holder).progressBar.setIndeterminate(true);
@@ -108,14 +155,20 @@ public class RecycleviewAdapter extends  RecyclerView.Adapter<RecyclerView.ViewH
         return list.get(position) != null ? VIEW_ITEM : VIEW_PROG;
     }
 
-    public static class DailyViewHolder extends RecyclerView.ViewHolder {
+    public static class DailyViewHolder extends RecyclerView.ViewHolder  implements View.OnClickListener  {
 
+        ItemClickListener itemClickListener;
         public View mView;
 
-        public ImageView mProfile;
+        public RoundedImageView mProfile;
         public TextView mUsername;
         public TextView mPoints;
         public ImageView mBlitz;
+        public ImageView mBlitzClicked;
+        public ImageButton mLike;
+        public ImageButton mLikeClicked;
+        public ImageButton mDislike;
+        public ImageButton mDislikeClicked;
         public TextView mChallenge;
         public TextView mHour;
 
@@ -123,14 +176,30 @@ public class RecycleviewAdapter extends  RecyclerView.Adapter<RecyclerView.ViewH
         public DailyViewHolder(View view) {
             super(view);
             mView = view;
-            mProfile= (ImageView) view.findViewById(R.id.profile_picture);
-            mUsername = (TextView) view.findViewById(R.id.name);
-            mPoints= (TextView) view.findViewById(R.id.points);
-            mBlitz = (ImageView) view.findViewById(R.id.blitz);
-            mChallenge = (TextView) view.findViewById(R.id.chapterDescription);
-            mHour = (TextView) view.findViewById(R.id.timePublished);
+            this.mProfile= (RoundedImageView) view.findViewById(R.id.profile_picture);
+            this.mUsername = (TextView) view.findViewById(R.id.name);
+            this.mPoints= (TextView) view.findViewById(R.id.points);
+            this.mBlitz = (ImageView) view.findViewById(R.id.blitzIcon);
+            this.mBlitzClicked = (ImageView) view.findViewById(R.id.blitzClickedIcon);
+            this.mLike = (ImageButton) view.findViewById(R.id.like);
+            this.mLikeClicked = (ImageButton) view.findViewById(R.id.likeClicked);
+            this.mDislike = (ImageButton) view.findViewById(R.id.dislike);
+            this.mDislikeClicked = (ImageButton)view.findViewById(R.id.dislikeClicked);
+            this.mChallenge = (TextView) view.findViewById(R.id.chapterDescription);
+            this.mHour = (TextView) view.findViewById(R.id.timePublished);
 
+            mBlitz.setOnClickListener(DailyViewHolder.this);
+            mBlitzClicked.setOnClickListener(DailyViewHolder.this);
+            mLike.setOnClickListener(DailyViewHolder.this);
+            mLikeClicked.setOnClickListener(DailyViewHolder.this);
+            mDislike.setOnClickListener(DailyViewHolder.this);
+            mDislikeClicked.setOnClickListener(DailyViewHolder.this);
         }
+
+        public void onClick(View v) {
+            this.itemClickListener.onItemClick(v,getLayoutPosition());
+        }
+        public void setItemClickListener(ItemClickListener ic) {this.itemClickListener=ic;}
     }
 
     public static class ProgressViewHolder extends RecyclerView.ViewHolder {

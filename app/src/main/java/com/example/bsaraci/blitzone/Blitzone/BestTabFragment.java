@@ -20,15 +20,6 @@ public class BestTabFragment extends Fragment {
     private RecyclerView recyclerView;
     private RecycleviewAdapter mAdapter;
 
-    /*int [] profilePictures = {R.mipmap.ic_orange_profile,R.mipmap.ic_orange_profile,R.mipmap.ic_orange_profile,
-            R.mipmap.ic_orange_profile,R.mipmap.ic_orange_profile,R.mipmap.ic_orange_profile,
-            R.mipmap.ic_orange_profile,R.mipmap.ic_orange_profile,R.mipmap.ic_orange_profile};
-    String [] usernames = {"teasaraci","mikelv92","sarasaraci","jonagolemi","ergysmati","enderballa","ilirpirani","sidritdritorja","jv21"};
-    String [] points = {"500","117","110","90","57","50","34","31","10"};
-    int [] blitz = {R.mipmap.ic_orange_blitz,R.mipmap.ic_orange_blitz,R.mipmap.ic_orange_blitz,
-            R.mipmap.ic_orange_blitz,R.mipmap.ic_orange_blitz,R.mipmap.ic_orange_blitz,
-            R.mipmap.ic_orange_blitz,R.mipmap.ic_orange_blitz,R.mipmap.ic_orange_blitz};*/
-
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
@@ -37,7 +28,6 @@ public class BestTabFragment extends Fragment {
         rv.setLayoutManager(new LinearLayoutManager(rv.getContext()));
 
         RecyclerView recyclerView = (RecyclerView) rv.findViewById(R.id.bestList);
-        recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), LinearLayoutManager.VERTICAL));
 
         rv.setAdapter(new RecyclerowAdapter(list));
 
@@ -47,27 +37,25 @@ public class BestTabFragment extends Fragment {
 
     }
     public void prepareData (){
-        RowDataProvider l =new RowDataProvider( R.mipmap.ic_profile_avatar,"sarasaraci" ,"200" ,R.mipmap.ic_orange_blitz);
+        RowDataProvider l =new RowDataProvider(R.color.lightGray,"sarasaraci" ,"200" ,R.mipmap.ic_orange_blitz);
         list.add(l);
-        l =new RowDataProvider( R.mipmap.ic_profile_avatar,"teasaraci" ,"150" ,0);
+        l =new RowDataProvider(R.color.lightGray,"teasaraci" ,"150" ,0);
         list.add(l);
-        l =new RowDataProvider( R.mipmap.ic_profile_avatar,"enderballa" ,"100" ,R.mipmap.ic_orange_blitz);
+        l =new RowDataProvider(R.color.lightGray,"enderballa" ,"100" ,R.mipmap.ic_orange_blitz);
         list.add(l);
-        l =new RowDataProvider( R.mipmap.ic_profile_avatar,"mikelv92" ,"100" ,0);
+        l =new RowDataProvider(R.color.lightGray,"mikelv92" ,"100" ,0);
         list.add(l);
-        l =new RowDataProvider( R.mipmap.ic_profile_avatar,"jonagolemi" ,"30" ,R.mipmap.ic_orange_blitz);
+        l =new RowDataProvider(R.color.lightGray,"jonagolemi" ,"30" ,R.mipmap.ic_orange_blitz);
         list.add(l);
-        l =new RowDataProvider( R.mipmap.ic_profile_avatar,"jv21" ,"15" ,0);
+        l =new RowDataProvider(R.color.lightGray,"jv21" ,"15" ,0);
         list.add(l);
-        l =new RowDataProvider( R.mipmap.ic_profile_avatar,"ergysmati" ,"10" ,R.mipmap.ic_orange_blitz);
+        l =new RowDataProvider(R.color.lightGray,"ergysmati" ,"10" ,R.mipmap.ic_orange_blitz);
         list.add(l);
-        l =new RowDataProvider( R.mipmap.ic_profile_avatar,"sidritdritorja" ,"10" ,R.mipmap.ic_orange_blitz);
+        l =new RowDataProvider(R.color.lightGray,"sidritdritorja" ,"10" ,R.mipmap.ic_orange_blitz);
         list.add(l);
-        l =new RowDataProvider( R.mipmap.ic_profile_avatar,"ilirpirani" ,"1" ,R.mipmap.ic_orange_blitz);
+        l =new RowDataProvider(R.color.lightGray,"ilirpirani" ,"1" ,R.mipmap.ic_orange_blitz);
         list.add(l);
-        l =new RowDataProvider( R.mipmap.ic_profile_avatar,"arditmeti" ,"0" ,R.mipmap.ic_orange_blitz);
+        l =new RowDataProvider(R.color.lightGray,"arditmeti" ,"0" ,R.mipmap.ic_orange_blitz);
         list.add(l);
-
-
     }
 }

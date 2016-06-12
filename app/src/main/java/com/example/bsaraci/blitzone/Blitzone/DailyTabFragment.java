@@ -11,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.bsaraci.blitzone.R;
@@ -27,13 +28,17 @@ public class DailyTabFragment extends Fragment implements SwipeRefreshLayout.OnR
     private List <String> time = new ArrayList<>();
     private List <Integer> profilePictures = new ArrayList<>();
     private List <Integer> blitz = new ArrayList<>();
+    private List <Integer> blitzClicked = new ArrayList<>();
+    private List <Integer> like = new ArrayList<>();
+    private List <Integer> likeClicked = new ArrayList<>();
+    private List <Integer> dislike = new ArrayList<>();
+    private List <Integer> dislikeClicked = new ArrayList<>();
     private SwipeRefreshLayout swipeLayout;
     RecyclerView recyclerView;
     RecycleviewAdapter adap ;
     LinearLayoutManager linearLayoutManager;
     private TextView tvEmptyView;
     protected Handler handler;
-
     //TODO TESTING ONLY
     private Integer teaCount = 0;
 
@@ -47,6 +52,7 @@ public class DailyTabFragment extends Fragment implements SwipeRefreshLayout.OnR
 
         prepareData();
         initRecyclerView();
+
 
         if (list.isEmpty()) {
             recyclerView.setVisibility(View.GONE);
@@ -77,7 +83,7 @@ public class DailyTabFragment extends Fragment implements SwipeRefreshLayout.OnR
                         for (int i = start + 1; i <= end; i++) {
                             //TODO COUNTING VIEWS FOR TESTING. REMOVE WHEN YOU DEPLOY
                             teaCount++;
-                            list.add(new ViewDataProvider(R.mipmap.ic_profile_avatar,"teasaraci" + teaCount.toString(),"200",0,"Old travel throwback","6 minutes ago"));
+                            list.add(new ViewDataProvider(R.color.boldGray, "teasaraci" + teaCount.toString(), "200", 0,0,R.mipmap.ic_gray_like,R.mipmap.ic_like_clicked, R.mipmap.ic_gray_dislike, R.mipmap.ic_dislike_clicked, "Old travel throwback", "6 minutes ago"));
                             adap.notifyItemInserted(list.size());
                         }
                         adap.setLoaded();
@@ -97,10 +103,12 @@ public class DailyTabFragment extends Fragment implements SwipeRefreshLayout.OnR
                 R.color.mint,
                 R.color.mint,
                 R.color.mint);
-
         return view;
 
     }
+
+
+
 
     private void initRecyclerView() {
         linearLayoutManager = new LinearLayoutManager(getActivity());
@@ -118,10 +126,16 @@ public class DailyTabFragment extends Fragment implements SwipeRefreshLayout.OnR
             points.add(i,"15");
             description.add(i,"Tickets to a new adventure");
             time.add(i,"6 minutes ago");
-            profilePictures.add(i,R.mipmap.ic_profile_avatar);
-            blitz.add(i,R.mipmap.ic_orange_blitz);
+            profilePictures.add(i,R.color.lightGray);
+            blitz.add(i,R.mipmap.ic_gray_blitz);
+            blitzClicked.add(i,R.mipmap.ic_orange_blitz);
+            like.add(i,R.mipmap.ic_gray_like);
+            likeClicked.add(i,R.mipmap.ic_like_clicked);
+            dislike.add(i,R.mipmap.ic_gray_dislike);
+            dislikeClicked.add(i,R.mipmap.ic_dislike_clicked);
 
-            ViewDataProvider l =new ViewDataProvider( profilePictures.get(i),usernames.get(i) ,points.get(i) ,blitz.get(i),description.get(i), time.get(i));
+
+            ViewDataProvider l =new ViewDataProvider(profilePictures.get(i),usernames.get(i) ,points.get(i) ,blitz.get(i),blitzClicked.get(i),like.get(i),likeClicked.get(i),dislike.get(i),dislikeClicked.get(i),description.get(i), time.get(i));
             list.add(l);
         }
     }
@@ -130,13 +144,18 @@ public class DailyTabFragment extends Fragment implements SwipeRefreshLayout.OnR
     public void modifyDataOnRefresh (){
         usernames.add("testUsername");
         points.add("testPoints");
-        profilePictures.add(R.mipmap.ic_orange_profile);
+        profilePictures.add(R.color.mint);
         blitz.add(0);
+        blitzClicked.add(0);
+        like.add(R.mipmap.ic_gray_like);
+        likeClicked.add(R.mipmap.ic_like_clicked);
+        dislike.add(R.mipmap.ic_gray_dislike);
+        dislikeClicked.add(R.mipmap.ic_dislike_clicked);
         description.add("testDescription");
         time.add("testTime");
 
-        ViewDataProvider l =new ViewDataProvider( profilePictures.get(profilePictures.size()-1),usernames.get(usernames.size()-1) ,points.get(points.size()-1) ,blitz.get(points.size()-1),description.get(description.size()-1), time.get(time.size()-1));
-        list.add(0,l);
+        ViewDataProvider l =new ViewDataProvider(profilePictures.get(profilePictures.size()-1),usernames.get(usernames.size()-1) ,points.get(points.size()-1) ,blitz.get(points.size()-1),blitzClicked.get(points.size()-1),like.get(points.size()-1),likeClicked.get(points.size()-1),dislike.get(points.size()-1),dislikeClicked.get(points.size()-1),description.get(description.size()-1), time.get(time.size()-1));
+        list.add(0, l);
 
 
     }
@@ -186,4 +205,6 @@ public class DailyTabFragment extends Fragment implements SwipeRefreshLayout.OnR
         }
 
     }
+
+
 }

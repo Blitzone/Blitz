@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.content.Intent;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -15,6 +16,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Layout;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
@@ -22,6 +24,7 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -63,6 +66,12 @@ public class GridViewSearch extends AppCompatActivity {
     ImageButton likeIcon;
     ImageButton dislikeIcon;
     ImageButton blitzIcon;
+    RelativeLayout buttonsLayout;
+    TextView usernameInToolbar;
+    boolean isFullsize;
+    View thumbView;
+    ImageButton gridViewFromFullsize;
+    ImageButton backFromGrid;
 
 
     protected void onCreate(Bundle savedInstanceState){
@@ -83,6 +92,10 @@ public class GridViewSearch extends AppCompatActivity {
         likeIcon = (ImageButton)findViewById(R.id.like);
         dislikeIcon = (ImageButton) findViewById(R.id.dislike);
         blitzIcon = (ImageButton) findViewById(R.id.blitz);
+        buttonsLayout = (RelativeLayout)findViewById(R.id.buttonsLayout);
+        usernameInToolbar = (TextView) findViewById(R.id.username_search_toolbar);
+        gridViewFromFullsize = (ImageButton) findViewById(R.id.gridView_from_fullsize);
+        backFromGrid = (ImageButton) findViewById(R.id.search_from_gridViewSearch);
         mShortAnimationDuration = getResources().getInteger(android.R.integer.config_shortAnimTime);
     }
 
@@ -92,14 +105,18 @@ public class GridViewSearch extends AppCompatActivity {
         gridView.setAdapter(gridAdapter);
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+                isFullsize=true;
+                thumbView=v;
                 String url = gridItems.get(position).getUrl();
-                zoomImageFromThumb(likeIcon,dislikeIcon,blitzIcon,v, url);
+                User u = gridItems.get(position).getUser();
+                usernameInToolbar.setText(u.getUsername());
+                zoomImageFromThumb(backFromGrid,gridViewFromFullsize,toolbarTitle,usernameInToolbar, buttonsLayout, likeIcon, dislikeIcon, blitzIcon, v, url);
             }
         });
 
     }
 
-    private void zoomImageFromThumb(final View likeIcon, final View dislikeIcon, final View blitzIcon, final View thumbView, String url) {
+    private void zoomImageFromThumb(final View backFromGrid, final View backFromFullSize, final View title, final View username,final View layout, final View likeIcon, final View dislikeIcon, final View blitzIcon, final View thumbView, String url) {
         // If there's an animation in progress, cancel it
         // immediately and proceed with this one.
         if (mCurrentAnimator != null) {
@@ -171,6 +188,11 @@ public class GridViewSearch extends AppCompatActivity {
         // begins, it will position the zoomed-in view in the place of the
         // thumbnail.
         thumbView.setAlpha(0f);
+        title.setAlpha(0f);
+        backFromGrid.setAlpha(0f);
+        backFromFullSize.setVisibility(View.VISIBLE);
+        username.setVisibility(View.VISIBLE);
+        layout.setVisibility(View.VISIBLE);
         expandedImageView.setVisibility(View.VISIBLE);
         likeIcon.setVisibility(View.VISIBLE);
         dislikeIcon.setVisibility(View.VISIBLE);
@@ -240,6 +262,11 @@ public class GridViewSearch extends AppCompatActivity {
                     @Override
                     public void onAnimationEnd(Animator animation) {
                         thumbView.setAlpha(1f);
+                        title.setAlpha(1f);
+                        backFromGrid.setAlpha(1f);
+                        backFromFullSize.setVisibility(View.GONE);
+                        username.setVisibility(View.GONE);
+                        layout.setVisibility(View.GONE);
                         expandedImageView.setVisibility(View.GONE);
                         likeIcon.setVisibility(View.GONE);
                         dislikeIcon.setVisibility(View.GONE);
@@ -250,7 +277,15 @@ public class GridViewSearch extends AppCompatActivity {
                     @Override
                     public void onAnimationCancel(Animator animation) {
                         thumbView.setAlpha(1f);
+                        title.setAlpha(1f);
+                        backFromGrid.setAlpha(1f);
+                        backFromFullSize.setVisibility(View.GONE);
+                        username.setVisibility(View.GONE);
+                        layout.setVisibility(View.GONE);
                         expandedImageView.setVisibility(View.GONE);
+                        likeIcon.setVisibility(View.GONE);
+                        dislikeIcon.setVisibility(View.GONE);
+                        blitzIcon.setVisibility(View.GONE);
                         mCurrentAnimator = null;
                     }
                 });
@@ -317,14 +352,57 @@ public class GridViewSearch extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        if(isFullsize){
+            initiateComponents();
+            final ImageView expandedImageView = (ImageView) findViewById(R.id.expandedImage);
+            thumbView.setAlpha(1f);
+            toolbarTitle.setAlpha(1f);
+            backFromGrid.setAlpha(1f);
+            gridViewFromFullsize.setVisibility(View.GONE);
+            expandedImageView.setVisibility(View.GONE);
+            buttonsLayout.setVisibility(View.GONE);
+            likeIcon.setVisibility(View.GONE);
+            dislikeIcon.setVisibility(View.GONE);
+            blitzIcon.setVisibility(View.GONE);
+            usernameInToolbar.setVisibility(View.GONE);
+            isFullsize=false;
+        }
+        else{
+            finish();
+        }
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+    }
+
     private JSONObject getGridPhotoChapterParams(Integer topicId,Integer chapterId) {
 
         Map<String, String> params = new HashMap<String, String>();
         params.put("chapter", chapterId.toString());
-        params.put("topic",topicId.toString());
+        params.put("topic", topicId.toString());
 
         return new JSONObject(params);
     }
 
     public void searchFromGridViewSearch (View view){finish();}
+
+    public void gridFromFullsize (View view){
+        initiateComponents();
+        final ImageView expandedImageView = (ImageView) findViewById(R.id.expandedImage);
+        thumbView.setAlpha(1f);
+        toolbarTitle.setAlpha(1f);
+        backFromGrid.setAlpha(1f);
+        gridViewFromFullsize.setVisibility(View.GONE);
+        expandedImageView.setVisibility(View.GONE);
+        buttonsLayout.setVisibility(View.GONE);
+        likeIcon.setVisibility(View.GONE);
+        dislikeIcon.setVisibility(View.GONE);
+        blitzIcon.setVisibility(View.GONE);
+        usernameInToolbar.setVisibility(View.GONE);
+        isFullsize=false;
+    }
 }
