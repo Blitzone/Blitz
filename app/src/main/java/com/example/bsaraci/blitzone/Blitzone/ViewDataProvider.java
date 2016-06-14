@@ -1,8 +1,9 @@
 package com.example.bsaraci.blitzone.Blitzone;
 
+import java.util.ArrayList;
+
 public class ViewDataProvider {
 
-    private int profilePicture;
     private String username;
     private String points;
     private int blitz;
@@ -11,21 +12,30 @@ public class ViewDataProvider {
     private int likeClicked;
     private int dislike;
     private int dislikeClicked;
-    private String challengeOfTheDay;
-    private String hour;
+    private ArrayList <SingleViewModel> allTopicPhotos;
 
-    public ViewDataProvider(int profilePicture, String username, String points, int blitz, int blitzClicked,int like, int likeClicked, int dislike,int dislikeClicked, String challengeOfTheDay, String hour) {
-        this.setProfilePicture(profilePicture);
+    public ViewDataProvider(){
+
+    }
+
+    public ViewDataProvider(String username, String points, int blitz, int blitzClicked,int like, int likeClicked, int dislike,int dislikeClicked, ArrayList<SingleViewModel> allTopicPhotos) {
         this.setUsername(username);
         this.setPoints(points);
         this.setBlitz(blitz);
         this.setBlitzClicked(blitzClicked);
-        this.setChallengeOfTheDay(challengeOfTheDay);
-        this.setHour(hour);
+        this.setLike(like);
+        this.setLikeClicked(likeClicked);
+        this.setDislike(dislike);
+        this.setDislikeClicked(dislikeClicked);
+        this.setAllTopicPhotos(allTopicPhotos);
     }
 
-    public int getProfilePicture() {
-        return profilePicture;
+    public ArrayList<SingleViewModel> getAllTopicPhotos() {
+        return allTopicPhotos;
+    }
+
+    public void setAllTopicPhotos(ArrayList<SingleViewModel> allTopicPhotos) {
+        this.allTopicPhotos = allTopicPhotos;
     }
 
     public String getUsername() {
@@ -50,12 +60,6 @@ public class ViewDataProvider {
 
     public int getDislikeClicked() {return dislikeClicked;}
 
-    public String getChallengeOfTheDay() { return challengeOfTheDay; }
-
-    public String getHour() { return hour; }
-
-    public void setProfilePicture(int profilePicture) {this.profilePicture = profilePicture;}
-
     public void setUsername(String username) {
         this.username = username;
     }
@@ -74,11 +78,6 @@ public class ViewDataProvider {
 
     public void setDislikeClicked(int dislikeClicked) {this.dislikeClicked = dislikeClicked;}
 
-    public void setPoints(String points) {
-        this.points = points;
-    }
+    public void setPoints(String points) {this.points = points;}
 
-    public void setChallengeOfTheDay(String challengeOfTheDay) { this.challengeOfTheDay = challengeOfTheDay; }
-
-    public void setHour(String hour) { this.hour = hour; }
 }

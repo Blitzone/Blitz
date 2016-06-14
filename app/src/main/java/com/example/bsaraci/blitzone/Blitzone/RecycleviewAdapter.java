@@ -1,5 +1,6 @@
 package com.example.bsaraci.blitzone.Blitzone;
 
+import android.content.Context;
 import android.media.Image;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -10,16 +11,19 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.bsaraci.blitzone.Profile.RoundedImageView;
 import com.example.bsaraci.blitzone.R;
 import com.example.bsaraci.blitzone.Search.ItemClickListener;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class RecycleviewAdapter extends  RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     List<ViewDataProvider> list;
+    private Context context;
     private final int VIEW_ITEM = 1;
     private final int VIEW_PROG = 0;
 
@@ -28,7 +32,8 @@ public class RecycleviewAdapter extends  RecyclerView.Adapter<RecyclerView.ViewH
     private boolean loading;
     private OnLoadMoreListener onLoadMoreListener;
 
-    public RecycleviewAdapter(List<ViewDataProvider> list, RecyclerView recyclerView) {
+    public RecycleviewAdapter(Context context,List<ViewDataProvider> list, RecyclerView recyclerView) {
+        this.context = context;
         this.list=list;
 
         if(recyclerView.getLayoutManager() instanceof LinearLayoutManager){
@@ -73,12 +78,11 @@ public class RecycleviewAdapter extends  RecyclerView.Adapter<RecyclerView.ViewH
     }
 
     @Override
-    public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
         if (holder instanceof DailyViewHolder) {
 
             ViewDataProvider viewDataProvider= (ViewDataProvider) list.get(position);
 
-            ((DailyViewHolder) holder).mProfile.setImageResource(viewDataProvider.getProfilePicture());
             ((DailyViewHolder) holder).mUsername.setText(viewDataProvider.getUsername());
             ((DailyViewHolder) holder).mBlitz.setImageResource(viewDataProvider.getBlitz());
             ((DailyViewHolder) holder).mBlitzClicked.setImageResource(viewDataProvider.getBlitzClicked());
@@ -87,40 +91,51 @@ public class RecycleviewAdapter extends  RecyclerView.Adapter<RecyclerView.ViewH
             ((DailyViewHolder) holder).mDislike.setImageResource(viewDataProvider.getDislike());
             ((DailyViewHolder) holder).mDislikeClicked.setImageResource(viewDataProvider.getDislikeClicked());
             ((DailyViewHolder) holder).mPoints.setText(viewDataProvider.getPoints());
-            ((DailyViewHolder) holder).mChallenge.setText(viewDataProvider.getChallengeOfTheDay());
-            ((DailyViewHolder) holder).mHour.setText(viewDataProvider.getHour());
 
-            ((DailyViewHolder) holder).setItemClickListener(new ItemClickListener() {
+            ArrayList singleViewModels = list.get(position).getAllTopicPhotos();
+
+            SingleViewModelAdapter singleViewModelAdapter = new SingleViewModelAdapter(context,singleViewModels);
+
+            ((DailyViewHolder) holder).mRecyclerView.setHasFixedSize(true);
+            ((DailyViewHolder) holder).mRecyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
+            ((DailyViewHolder) holder).mRecyclerView.setAdapter(singleViewModelAdapter);
+
+
+            /*((DailyViewHolder) holder).btnMore.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+
+                    Toast.makeText(v.getContext(), "click event on more, "+position , Toast.LENGTH_SHORT).show();
+
+
+
+                }
+            });*/
+
+
+                    ((DailyViewHolder) holder).setItemClickListener(new ItemClickListener() {
                 @Override
                 public void onItemClick(View v, int pos) {
                     if (v == ((DailyViewHolder) holder).mBlitz) {
                         v.setVisibility(View.GONE);
                         ((DailyViewHolder) holder).mBlitzClicked.setVisibility(View.VISIBLE);
-                    }
-                    else if (v == ((DailyViewHolder) holder).mBlitzClicked){
+                    } else if (v == ((DailyViewHolder) holder).mBlitzClicked) {
                         v.setVisibility(View.GONE);
                         ((DailyViewHolder) holder).mBlitz.setVisibility(View.VISIBLE);
-                    }
-
-                    else if (v == ((DailyViewHolder) holder).mLike ){
+                    } else if (v == ((DailyViewHolder) holder).mLike) {
                         v.setVisibility(View.GONE);
                         ((DailyViewHolder) holder).mDislike.setVisibility(View.GONE);
                         ((DailyViewHolder) holder).mLikeClicked.setVisibility(View.VISIBLE);
-                    }
-
-                    else if (v == ((DailyViewHolder) holder).mLikeClicked ){
+                    } else if (v == ((DailyViewHolder) holder).mLikeClicked) {
                         v.setVisibility(View.GONE);
                         ((DailyViewHolder) holder).mDislike.setVisibility(View.VISIBLE);
                         ((DailyViewHolder) holder).mLike.setVisibility(View.VISIBLE);
-                    }
-
-                    else if (v == ((DailyViewHolder) holder).mDislike ){
+                    } else if (v == ((DailyViewHolder) holder).mDislike) {
                         v.setVisibility(View.GONE);
                         ((DailyViewHolder) holder).mLike.setVisibility(View.GONE);
                         ((DailyViewHolder) holder).mDislikeClicked.setVisibility(View.VISIBLE);
-                    }
-
-                    else if (v == ((DailyViewHolder) holder).mDislikeClicked ){
+                    } else if (v == ((DailyViewHolder) holder).mDislikeClicked) {
                         v.setVisibility(View.GONE);
                         ((DailyViewHolder) holder).mLike.setVisibility(View.VISIBLE);
                         ((DailyViewHolder) holder).mDislike.setVisibility(View.VISIBLE);
@@ -169,8 +184,7 @@ public class RecycleviewAdapter extends  RecyclerView.Adapter<RecyclerView.ViewH
         public ImageButton mLikeClicked;
         public ImageButton mDislike;
         public ImageButton mDislikeClicked;
-        public TextView mChallenge;
-        public TextView mHour;
+        public RecyclerView mRecyclerView;
 
 
         public DailyViewHolder(View view) {
@@ -185,8 +199,7 @@ public class RecycleviewAdapter extends  RecyclerView.Adapter<RecyclerView.ViewH
             this.mLikeClicked = (ImageButton) view.findViewById(R.id.likeClicked);
             this.mDislike = (ImageButton) view.findViewById(R.id.dislike);
             this.mDislikeClicked = (ImageButton)view.findViewById(R.id.dislikeClicked);
-            this.mChallenge = (TextView) view.findViewById(R.id.chapterDescription);
-            this.mHour = (TextView) view.findViewById(R.id.timePublished);
+            this.mRecyclerView = (RecyclerView) view.findViewById(R.id.chapterOfTheDay);
 
             mBlitz.setOnClickListener(DailyViewHolder.this);
             mBlitzClicked.setOnClickListener(DailyViewHolder.this);

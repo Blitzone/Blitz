@@ -24,15 +24,13 @@ public class DailyTabFragment extends Fragment implements SwipeRefreshLayout.OnR
     private List<ViewDataProvider> list = new ArrayList<>();
     private List <String> usernames = new ArrayList<>();
     private List <String> points = new ArrayList<>();
-    private List <String> description = new ArrayList<>();
-    private List <String> time = new ArrayList<>();
-    private List <Integer> profilePictures = new ArrayList<>();
     private List <Integer> blitz = new ArrayList<>();
     private List <Integer> blitzClicked = new ArrayList<>();
     private List <Integer> like = new ArrayList<>();
     private List <Integer> likeClicked = new ArrayList<>();
     private List <Integer> dislike = new ArrayList<>();
     private List <Integer> dislikeClicked = new ArrayList<>();
+    ArrayList <SingleViewModel> singleViewModels = new ArrayList<SingleViewModel>();
     private SwipeRefreshLayout swipeLayout;
     RecyclerView recyclerView;
     RecycleviewAdapter adap ;
@@ -49,6 +47,19 @@ public class DailyTabFragment extends Fragment implements SwipeRefreshLayout.OnR
         recyclerView = (RecyclerView) view.findViewById(R.id.dailyList);
         tvEmptyView = (TextView)view.findViewById(R.id.emptyView);
         handler = new Handler();
+
+        SingleViewModel singleViewModel1 = new SingleViewModel(R.color.boldGray,"test","6 minutes ago");
+        SingleViewModel singleViewModel2 = new SingleViewModel(R.color.lightGray,"test","6 minutes ago");
+        SingleViewModel singleViewModel3 = new SingleViewModel(R.color.mint,"test","6 minutes ago");
+        SingleViewModel singleViewModel4 = new SingleViewModel(R.color.boldGray,"test","6 minutes ago");
+        SingleViewModel singleViewModel5 = new SingleViewModel(R.color.lightGray,"test","6 minutes ago");
+        SingleViewModel singleViewModel6 = new SingleViewModel(R.color.mint,"test","6 minutes ago");
+        singleViewModels.add(singleViewModel1);
+        singleViewModels.add(singleViewModel2);
+        singleViewModels.add(singleViewModel3);
+        singleViewModels.add(singleViewModel4);
+        singleViewModels.add(singleViewModel5);
+        singleViewModels.add(singleViewModel6);
 
         prepareData();
         initRecyclerView();
@@ -83,7 +94,7 @@ public class DailyTabFragment extends Fragment implements SwipeRefreshLayout.OnR
                         for (int i = start + 1; i <= end; i++) {
                             //TODO COUNTING VIEWS FOR TESTING. REMOVE WHEN YOU DEPLOY
                             teaCount++;
-                            list.add(new ViewDataProvider(R.color.boldGray, "teasaraci" + teaCount.toString(), "200", 0,0,R.mipmap.ic_gray_like,R.mipmap.ic_like_clicked, R.mipmap.ic_gray_dislike, R.mipmap.ic_dislike_clicked, "Old travel throwback", "6 minutes ago"));
+                            list.add(new ViewDataProvider("teasaraci" + teaCount.toString(), "200", 0,0,R.mipmap.ic_gray_like,R.mipmap.ic_like_clicked, R.mipmap.ic_gray_dislike, R.mipmap.ic_dislike_clicked,singleViewModels));
                             adap.notifyItemInserted(list.size());
                         }
                         adap.setLoaded();
@@ -111,10 +122,10 @@ public class DailyTabFragment extends Fragment implements SwipeRefreshLayout.OnR
 
 
     private void initRecyclerView() {
-        linearLayoutManager = new LinearLayoutManager(getActivity());
+        linearLayoutManager = new LinearLayoutManager(this.getContext(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(linearLayoutManager);
-        adap = new RecycleviewAdapter(list,recyclerView);
+        adap = new RecycleviewAdapter(getContext(),list,recyclerView);
         recyclerView.setAdapter(adap);
     }
 
@@ -124,9 +135,6 @@ public class DailyTabFragment extends Fragment implements SwipeRefreshLayout.OnR
         for(int i =0;i<10; i++){
             usernames.add(i,"jv21");
             points.add(i,"15");
-            description.add(i,"Tickets to a new adventure");
-            time.add(i,"6 minutes ago");
-            profilePictures.add(i,R.color.lightGray);
             blitz.add(i,R.mipmap.ic_gray_blitz);
             blitzClicked.add(i,R.mipmap.ic_orange_blitz);
             like.add(i,R.mipmap.ic_gray_like);
@@ -135,7 +143,7 @@ public class DailyTabFragment extends Fragment implements SwipeRefreshLayout.OnR
             dislikeClicked.add(i,R.mipmap.ic_dislike_clicked);
 
 
-            ViewDataProvider l =new ViewDataProvider(profilePictures.get(i),usernames.get(i) ,points.get(i) ,blitz.get(i),blitzClicked.get(i),like.get(i),likeClicked.get(i),dislike.get(i),dislikeClicked.get(i),description.get(i), time.get(i));
+            ViewDataProvider l =new ViewDataProvider(usernames.get(i) ,points.get(i) ,blitz.get(i),blitzClicked.get(i),like.get(i),likeClicked.get(i),dislike.get(i),dislikeClicked.get(i),singleViewModels);
             list.add(l);
         }
     }
@@ -144,17 +152,14 @@ public class DailyTabFragment extends Fragment implements SwipeRefreshLayout.OnR
     public void modifyDataOnRefresh (){
         usernames.add("testUsername");
         points.add("testPoints");
-        profilePictures.add(R.color.mint);
         blitz.add(0);
         blitzClicked.add(0);
         like.add(R.mipmap.ic_gray_like);
         likeClicked.add(R.mipmap.ic_like_clicked);
         dislike.add(R.mipmap.ic_gray_dislike);
         dislikeClicked.add(R.mipmap.ic_dislike_clicked);
-        description.add("testDescription");
-        time.add("testTime");
 
-        ViewDataProvider l =new ViewDataProvider(profilePictures.get(profilePictures.size()-1),usernames.get(usernames.size()-1) ,points.get(points.size()-1) ,blitz.get(points.size()-1),blitzClicked.get(points.size()-1),like.get(points.size()-1),likeClicked.get(points.size()-1),dislike.get(points.size()-1),dislikeClicked.get(points.size()-1),description.get(description.size()-1), time.get(time.size()-1));
+        ViewDataProvider l =new ViewDataProvider(usernames.get(usernames.size()-1) ,points.get(points.size()-1) ,blitz.get(points.size()-1),blitzClicked.get(points.size()-1),like.get(points.size()-1),likeClicked.get(points.size()-1),dislike.get(points.size()-1),dislikeClicked.get(points.size()-1),singleViewModels);
         list.add(0, l);
 
 
