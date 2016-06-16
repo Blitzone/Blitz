@@ -1,5 +1,7 @@
 package com.example.bsaraci.blitzone.Blitzone;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -11,7 +13,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.bsaraci.blitzone.R;
@@ -48,18 +49,14 @@ public class DailyTabFragment extends Fragment implements SwipeRefreshLayout.OnR
         tvEmptyView = (TextView)view.findViewById(R.id.emptyView);
         handler = new Handler();
 
-        SingleViewModel singleViewModel1 = new SingleViewModel(R.color.boldGray,"test","6 minutes ago");
-        SingleViewModel singleViewModel2 = new SingleViewModel(R.color.lightGray,"test","6 minutes ago");
-        SingleViewModel singleViewModel3 = new SingleViewModel(R.color.mint,"test","6 minutes ago");
-        SingleViewModel singleViewModel4 = new SingleViewModel(R.color.boldGray,"test","6 minutes ago");
-        SingleViewModel singleViewModel5 = new SingleViewModel(R.color.lightGray,"test","6 minutes ago");
-        SingleViewModel singleViewModel6 = new SingleViewModel(R.color.mint,"test","6 minutes ago");
-        singleViewModels.add(singleViewModel1);
-        singleViewModels.add(singleViewModel2);
-        singleViewModels.add(singleViewModel3);
-        singleViewModels.add(singleViewModel4);
-        singleViewModels.add(singleViewModel5);
-        singleViewModels.add(singleViewModel6);
+        Bitmap bm = BitmapFactory.decodeResource(getResources(), R.drawable.b);
+        SingleViewModel singleViewModel = new SingleViewModel(bm,"test");
+        singleViewModels.add(singleViewModel);
+        singleViewModels.add(singleViewModel);
+        singleViewModels.add(singleViewModel);
+        singleViewModels.add(singleViewModel);
+        singleViewModels.add(singleViewModel);
+        singleViewModels.add(singleViewModel);
 
         prepareData();
         initRecyclerView();

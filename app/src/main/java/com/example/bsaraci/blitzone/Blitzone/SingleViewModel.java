@@ -1,29 +1,21 @@
 package com.example.bsaraci.blitzone.Blitzone;
 
-public class SingleViewModel {
-    private int image;
-    private String chapter;
-    private String hour;
+import android.graphics.Bitmap;
 
-    public SingleViewModel(int image, String chapter, String hour) {
+public class SingleViewModel {
+    private Bitmap image;
+    private String chapter;
+
+    public SingleViewModel(Bitmap image, String chapter) {
         this.image = image;
         this.chapter = chapter;
-        this.hour = hour;
     }
 
-    public String getHour() {
-        return hour;
-    }
-
-    public void setHour(String hour) {
-        this.hour = hour;
-    }
-
-    public int getImage() {
+    public Bitmap getImage() {
         return image;
     }
 
-    public void setImage(int image) {
+    public void setImage(Bitmap image) {
         this.image = image;
     }
 
