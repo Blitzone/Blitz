@@ -27,12 +27,25 @@ public class User {
     private String username;
     private String profilePictureUrl;
     private int blitz;
+    private boolean following;
 
     public User() {
     }
 
     public User(String username) {
         this.username = username;
+    }
+
+    public Bitmap getProfilePicture() {
+        return profilePicture;
+    }
+
+    public boolean isFollowing() {
+        return following;
+    }
+
+    public void setFollowing(boolean following) {
+        this.following = following;
     }
 
     public Bitmap getProfilePicture(Context context, String url) {

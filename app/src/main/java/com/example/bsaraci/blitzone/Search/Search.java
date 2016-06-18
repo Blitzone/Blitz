@@ -267,6 +267,7 @@ public class Search extends AppCompatActivity
                     p.setAdd("Add");
                     p.setRemove("Remove");
                     p.getUser().setProfilePictureUrl(RequestURL.IP_ADDRESS + ((JSONObject) searchUserList.get(i)).getString("avatar"));
+                    p.getUser().setFollowing(((JSONObject)searchUserList.get(i)).getBoolean("is_followed"));
                     users.add(p);
                 }
             }

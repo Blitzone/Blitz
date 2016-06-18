@@ -19,6 +19,7 @@ import com.example.bsaraci.blitzone.ServerComm.MRequest;
 import com.example.bsaraci.blitzone.ServerComm.RequestQueueSingleton;
 import com.example.bsaraci.blitzone.ServerComm.RequestURL;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -58,6 +59,14 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchViewHolder> implem
         //BIND DATA
         holder.addUserText.setText(users.get(position).getAdd());
         holder.removeUserText.setText(users.get(position).getRemove());
+        if(users.get(position).getUser().isFollowing()){
+            holder.addUserText.setVisibility(View.GONE);
+            holder.removeUserText.setVisibility(View.VISIBLE);
+        }
+        else {
+            holder.addUserText.setVisibility(View.VISIBLE);
+            holder.removeUserText.setVisibility(View.GONE);
+        }
         String url = (users.get(position).getUser().getProfilePictureUrl());
         username = (users.get(position).getUser().getUsername());
         if (url!= null){
@@ -127,7 +136,18 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchViewHolder> implem
         Response.Listener<JSONObject> listener = new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                Toast.makeText(c,response.toString(),Toast.LENGTH_LONG).show();
+                try {
+                    if((int)response.get("statusCode")==200){
+                        Toast.makeText(c,"User removed successfully",Toast.LENGTH_SHORT).show();
+                    }
+                    else {
+                        Toast.makeText(c,"There was an error when removing this user",Toast.LENGTH_SHORT).show();
+                    }
+                }
+                catch (JSONException e){
+                    e.printStackTrace();
+
+                }
             }
         };
 
@@ -159,7 +179,18 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchViewHolder> implem
         Response.Listener<JSONObject> listener = new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                Toast.makeText(c,response.toString(),Toast.LENGTH_LONG).show();
+                try {
+                    if((int)response.get("statusCode")==200){
+                        Toast.makeText(c,"User added successfully",Toast.LENGTH_SHORT).show();
+                    }
+                    else {
+                        Toast.makeText(c,"There was an error when adding this user",Toast.LENGTH_SHORT).show();
+                    }
+                }
+               catch (JSONException e){
+                   e.printStackTrace();
+
+               }
             }
         };
 

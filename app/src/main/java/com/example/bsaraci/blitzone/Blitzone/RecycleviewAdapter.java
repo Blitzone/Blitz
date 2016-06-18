@@ -101,19 +101,6 @@ public class RecycleviewAdapter extends  RecyclerView.Adapter<RecyclerView.ViewH
             ((DailyViewHolder) holder).mRecyclerView.setAdapter(singleViewModelAdapter);
 
 
-            /*((DailyViewHolder) holder).btnMore.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-
-                    Toast.makeText(v.getContext(), "click event on more, "+position , Toast.LENGTH_SHORT).show();
-
-
-
-                }
-            });*/
-
-
                     ((DailyViewHolder) holder).setItemClickListener(new ItemClickListener() {
                 @Override
                 public void onItemClick(View v, int pos) {
