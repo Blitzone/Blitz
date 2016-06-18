@@ -56,28 +56,24 @@ import java.util.Map;
 
 
 public class GridViewSearch extends AppCompatActivity {
-    Toolbar gridViewToolbar ;
-    TextView toolbarTitle;
-    GridView gridView;
-    GridViewAdapter gridAdapter;
-    Integer topicId;
-    Integer chapterId;
+    private Toolbar gridViewToolbar ;
+    private TextView toolbarTitle;
+    private GridView gridView;
+    private GridViewAdapter gridAdapter;
+    private Integer topicId;
+    private Integer chapterId;
     private Animator mCurrentAnimator;
     private int mShortAnimationDuration;
-    ImageButton likeIcon;
-    ImageButton dislikeIcon;
-    ImageButton blitzIcon;
-    RelativeLayout buttonsLayout;
-    TextView usernameInToolbar;
+    private TextView usernameInToolbar;
     boolean isFullsize;
-    View thumbView;
-    ImageButton gridViewFromFullsize;
-    ImageButton backFromGrid;
-    TextView points;
-    ImageView blitz;
-    Button add;
-    Button remove;
-    String uname;
+    private View thumbView;
+    private ImageButton gridViewFromFullsize;
+    private ImageButton backFromGrid;
+    private TextView points;
+    private ImageView blitz;
+    private Button add;
+    private Button remove;
+    private String uname;
 
 
     protected void onCreate(Bundle savedInstanceState){
@@ -116,13 +112,15 @@ public class GridViewSearch extends AppCompatActivity {
                 String url = gridItems.get(position).getUrl();
                 User u = gridItems.get(position).getUser();
                 usernameInToolbar.setText(u.getUsername());
-                zoomImageFromThumb(points,blitz,add,remove,backFromGrid,gridViewFromFullsize,toolbarTitle,usernameInToolbar,v, url);
+                boolean followed = u.isFollowing();
+                uname=u.getUsername();
+                zoomImageFromThumb(points,blitz,add,remove,backFromGrid,gridViewFromFullsize,toolbarTitle,usernameInToolbar,v, url,followed);
             }
         });
 
     }
 
-    private void zoomImageFromThumb(final View pts, final View blz, final View addUser, final View removeUser, final View backFromGrid, final View backFromFullSize, final View title, final View username,final View thumbView, String url) {
+    private void zoomImageFromThumb(final View pts, final View blz, final View addUser, final View removeUser, final View backFromGrid, final View backFromFullSize, final View title, final View username,final View thumbView, String url, boolean followed) {
         // If there's an animation in progress, cancel it
         // immediately and proceed with this one.
         if (mCurrentAnimator != null) {
@@ -200,8 +198,14 @@ public class GridViewSearch extends AppCompatActivity {
         username.setVisibility(View.VISIBLE);
         pts.setVisibility(View.VISIBLE);
         blz.setVisibility(View.VISIBLE);
-        addUser.setVisibility(View.GONE);
-        removeUser.setVisibility(View.VISIBLE);
+        if(followed){
+            addUser.setVisibility(View.GONE);
+            removeUser.setVisibility(View.VISIBLE);
+        }
+        else{
+            addUser.setVisibility(View.VISIBLE);
+            removeUser.setVisibility(View.GONE);
+        }
         expandedImageView.setVisibility(View.VISIBLE);
 
         // Set the pivot point for SCALE_X and SCALE_Y transformations
@@ -277,6 +281,7 @@ public class GridViewSearch extends AppCompatActivity {
                         addUser.setVisibility(View.GONE);
                         removeUser.setVisibility(View.GONE);
                         expandedImageView.setVisibility(View.GONE);
+                        getGridPhotoChapters();
                         mCurrentAnimator = null;
                     }
 
@@ -292,6 +297,7 @@ public class GridViewSearch extends AppCompatActivity {
                         addUser.setVisibility(View.GONE);
                         removeUser.setVisibility(View.GONE);
                         expandedImageView.setVisibility(View.GONE);
+                        getGridPhotoChapters();
                         mCurrentAnimator = null;
                     }
                 });
@@ -345,13 +351,14 @@ public class GridViewSearch extends AppCompatActivity {
                 JSONObject jsonUser = (JSONObject) jsonPhotoChapter.getJSONObject("user");
                 String username=jsonUser.getString("user");
                 Integer blitzCount = jsonUser.getInt("blitzCount");
+                boolean isFollowed = jsonPhotoChapter.getBoolean("is_followed");
                 GridItem gridItem = new GridItem();
                 User u = new User();
                 u.setUsername(username);
-                uname=u.getUsername();
                 u.setBlitz(blitzCount);
                 String blz = blitzCount.toString();
                 points.setText(blz);
+                u.setFollowing(isFollowed);
                 gridItem.setUrl(RequestURL.IP_ADDRESS + jsonPhotoChapter.getString("image"));
                 gridItem.setUser(u);
                 items.add(gridItem);
@@ -376,8 +383,10 @@ public class GridViewSearch extends AppCompatActivity {
             points.setVisibility(View.GONE);
             blitz.setVisibility(View.GONE);
             add.setVisibility(View.GONE);
+            remove.setVisibility(View.GONE);
             usernameInToolbar.setVisibility(View.GONE);
             isFullsize=false;
+            getGridPhotoChapters();
         }
         else{
             finish();
@@ -411,8 +420,10 @@ public class GridViewSearch extends AppCompatActivity {
         points.setVisibility(View.GONE);
         blitz.setVisibility(View.GONE);
         add.setVisibility(View.GONE);
+        remove.setVisibility(View.GONE);
         usernameInToolbar.setVisibility(View.GONE);
         isFullsize=false;
+        getGridPhotoChapters();
     }
 
     public void addCallback(View view){
