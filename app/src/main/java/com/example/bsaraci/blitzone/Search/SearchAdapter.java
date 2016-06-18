@@ -31,7 +31,6 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchViewHolder> implem
     Context c;
     ArrayList<SearchModel> users,filterList;
     CustomFilter filter;
-    String username;
 
 
     public SearchAdapter(Context ctx,ArrayList<SearchModel> users)
@@ -68,7 +67,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchViewHolder> implem
             holder.removeUserText.setVisibility(View.GONE);
         }
         String url = (users.get(position).getUser().getProfilePictureUrl());
-        username = (users.get(position).getUser().getUsername());
+        String username = (users.get(position).getUser().getUsername());
         if (url!= null){
             users.get(position).getUser().loadPicture(c, url, holder.img);
             holder.usernameText.setText(username);
@@ -85,14 +84,16 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchViewHolder> implem
             @Override
             public void onItemClick(View v, int pos) {
                 if (v == holder.addUserText){
+                    String username = (users.get(pos).getUser().getUsername());
+                    getFollowUser(username);
                     v.setVisibility(View.GONE);
                     holder.removeUserText.setVisibility(View.VISIBLE);
-                    getFollowUser();
                 }
                 else if(v == holder.removeUserText){
+                    String username = (users.get(pos).getUser().getUsername());
+                    getUnfollowUser(username);
                     v.setVisibility(View.GONE);
                     holder.addUserText.setVisibility(View.VISIBLE);
-                    getUnfollowUser();
                 }
             }
         });
@@ -130,7 +131,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchViewHolder> implem
 
 
 
-    private void getUnfollowUser(){
+    private void getUnfollowUser(String username){
         Response.Listener<JSONObject> listener = new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -173,7 +174,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchViewHolder> implem
         RequestQueueSingleton.getInstance(c).addToRequestQueue(mRequest);
     }
 
-    private void getFollowUser(){
+    private void getFollowUser(String username){
         Response.Listener<JSONObject> listener = new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
