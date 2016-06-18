@@ -174,7 +174,7 @@ public class Search extends AppCompatActivity
                 // Set styles for expanded state here
                 initiateRV(new ArrayList<SearchModel>());
                 toolbarTitle.setVisibility(View.GONE);
-                rv.setVisibility(View.GONE);
+                rv.setVisibility(View.VISIBLE);
                 isVisible = false;
                 initiateTextViews(isVisible);
                 backIcon.setVisibility(View.GONE);

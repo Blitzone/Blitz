@@ -85,16 +85,14 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchViewHolder> implem
             @Override
             public void onItemClick(View v, int pos) {
                 if (v == holder.addUserText){
-                    getFollowUser();
-                    holder.addUserText.setVisibility(View.INVISIBLE);
+                    v.setVisibility(View.GONE);
                     holder.removeUserText.setVisibility(View.VISIBLE);
-                    notifyDataSetChanged();
+                    getFollowUser();
                 }
                 else if(v == holder.removeUserText){
-                    getUnfollowUser();
-                    holder.removeUserText.setVisibility(View.INVISIBLE);
+                    v.setVisibility(View.GONE);
                     holder.addUserText.setVisibility(View.VISIBLE);
-                    notifyDataSetChanged();
+                    getUnfollowUser();
                 }
             }
         });
