@@ -55,7 +55,6 @@ public class Search extends AppCompatActivity
     ImageButton backIcon;
     View dividerBackIcon;
     Boolean isVisible;
-    String query;
     int chapterId1,chapterId2,chapterId3,chapterId4,chapterId5;
     int topicId;
 
@@ -203,8 +202,7 @@ public class Search extends AppCompatActivity
 
             @Override
             public boolean onQueryTextChange(String q) {
-                query=q;
-                getSearchUserList();
+                getSearchUserList(q);
                 rv.setVisibility(View.VISIBLE);
                 return false;
             }
@@ -220,11 +218,11 @@ public class Search extends AppCompatActivity
     }
 
 
-    private void getSearchUserList(){
+    private void getSearchUserList(final String query){
         Response.Listener<JSONObject> listener = new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                updateSearchList(response);
+                updateSearchList(response,query);
             }
         };
 
@@ -252,7 +250,7 @@ public class Search extends AppCompatActivity
         RequestQueueSingleton.getInstance(Search.this).addToRequestQueue(mRequest);
     }
 
-    private void updateSearchList(JSONObject searchUser) {
+    private void updateSearchList(JSONObject searchUser, String query) {
 
         try {
             ArrayList<SearchModel> users=new ArrayList<>();
@@ -267,7 +265,7 @@ public class Search extends AppCompatActivity
                     p.setAdd("Add");
                     p.setRemove("Remove");
                     p.getUser().setProfilePictureUrl(RequestURL.IP_ADDRESS + ((JSONObject) searchUserList.get(i)).getString("avatar"));
-                    p.getUser().setFollowing(((JSONObject)searchUserList.get(i)).getBoolean("is_followed"));
+                    p.getUser().setFollowing(((JSONObject) searchUserList.get(i)).getBoolean("is_followed"));
                     users.add(p);
                 }
             }

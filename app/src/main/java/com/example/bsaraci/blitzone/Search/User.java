@@ -26,7 +26,7 @@ public class User {
     private Bitmap profilePicture;
     private String username;
     private String profilePictureUrl;
-    private int blitz;
+    private Integer blitz;
     private boolean following;
 
     public User() {
@@ -56,7 +56,7 @@ public class User {
         return username;
     }
 
-    public int getBlitz() {
+    public Integer getBlitz() {
         return blitz;
     }
 
@@ -68,7 +68,7 @@ public class User {
         this.profilePicture = profilePicture;
     }
 
-    public void setBlitz(int blitz) {
+    public void setBlitz(Integer blitz) {
         this.blitz = blitz;
     }
 

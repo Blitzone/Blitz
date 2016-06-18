@@ -29,15 +29,18 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="ABC"
-            android:textSize="18sp"
+            android:text="brajansaraci"
+            android:textSize="15sp"
             android:id="@+id/username_search_toolbar"
             android:textColor="@color/mint"
-            android:layout_alignBottom="@+id/search_from_gridViewSearch"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="8dp"
             android:textStyle="bold"
-            android:visibility="invisible"/>
+            android:visibility="invisible"
+            android:layout_alignTop="@+id/search_from_gridViewSearch"
+            android:layout_toRightOf="@+id/divider1"
+            android:layout_toEndOf="@+id/divider1"
+            android:layout_marginStart="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="5dp"/>
 
         <ImageButton
             android:layout_width="40dp"
@@ -76,6 +79,55 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="121"
+            android:textSize="13sp"
+            android:id="@+id/pointsGridView"
+            android:textColor="@color/mint"
+            android:textStyle="bold"
+            android:layout_alignBottom="@+id/search_from_gridViewSearch"
+            android:layout_alignLeft="@+id/username_search_toolbar"
+            android:layout_alignStart="@+id/username_search_toolbar"
+            android:visibility="invisible"/>
+
+        <ImageView
+            android:id="@+id/blitzGridView"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@mipmap/ic_orange_blitz"
+            android:scaleType="fitXY"
+            android:layout_above="@+id/divider2"
+            android:layout_toRightOf="@+id/pointsGridView"
+            android:layout_toEndOf="@+id/pointsGridView"
+            android:layout_marginBottom="1dp"
+            android:visibility="invisible"/>
+
+        <Button
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:id="@+id/addGridView"
+            android:background="@mipmap/ic_add"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:scaleType="center"
+            android:visibility="invisible"
+            android:onClick="addCallback"/>
+
+        <Button
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:id="@+id/removeGridView"
+            android:background="@mipmap/ic_remove"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:scaleType="center"
+            android:visibility="invisible"
+            android:onClick="removeCallback"/>
+
     </RelativeLayout>
 
     <RelativeLayout
@@ -106,51 +158,6 @@
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:scaleType="centerCrop" />
-
-        <RelativeLayout
-            android:id="@+id/buttonsLayout"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:background="@color/mint"
-            android:visibility="invisible">
-
-            <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/like"
-                android:src="@mipmap/ic_white_like"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:background="@android:color/transparent"
-                android:visibility="invisible"/>
-
-            <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/dislike"
-                android:src="@mipmap/ic_white_dislike"
-                android:background="@android:color/transparent"
-                android:layout_alignTop="@+id/like"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true"
-                android:visibility="invisible"/>
-
-            <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/blitz"
-                android:src="@mipmap/ic_blitz"
-                android:background="@android:color/transparent"
-                android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true"
-                android:visibility="invisible"/>
-
-        </RelativeLayout>
-
 
     </RelativeLayout>
 </LinearLayout>

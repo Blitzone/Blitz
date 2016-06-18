@@ -21,6 +21,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -72,6 +73,11 @@ public class GridViewSearch extends AppCompatActivity {
     View thumbView;
     ImageButton gridViewFromFullsize;
     ImageButton backFromGrid;
+    TextView points;
+    ImageView blitz;
+    Button add;
+    Button remove;
+    String uname;
 
 
     protected void onCreate(Bundle savedInstanceState){
@@ -89,13 +95,13 @@ public class GridViewSearch extends AppCompatActivity {
         gridViewToolbar = (Toolbar) findViewById(R.id.toolbar_of_gridView_search);
         toolbarTitle = (TextView) findViewById(R.id.gridView_search_toolbar_title);
         toolbarTitle.setText(title);
-        likeIcon = (ImageButton)findViewById(R.id.like);
-        dislikeIcon = (ImageButton) findViewById(R.id.dislike);
-        blitzIcon = (ImageButton) findViewById(R.id.blitz);
-        buttonsLayout = (RelativeLayout)findViewById(R.id.buttonsLayout);
         usernameInToolbar = (TextView) findViewById(R.id.username_search_toolbar);
         gridViewFromFullsize = (ImageButton) findViewById(R.id.gridView_from_fullsize);
         backFromGrid = (ImageButton) findViewById(R.id.search_from_gridViewSearch);
+        points = (TextView) findViewById(R.id.pointsGridView);
+        blitz = (ImageView) findViewById(R.id.blitzGridView);
+        add = (Button) findViewById(R.id.addGridView);
+        remove = (Button) findViewById(R.id.removeGridView);
         mShortAnimationDuration = getResources().getInteger(android.R.integer.config_shortAnimTime);
     }
 
@@ -110,13 +116,13 @@ public class GridViewSearch extends AppCompatActivity {
                 String url = gridItems.get(position).getUrl();
                 User u = gridItems.get(position).getUser();
                 usernameInToolbar.setText(u.getUsername());
-                zoomImageFromThumb(backFromGrid,gridViewFromFullsize,toolbarTitle,usernameInToolbar, buttonsLayout, likeIcon, dislikeIcon, blitzIcon, v, url);
+                zoomImageFromThumb(points,blitz,add,remove,backFromGrid,gridViewFromFullsize,toolbarTitle,usernameInToolbar,v, url);
             }
         });
 
     }
 
-    private void zoomImageFromThumb(final View backFromGrid, final View backFromFullSize, final View title, final View username,final View layout, final View likeIcon, final View dislikeIcon, final View blitzIcon, final View thumbView, String url) {
+    private void zoomImageFromThumb(final View pts, final View blz, final View addUser, final View removeUser, final View backFromGrid, final View backFromFullSize, final View title, final View username,final View thumbView, String url) {
         // If there's an animation in progress, cancel it
         // immediately and proceed with this one.
         if (mCurrentAnimator != null) {
@@ -192,11 +198,11 @@ public class GridViewSearch extends AppCompatActivity {
         backFromGrid.setAlpha(0f);
         backFromFullSize.setVisibility(View.VISIBLE);
         username.setVisibility(View.VISIBLE);
-        layout.setVisibility(View.VISIBLE);
+        pts.setVisibility(View.VISIBLE);
+        blz.setVisibility(View.VISIBLE);
+        addUser.setVisibility(View.GONE);
+        removeUser.setVisibility(View.VISIBLE);
         expandedImageView.setVisibility(View.VISIBLE);
-        likeIcon.setVisibility(View.VISIBLE);
-        dislikeIcon.setVisibility(View.VISIBLE);
-        blitzIcon.setVisibility(View.VISIBLE);
 
         // Set the pivot point for SCALE_X and SCALE_Y transformations
         // to the top-left corner of the zoomed-in view (the default
@@ -266,11 +272,11 @@ public class GridViewSearch extends AppCompatActivity {
                         backFromGrid.setAlpha(1f);
                         backFromFullSize.setVisibility(View.GONE);
                         username.setVisibility(View.GONE);
-                        layout.setVisibility(View.GONE);
+                        pts.setVisibility(View.GONE);
+                        blz.setVisibility(View.GONE);
+                        addUser.setVisibility(View.GONE);
+                        removeUser.setVisibility(View.GONE);
                         expandedImageView.setVisibility(View.GONE);
-                        likeIcon.setVisibility(View.GONE);
-                        dislikeIcon.setVisibility(View.GONE);
-                        blitzIcon.setVisibility(View.GONE);
                         mCurrentAnimator = null;
                     }
 
@@ -281,11 +287,11 @@ public class GridViewSearch extends AppCompatActivity {
                         backFromGrid.setAlpha(1f);
                         backFromFullSize.setVisibility(View.GONE);
                         username.setVisibility(View.GONE);
-                        layout.setVisibility(View.GONE);
+                        pts.setVisibility(View.GONE);
+                        blz.setVisibility(View.GONE);
+                        addUser.setVisibility(View.GONE);
+                        removeUser.setVisibility(View.GONE);
                         expandedImageView.setVisibility(View.GONE);
-                        likeIcon.setVisibility(View.GONE);
-                        dislikeIcon.setVisibility(View.GONE);
-                        blitzIcon.setVisibility(View.GONE);
                         mCurrentAnimator = null;
                     }
                 });
@@ -338,11 +344,14 @@ public class GridViewSearch extends AppCompatActivity {
                 JSONObject jsonPhotoChapter = (JSONObject) photoChapterGrid.getJSONObject(i);
                 JSONObject jsonUser = (JSONObject) jsonPhotoChapter.getJSONObject("user");
                 String username=jsonUser.getString("user");
-                int blitzCount = jsonUser.getInt("blitzCount");
+                Integer blitzCount = jsonUser.getInt("blitzCount");
                 GridItem gridItem = new GridItem();
                 User u = new User();
                 u.setUsername(username);
+                uname=u.getUsername();
                 u.setBlitz(blitzCount);
+                String blz = blitzCount.toString();
+                points.setText(blz);
                 gridItem.setUrl(RequestURL.IP_ADDRESS + jsonPhotoChapter.getString("image"));
                 gridItem.setUser(u);
                 items.add(gridItem);
@@ -364,10 +373,9 @@ public class GridViewSearch extends AppCompatActivity {
             backFromGrid.setAlpha(1f);
             gridViewFromFullsize.setVisibility(View.GONE);
             expandedImageView.setVisibility(View.GONE);
-            buttonsLayout.setVisibility(View.GONE);
-            likeIcon.setVisibility(View.GONE);
-            dislikeIcon.setVisibility(View.GONE);
-            blitzIcon.setVisibility(View.GONE);
+            points.setVisibility(View.GONE);
+            blitz.setVisibility(View.GONE);
+            add.setVisibility(View.GONE);
             usernameInToolbar.setVisibility(View.GONE);
             isFullsize=false;
         }
@@ -400,11 +408,120 @@ public class GridViewSearch extends AppCompatActivity {
         backFromGrid.setAlpha(1f);
         gridViewFromFullsize.setVisibility(View.GONE);
         expandedImageView.setVisibility(View.GONE);
-        buttonsLayout.setVisibility(View.GONE);
-        likeIcon.setVisibility(View.GONE);
-        dislikeIcon.setVisibility(View.GONE);
-        blitzIcon.setVisibility(View.GONE);
+        points.setVisibility(View.GONE);
+        blitz.setVisibility(View.GONE);
+        add.setVisibility(View.GONE);
         usernameInToolbar.setVisibility(View.GONE);
         isFullsize=false;
+    }
+
+    public void addCallback(View view){
+        view.setVisibility(View.GONE);
+        getFollowUser(uname);
+        remove.setVisibility(View.VISIBLE);
+    }
+
+    public void removeCallback(View view){
+        view.setVisibility(View.GONE);
+        getUnfollowUser(uname);
+        add.setVisibility(View.VISIBLE);
+    }
+
+    private JSONObject getFollowUserParams(String username){
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("followedUser", username);
+        return new JSONObject(params);
+    }
+
+    private void getFollowUser(String username){
+        Response.Listener<JSONObject> listener = new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    if((int)response.get("statusCode")==200){
+                        Toast.makeText(GridViewSearch.this,"User added successfully",Toast.LENGTH_SHORT).show();
+                    }
+                    else {
+                        Toast.makeText(GridViewSearch.this,"There was an error when adding this user",Toast.LENGTH_SHORT).show();
+                    }
+                }
+                catch (JSONException e){
+                    e.printStackTrace();
+
+                }
+            }
+        };
+
+        //Function to be executed in case of an error
+        Response.ErrorListener errorListener = new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("Error", error.toString());
+            }
+        };
+
+        JWTManager jwtManager = new JWTManager(GridViewSearch.this);
+        //Put everything in the request
+
+        MRequest mRequest = new MRequest(
+                RequestURL.FOLLOW_USER,
+                Request.Method.POST,
+                getFollowUserParams(username), //Put the parameters of the request here (JSONObject format)
+                listener,
+                errorListener,
+                jwtManager
+        );
+
+        RequestQueueSingleton.getInstance(GridViewSearch.this).addToRequestQueue(mRequest);
+    }
+
+    private JSONObject getUnfollowUserParams(String username){
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("followedUser", username);
+        return new JSONObject(params);
+    }
+
+    private void getUnfollowUser(String username){
+        Response.Listener<JSONObject> listener = new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    if((int)response.get("statusCode")==200){
+                        Toast.makeText(GridViewSearch.this,"User removed successfully",Toast.LENGTH_SHORT).show();
+                    }
+                    else {
+                        Toast.makeText(GridViewSearch.this,"There was an error when removing this user",Toast.LENGTH_SHORT).show();
+                    }
+                }
+                catch (JSONException e){
+                    e.printStackTrace();
+
+                }
+            }
+        };
+
+        //Function to be executed in case of an error
+        Response.ErrorListener errorListener = new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("Error", error.toString());
+            }
+        };
+
+        JWTManager jwtManager = new JWTManager(GridViewSearch.this);
+        //Put everything in the request
+
+        MRequest mRequest = new MRequest(
+                RequestURL.UNFOLLOW_USER,
+                Request.Method.POST,
+                getUnfollowUserParams(username), //Put the parameters of the request here (JSONObject format)
+                listener,
+                errorListener,
+                jwtManager
+        );
+
+        RequestQueueSingleton.getInstance(GridViewSearch.this).addToRequestQueue(mRequest);
     }
 }
