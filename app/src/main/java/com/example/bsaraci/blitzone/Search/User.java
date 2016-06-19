@@ -18,15 +18,19 @@ import com.example.bsaraci.blitzone.Profile.PhotoChapter;
 import com.example.bsaraci.blitzone.R;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 
 /**
  * Created by bsaraci on 6/7/2016.
  */
-public class User {
+public class User implements Comparable<User> {
     private Bitmap profilePicture;
     private String username;
     private String profilePictureUrl;
     private Integer blitz;
+    private ArrayList <User> userList;
     private boolean following;
 
     public User() {
@@ -80,6 +84,14 @@ public class User {
         this.profilePictureUrl = profilePictureUrl;
     }
 
+    public ArrayList<User> getUserList() {
+        return userList;
+    }
+
+    public void setUserList(ArrayList<User> userList) {
+        this.userList = userList;
+    }
+
     public void loadPicture(final Context c, String url, ImageView imageView){
         Glide.with(c)
                 .load(url)
@@ -99,5 +111,14 @@ public class User {
                         //never called
                     }
                 });
+    }
+
+    @Override
+    public int compareTo(User user) {
+        return user.blitz - this.blitz;
+    }
+
+    public void order(ArrayList <User> users){
+        Collections.sort(users);
     }
 }

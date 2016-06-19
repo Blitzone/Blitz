@@ -14,12 +14,16 @@ import com.example.bsaraci.blitzone.R;
 import com.example.bsaraci.blitzone.Search.User;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
 
-public class BestTabFragment extends Fragment {
+public class BestTabFragment extends Fragment{
 
-    private List<RowDataProvider> list = new ArrayList<>();
+    private List<RowDataProvider> list = new ArrayList<RowDataProvider>();
+    private ArrayList<User> userList = new ArrayList<User>();
     private RecyclerView recyclerView;
     private RecycleviewAdapter mAdapter;
 
@@ -29,6 +33,10 @@ public class BestTabFragment extends Fragment {
         RecyclerView rv = (RecyclerView) inflater.inflate(R.layout.best_tab_content, container, false);
         rv.setLayoutManager(new LinearLayoutManager(rv.getContext()));
         RecyclerView recyclerView = (RecyclerView) rv.findViewById(R.id.bestList);
+        User u = new User();
+        prepareUserList();
+        u.setUserList(userList);
+        u.order(userList);
         prepareData();
         rv.setAdapter(new RecyclerowAdapter(list));
 
@@ -37,17 +45,24 @@ public class BestTabFragment extends Fragment {
     }
 
     public void prepareData (){
-        for(int i = 0; i<10 ; i++){
+        for(int i = 0; i<30 ; i++){
             RowDataProvider rowDataProvider = new RowDataProvider();
-            User u = new User();
-            Random random = new Random();
-            int r = random.nextInt(10);
-            u.setUsername("user " + (i+1));
-            u.setBlitz(r);
-            u.setProfilePicture(BitmapFactory.decodeResource(this.getResources(), R.drawable.b));
-            u.setFollowing(true);
-            rowDataProvider.setUser(u);
+            rowDataProvider.setUser(userList.get(i));
             list.add(rowDataProvider);
         }
     }
+
+    public void prepareUserList(){
+        for(int i = 0; i<30 ; i++){
+            Random random = new Random();
+            int r = random.nextInt(1000);
+            User u = new User();
+            u.setUsername("user " + (i + 1));
+            u.setBlitz(r);
+            u.setProfilePicture(BitmapFactory.decodeResource(this.getResources(), R.drawable.b));
+            u.setFollowing(true);
+            userList.add(u);
+        }
+    }
+
 }
