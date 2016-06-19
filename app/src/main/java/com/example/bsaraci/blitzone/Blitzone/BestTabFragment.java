@@ -14,16 +14,13 @@ import com.example.bsaraci.blitzone.R;
 import com.example.bsaraci.blitzone.Search.User;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
 
 public class BestTabFragment extends Fragment{
 
-    private List<RowDataProvider> list = new ArrayList<RowDataProvider>();
-    private ArrayList<User> userList = new ArrayList<User>();
+    private List<RowDataProvider> rowDataProviderList = new ArrayList<RowDataProvider>();
+    private ArrayList<User> followingUserList = new ArrayList<User>();
     private RecyclerView recyclerView;
     private RecycleviewAdapter mAdapter;
 
@@ -33,12 +30,10 @@ public class BestTabFragment extends Fragment{
         RecyclerView rv = (RecyclerView) inflater.inflate(R.layout.best_tab_content, container, false);
         rv.setLayoutManager(new LinearLayoutManager(rv.getContext()));
         RecyclerView recyclerView = (RecyclerView) rv.findViewById(R.id.bestList);
-        User u = new User();
         prepareUserList();
-        u.setUserList(userList);
-        u.order(userList);
+        User.order(followingUserList);
         prepareData();
-        rv.setAdapter(new RecyclerowAdapter(list));
+        rv.setAdapter(new RecyclerowAdapter(rowDataProviderList));
 
         return rv;
 
@@ -47,8 +42,8 @@ public class BestTabFragment extends Fragment{
     public void prepareData (){
         for(int i = 0; i<30 ; i++){
             RowDataProvider rowDataProvider = new RowDataProvider();
-            rowDataProvider.setUser(userList.get(i));
-            list.add(rowDataProvider);
+            rowDataProvider.setUser(followingUserList.get(i));
+            rowDataProviderList.add(rowDataProvider);
         }
     }
 
@@ -61,7 +56,7 @@ public class BestTabFragment extends Fragment{
             u.setBlitz(r);
             u.setProfilePicture(BitmapFactory.decodeResource(this.getResources(), R.drawable.b));
             u.setFollowing(true);
-            userList.add(u);
+            followingUserList.add(u);
         }
     }
 

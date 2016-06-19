@@ -3,6 +3,7 @@ package com.example.bsaraci.blitzone.Search;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.NonNull;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -22,9 +23,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 
-/**
- * Created by bsaraci on 6/7/2016.
- */
 public class User implements Comparable<User> {
     private Bitmap profilePicture;
     private String username;
@@ -38,6 +36,14 @@ public class User implements Comparable<User> {
 
     public User(String username) {
         this.username = username;
+    }
+
+    public ArrayList<User> getUserList() {
+        return userList;
+    }
+
+    public void setUserList(ArrayList<User> userList) {
+        this.userList = userList;
     }
 
     public Bitmap getProfilePicture() {
@@ -84,13 +90,6 @@ public class User implements Comparable<User> {
         this.profilePictureUrl = profilePictureUrl;
     }
 
-    public ArrayList<User> getUserList() {
-        return userList;
-    }
-
-    public void setUserList(ArrayList<User> userList) {
-        this.userList = userList;
-    }
 
     public void loadPicture(final Context c, String url, ImageView imageView){
         Glide.with(c)
@@ -114,11 +113,11 @@ public class User implements Comparable<User> {
     }
 
     @Override
-    public int compareTo(User user) {
+    public int compareTo(@NonNull User user) {
         return user.blitz - this.blitz;
     }
 
-    public void order(ArrayList <User> users){
+    public static void order(ArrayList <User> users){
         Collections.sort(users);
     }
 }
