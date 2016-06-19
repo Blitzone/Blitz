@@ -1,48 +1,20 @@
 package com.example.bsaraci.blitzone.Blitzone;
 
+import com.example.bsaraci.blitzone.Search.User;
+
 public class RowDataProvider {
 
-    private int profilePicture;
-    private String username;
-    private String points;
-    private int blitz;
+    private User user;
 
-    public RowDataProvider(int profilePicture, String username, String points, int blitz) {
-        this.setProfilePicture(profilePicture);
-        this.setUsername(username);
-        this.setPoints(points);
-        this.setBlitz(blitz);
+    public RowDataProvider(){
+
     }
 
-    public int getProfilePicture() {
-        return profilePicture;
+    public User getUser() {
+        return user;
     }
 
-    public String getUsername() {
-        return username;
-    }
-
-    public String getPoints() {
-        return points;
-    }
-
-    public int getBlitz() {
-        return blitz;
-    }
-
-    public void setProfilePicture(int profilePicture) {
-        this.profilePicture = profilePicture;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public void setBlitz(int blitz) {
-        this.blitz = blitz;
-    }
-
-    public void setPoints(String points) {
-        this.points = points;
+    public void setUser(User user) {
+        this.user = user;
     }
 }

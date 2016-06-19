@@ -45,8 +45,7 @@ public class RecyclerowAdapter extends  RecyclerView.Adapter<RecyclerowAdapter.V
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.blitzone_row_content, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.blitzone_row_content, parent, false);
 
         return new ViewHolder(view);
     }
@@ -54,10 +53,16 @@ public class RecyclerowAdapter extends  RecyclerView.Adapter<RecyclerowAdapter.V
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         RowDataProvider listDataProvider = list.get(position);
-        holder.mProfile.setImageResource(listDataProvider.getProfilePicture());
-        holder.mUsername.setText(listDataProvider.getUsername());
-        holder.mBlitz.setImageResource(listDataProvider.getBlitz());
-        holder.mPoints.setText(listDataProvider.getPoints());
+        holder.mProfile.setImageBitmap(listDataProvider.getUser().getProfilePicture());
+        holder.mUsername.setText(listDataProvider.getUser().getUsername());
+        String pts = listDataProvider.getUser().getBlitz().toString();
+        holder.mPoints.setText(pts);
+        if(listDataProvider.getUser().isFollowing()){
+            holder.mBlitz.setImageResource(R.mipmap.ic_orange_blitz);
+        }
+        else{
+            holder.mBlitz.setImageResource(0);
+        }
 
     }
 

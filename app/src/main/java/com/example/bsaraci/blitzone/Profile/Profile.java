@@ -242,6 +242,7 @@ public class Profile extends AppCompatActivity {
             String usernameFromServer = response.get("user").toString();
             Boolean isBanned = response.get("is_banned").toString().equals("true");
             Integer blitzCount = (Integer) response.get("blitzCount");
+            Integer numFollowers = (Integer) response.get("followers");
             String avatar = RequestURL.IP_ADDRESS + response.get("avatar").toString();
 
             final ImageView imageView = (ImageView) this.findViewById(R.id.profile_picture);
@@ -268,7 +269,8 @@ public class Profile extends AppCompatActivity {
 
             TextView blitzCountView = (TextView) findViewById(R.id.number_of_blitz);
             blitzCountView.setText(blitzCount.toString());
-
+            TextView followersView = (TextView) findViewById(R.id.number_of_followers);
+            followersView.setText(numFollowers.toString());
             TextView usernameView = (TextView) findViewById(R.id.profile_toolbar_title);
             usernameView.setText(usernameFromServer);
             username=toolbarTitle.getText().toString();
