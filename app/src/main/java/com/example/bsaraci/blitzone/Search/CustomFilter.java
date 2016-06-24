@@ -1,22 +1,22 @@
 package com.example.bsaraci.blitzone.Search;
+
 import android.widget.Filter;
 
 import java.util.ArrayList;
 
 public class CustomFilter extends Filter{
 
-    SearchAdapter adapter;
-    ArrayList<SearchModel> filterList;
+    SearchAdapter adapter;              //A SearchAdapter
+    ArrayList<SearchModel> filterList;  //The filtered ArrayList
 
-
-    public CustomFilter(ArrayList<SearchModel> filterList, SearchAdapter adapter)
-    {
+    //CONSTRUCTOR WITH AN ArrayList AND A SearchAdapter
+    public CustomFilter(ArrayList<SearchModel> filterList, SearchAdapter adapter) {
         this.adapter=adapter;
         this.filterList=filterList;
 
     }
 
-    //FILTERING OCURS
+    //METHOD THAT MAKES THE FILTERING POSSIBLE
     @Override
     protected FilterResults performFiltering(CharSequence constraint) {
         FilterResults results=new FilterResults();
@@ -52,6 +52,7 @@ public class CustomFilter extends Filter{
         return results;
     }
 
+    //METHOD THAT CHANGES THE LIST BY THE FILTERED ONE
     @Override
     protected void publishResults(CharSequence constraint, FilterResults results) {
 

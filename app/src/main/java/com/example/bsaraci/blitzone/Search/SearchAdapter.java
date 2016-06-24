@@ -28,121 +28,149 @@ import java.util.Map;
 
 public class SearchAdapter extends RecyclerView.Adapter<SearchViewHolder> implements Filterable{
 
-    Context c;
-    ArrayList<SearchModel> users,filterList;
-    CustomFilter filter;
+    Context c;                                  //Context where we are calling the adapter
+    ArrayList<SearchModel> users,filterList;    //Two ArrayList<SearchModel>, one for users, the second one for filtered list
+    CustomFilter filter;                        //The filter
 
-
-    public SearchAdapter(Context ctx,ArrayList<SearchModel> users)
-    {
+    //CONSTRUCTOR OF THE SEARCH ADAPTER
+    public SearchAdapter(Context ctx,ArrayList<SearchModel> users) {
         this.c=ctx;
         this.users=users;
         this.filterList=users;
     }
 
-
+    //THIS METHOD INFLATES THE ROW MODEL OF THE LIST AND THEN CREATES A SearchViewHolder WITH THE INFLATED ROW AS PARAMETER
     @Override
     public SearchViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        View v= LayoutInflater.from(parent.getContext()).inflate(R.layout.search_item_model,null);
-
-        SearchViewHolder holder=new SearchViewHolder(v);
-
+        View v= LayoutInflater.from(parent.getContext()).inflate(R.layout.search_item_model,null); //Inflates the xml element to the view v
+        SearchViewHolder holder=new SearchViewHolder(v); //Creates a new SearchViewHolder
         return holder;
     }
 
-    //DATA BOUND TO VIEWS
+    //THIS METHOD BOUNDS DATA TO VIEWS
     @Override
     public void onBindViewHolder(final SearchViewHolder holder, int position) {
 
-        //BIND DATA
-        holder.addUserText.setText(users.get(position).getAdd());
-        holder.removeUserText.setText(users.get(position).getRemove());
-        if(users.get(position).getUser().isFollowing()){
-            holder.addUserText.setVisibility(View.GONE);
-            holder.removeUserText.setVisibility(View.VISIBLE);
-        }
-        else {
-            holder.addUserText.setVisibility(View.VISIBLE);
-            holder.removeUserText.setVisibility(View.GONE);
-        }
-        String url = (users.get(position).getUser().getProfilePictureUrl());
-        String username = (users.get(position).getUser().getUsername());
-        if (url!= null){
-            users.get(position).getUser().loadPicture(c, url, holder.img);
-            holder.usernameText.setText(username);
-        }
+        //Bind data
+        holder.addUserText.setText(users.get(position).getAdd());       //Puts the text for Add button which is found at position
+        holder.removeUserText.setText(users.get(position).getRemove()); //Puts the text for Remove button which is found at position
 
-        else
-        {
-            holder.img.setImageResource(R.color.boldGray);
-        }
+            //Enters if you follow user in position
+            if(users.get(position).getUser().isFollowing()){
+
+                holder.addUserText.setVisibility(View.GONE);        //Makes the addUserText invisible
+                holder.removeUserText.setVisibility(View.VISIBLE);  //Makes the removeUserText visible
+            }
+
+            //Enters if you don't follow user in position
+            else {
+
+                holder.addUserText.setVisibility(View.VISIBLE);     //Makes the addUserText visible
+                holder.removeUserText.setVisibility(View.GONE);     //Makes the removeUserText invisible
+            }
+
+        String url = (users.get(position).getUser().getProfilePictureUrl());    //Takes the Url of the picture for user in position
+        String username = (users.get(position).getUser().getUsername());        //Takes the username for user in position
+
+            //Enters if we have an url for the picture
+            if (url!= null){
+
+                users.get(position).getUser().loadPicture(c, url, holder.img); //Loads the picture using glide to the appropriated ImageView
+                holder.usernameText.setText(username);  //Sets the text for the appropriated TextView
+            }
+
+            //Enters if we don't have an url for the picture
+            else {
+
+                holder.img.setImageResource(R.color.boldGray);  //Loads a gray picture
+            }
 
 
-        //IMPLEMENT CLICK LISTENER
+        //Implement clickListener
         holder.setItemClickListener(new ItemClickListener() {
             @Override
             public void onItemClick(View v, int pos) {
+
+                //Enters if we click on Add
                 if (v == holder.addUserText){
-                    String username = (users.get(pos).getUser().getUsername());
-                    getFollowUser(username);
-                    v.setVisibility(View.GONE);
-                    holder.removeUserText.setVisibility(View.VISIBLE);
+
+                    String username = (users.get(pos).getUser().getUsername());     //Takes the username of the user in pos
+                    getFollowUser(username);                                        //Triggers the method getFollowUser
+                    v.setVisibility(View.GONE);                                     //Makes Add button invisible
+                    holder.removeUserText.setVisibility(View.VISIBLE);              //Makes Remove button visible
                 }
+
+                //Enters if we click on Remove
                 else if(v == holder.removeUserText){
-                    String username = (users.get(pos).getUser().getUsername());
-                    getUnfollowUser(username);
-                    v.setVisibility(View.GONE);
-                    holder.addUserText.setVisibility(View.VISIBLE);
+
+                    String username = (users.get(pos).getUser().getUsername());     //Takes the username of the user in pos
+                    getUnfollowUser(username);                                      //Triggers the method getUnfollowUser
+                    v.setVisibility(View.GONE);                                     //Makes Remove button invisible
+                    holder.addUserText.setVisibility(View.VISIBLE);                 //Makes Add button visible
                 }
             }
         });
 
     }
 
-    //GET TOTAL NUM OF USERS
+    //THIS METHOD GETS THE TOTAL NUMBERS OF USERS
     @Override
     public int getItemCount() {
         return users.size();
     }
 
-    //RETURN FILTER OBJ
+    //THIS METHOD RETURNS THE FILTER LIST
     @Override
     public Filter getFilter() {
-        if(filter==null)
-        {
-            filter=new CustomFilter(filterList,this);
+        //ENTERS IF WE DONT HAVE A FILTER
+        if(filter==null) {
+
+            filter=new CustomFilter(filterList,this);   //Creates a new filter
         }
 
         return filter;
     }
 
+    //THIS METHOD RETURNS A JSONObject WITH THE PARAMS NEEDED FOR THE MRequest getFollowUser
     private JSONObject getFollowUserParams(String username){
-        Map<String, String> params = new HashMap<String, String>();
-        params.put("followedUser", username);
-        return new JSONObject(params);
+
+        Map<String, String> params = new HashMap<String, String>(); //Creates the HashMap
+        params.put("followedUser", username);          //Puts username in key 'followedUser'
+        return new JSONObject(params);                 //Returns the params
     }
 
+    //THIS METHOD RETURNS A JSONObject WITH THE PARAMS NEEDED FOR THE MRequest getUnfollowUser
     private JSONObject getUnfollowUserParams(String username){
-        Map<String, String> params = new HashMap<String, String>();
-        params.put("followedUser", username);
-        return new JSONObject(params);
+
+        Map<String, String> params = new HashMap<String, String>(); //Creates the HashMap
+        params.put("followedUser", username);          //Puts username in key 'followedUser'
+        return new JSONObject(params);                 //Returns the params
     }
 
-
-
+    //THIS METHOD SENDS THE MRequest TO UNFOLLOW AN USER. TAKES IN PARAMETER THE USERNAME NEEDED TO COMPLETE THE REQUEST
     private void getUnfollowUser(String username){
+
+        //Adds a listener to the response. In this case it will alert user if the user is added or remove correctly.
         Response.Listener<JSONObject> listener = new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
+
+                //We use try and catch to handle JSONExceptions
                 try {
+
+                    //Enters if statusCode is 200
                     if((int)response.get("statusCode")==200){
-                        Toast.makeText(c,"User removed successfully",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(c,"User removed successfully",Toast.LENGTH_SHORT).show(); //Alerts user
                     }
+
+                    //Enters when status code !=200 (=400)
                     else {
-                        Toast.makeText(c,"There was an error when removing this user",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(c,"There was an error when removing this user",Toast.LENGTH_SHORT).show(); //Alerts user
                     }
                 }
+
+                //In case of an exception
                 catch (JSONException e){
                     e.printStackTrace();
 
@@ -159,35 +187,46 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchViewHolder> implem
             }
         };
 
-        JWTManager jwtManager = new JWTManager(c);
-        //Put everything in the request
+        JWTManager jwtManager = new JWTManager(c);  //Creates the JWTManager
 
+        //Put everything in the request
         MRequest mRequest = new MRequest(
-                RequestURL.UNFOLLOW_USER,
-                Request.Method.POST,
-                getUnfollowUserParams(username), //Put the parameters of the request here (JSONObject format)
-                listener,
-                errorListener,
-                jwtManager
+                RequestURL.UNFOLLOW_USER,           //The URL (/accounts/delFollow/)
+                Request.Method.POST,                //Type of method
+                getUnfollowUserParams(username),    //Put the parameters of the request here (JSONObject format)
+                listener,                           //The listener
+                errorListener,                      //The errorListener
+                jwtManager                          //The JWTManager
         );
 
-        RequestQueueSingleton.getInstance(c).addToRequestQueue(mRequest);
+        RequestQueueSingleton.getInstance(c).addToRequestQueue(mRequest);   //Sends the request
     }
 
+    //THIS METHOD SENDS THE MRequest TO FOLLOW AN USER. TAKES IN PARAMETER THE USERNAME NEEDED TO COMPLETE THE REQUEST
     private void getFollowUser(String username){
+
+        //Adds a listener to the response. In this case it will alert user if the user is added or remove correctly.
         Response.Listener<JSONObject> listener = new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
+
+                //We use try and catch to handle JSONExceptions
                 try {
+
+                    //Enters if statusCode is 200
                     if((int)response.get("statusCode")==200){
-                        Toast.makeText(c,"User added successfully",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(c,"User added successfully",Toast.LENGTH_SHORT).show();  //Alerts user
                     }
+
+                    //Enters when status code !=200 (=400)
                     else {
-                        Toast.makeText(c,"There was an error when adding this user",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(c,"There was an error when adding this user",Toast.LENGTH_SHORT).show(); //Alerts user
                     }
                 }
-               catch (JSONException e){
-                   e.printStackTrace();
+
+                //In case of JSONException
+                catch (JSONException e){
+                    e.printStackTrace();
 
                }
             }
@@ -202,18 +241,18 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchViewHolder> implem
             }
         };
 
-        JWTManager jwtManager = new JWTManager(c);
-        //Put everything in the request
+        JWTManager jwtManager = new JWTManager(c);  //Creates the JWTManager
 
+        //Put everything in the request
         MRequest mRequest = new MRequest(
-                RequestURL.FOLLOW_USER,
-                Request.Method.POST,
-                getFollowUserParams(username), //Put the parameters of the request here (JSONObject format)
-                listener,
-                errorListener,
-                jwtManager
+                RequestURL.FOLLOW_USER,         //The Url (/accounts/addFollow/)
+                Request.Method.POST,            //The type of method
+                getFollowUserParams(username),  //Put the parameters of the request here (JSONObject format)
+                listener,                       //The listener
+                errorListener,                  //The errorListener
+                jwtManager                      //The JWTManager
         );
 
-        RequestQueueSingleton.getInstance(c).addToRequestQueue(mRequest);
+        RequestQueueSingleton.getInstance(c).addToRequestQueue(mRequest);   //Sends the request
     }
 }
