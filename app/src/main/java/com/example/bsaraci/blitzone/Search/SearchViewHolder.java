@@ -1,5 +1,12 @@
 package com.example.bsaraci.blitzone.Search;
 
+/**This class defines the views that are going to be present in our row. It appears in : SearchAdapter. It also overrides
+ * the onClick method from the Interface ItemClickListener
+*************************************************************************************************************************
+* BUGS : NO BUGS FOR THE MOMENT
+*************************************************************************************************************************
+* AMELIORATION : NO AMELIORATION FOR THE MOMENT*/
+
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
@@ -15,7 +22,10 @@ public class SearchViewHolder extends RecyclerView.ViewHolder implements View.On
     TextView removeUserText;                //For the Remove button
     ItemClickListener itemClickListener;    //New ItemClickListener
 
-    //CONSTRUCTOR WITH A View
+/**
+    CONSTRUCTOR
+    @param itemView, the view in this case the row of the search user list
+*/
     public SearchViewHolder(View itemView) {
         super(itemView);
 
@@ -28,14 +38,20 @@ public class SearchViewHolder extends RecyclerView.ViewHolder implements View.On
         removeUserText.setOnClickListener(this);    //Sets the click only for remove button
     }
 
-    //METHOD THAT HANDLES THE CLICKS ON VIEW v
+/**
+    METHOD THAT HANDLES THE CLICKS ON VIEW v
+    @param v, the view that we click
+*/
     @Override
     public void onClick(View v) {
 
         this.itemClickListener.onItemClick(v,getLayoutPosition());
     }
 
-    //SETTER FOR itemClickListener
+/**
+    SETTER FOR itemClickListener
+    @param ic, the new ItemClickListener that we want to affect to a button of the row
+*/
     public void setItemClickListener(ItemClickListener ic)
     {
         this.itemClickListener=ic;

@@ -1,5 +1,13 @@
 package com.example.bsaraci.blitzone.Search;
 
+/**This class takes all the properties of an user. It appears in many classes because it is the basic object of our app.
+* Its characteristics we will take from the server and affect to an user by using the setters. Mostly we will use the empty
+* constructor because we don't always know the properties for an user.
+***************************************************************************************************************************
+* BUGS : NO BUGS FOR THE MOMENT
+***************************************************************************************************************************
+* AMELIORATION : MAYBE WE WILL HAVE TO ADD OTHER METHODS IF NEEDED*/
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
@@ -25,80 +33,135 @@ public class User implements Comparable<User> {
     private ArrayList <User> followedUserList;  //ArrayList for the followed users
     private boolean following;                  //boolean that tells if you're following an user or not
 
-    //EMPTY CONSTRUCTOR
+/**
+    EMPTY CONSTRUCTOR
+*/
     public User() {}
 
-    //CONSTRUCTOR WITH USERNAME
+/**
+    CONSTRUCTOR
+    @param username, the username of the user
+*/
+    @SuppressWarnings("unused")
     public User(String username) {
         this.username = username;
     }
 
-    //GETTER FOR followedUserList
+/**
+    GETTER FOR followedUserList
+    @return an ArrayList of followed users
+*/
+    @SuppressWarnings("unused")
     public ArrayList<User> getFollowedUserList() {
         return followedUserList;
     }
 
-    //SETTER FOR followedUserList
+/**
+    SETTER FOR followedUserList
+    @param followedUserList, the new ArrayList of users that we want to affect to followedUserList
+*/
+    @SuppressWarnings("unused")
     public void setFollowedUserList(ArrayList<User> followedUserList) {
         this.followedUserList = followedUserList;
     }
 
-    //GETTER FOR profilePicture
+/**
+    GETTER FOR profilePicture
+    @return the profile picture of the user
+*/
     public Bitmap getProfilePicture() {
         return profilePicture;
     }
 
-    //GETTER FOR following
+/**
+    GETTER FOR following
+    @return true if you follow this user. False if not
+*/
     public boolean isFollowing() {
         return following;
     }
 
-    //SETTER FOR following
+/**
+    SETTER FOR following
+    @param following, a boolean we set to true of false to say whether if we follow the user or not
+*/
     public void setFollowing(boolean following) {
         this.following = following;
     }
 
-    //GETTER FOR profilePicture WITH CONTEXT AND URL IN PARAMETER
+/**
+    GETTER FOR profilePicture WITH CONTEXT AND URL IN PARAMETER
+    @param context, the context where the user appears
+    @param url, the url of the picture in our server
+    @return the profile picture that is found in this url
+*/
+    @SuppressWarnings("unused")
     public Bitmap getProfilePicture(Context context, String url) {
         return profilePicture;
     }
 
-    //GETTER FOR username
+/**
+    GETTER FOR username
+    @return the username of the user
+*/
     public String getUsername() {
         return username;
     }
 
-    //GETTER FOR blitz
+/**
+    GETTER FOR blitz
+    @return the number of blitzes the user has
+*/
     public Integer getBlitz() {
         return blitz;
     }
 
-    //GETTER FOR profilePictureUrl
+/**
+    GETTER FOR profilePictureUrl
+    @return the url of the profile picture for the user
+*/
     public String getProfilePictureUrl() {
         return profilePictureUrl;
     }
 
-    //SETTER FOR profilePicture
+/**
+    SETTER FOR profilePicture
+    @param profilePicture, the profile picture we want to set for the user
+*/
     public void setProfilePicture(Bitmap profilePicture) {
         this.profilePicture = profilePicture;
     }
 
-    //SETTER FOR blitz
+/**
+    SETTER FOR blitz
+    @param blitz, the number of blitzes we want to set for a user
+*/
     public void setBlitz(Integer blitz) {
         this.blitz = blitz;
     }
 
-    //SETTER FOR username
+/**
+    SETTER FOR username
+    @param username, the username we want to set for the user
+*/
     public void setUsername(String username) {
         this.username = username;
     }
 
-    //SETTER FOR profilePictureUrl
+/**
+    SETTER FOR profilePictureUrl
+    @param profilePictureUrl, the profile picture url we want to set for the user
+*/
     public void setProfilePictureUrl(String profilePictureUrl) {
         this.profilePictureUrl = profilePictureUrl;
     }
 
-    //METHOD THAT LOADS A PICTURE IF YOU PUT THE URL. LOADS IT WITH GLIDE
+/**
+    METHOD THAT LOADS A PICTURE IF YOU PUT THE URL. LOADS IT WITH GLIDE
+    @param c, the context we are loading the photo
+    @param url, the url where the photo is found
+    @param imageView, the image view where we want to put the loaded photo
+*/
     public void loadPicture(final Context c, String url, ImageView imageView){
         Glide.with(c)                                                   //Put the context
                 .load(url)                                              //Url where u want the photo to load from
@@ -123,13 +186,20 @@ public class User implements Comparable<User> {
                 });
     }
 
-    //METHOD THAT COMPARES AN USER BY HIS BLITZES
+/**
+    METHOD THAT COMPARES AN USER BY HIS BLITZES
+    @param user, the user we want to compare with the actual user
+    @return 1 if user has more blitzes than the actual user, -1 if he has less, 0 if they have the same number of blitzes
+*/
     @Override
     public int compareTo(@NonNull User user) {
         return user.blitz - this.blitz;
     }
 
-    //METHOD THAT ORDERS A LIST BY THE COMPARISON WE WANT
+/**
+    METHOD THAT ORDERS A LIST BY THE COMPARISON WE WANT
+    @param users, the ArrayList we want to reorder
+*/
     public static void order(ArrayList <User> users){
         Collections.sort(users);
     }

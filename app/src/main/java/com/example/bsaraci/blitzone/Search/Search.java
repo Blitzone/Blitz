@@ -1,5 +1,16 @@
 package com.example.bsaraci.blitzone.Search;
 
+/**This class is the main intent of the Search. It is related to the classes : SearchAdapter, SearchModel, and all the classes
+* of the server communication. In this class we handle the behaviour of the TextViews related to chapters that are coming from
+* the server. Also it handles the SearchView and its actions when we expand it or collapse it. We call the server in this class
+* to get our chapters and then we pass these chapters with putExtra to the GridViewSearch. We are also calling the server to get
+* the searchUserList, the list of users that appears when we start typing on search.
+*********************************************************************************************************************************
+* BUGS : CHAPTERS DON'T APPEAR WHEN WE TYPE A LETTER IN THE SEARCH EDIT TEXT AND THEN WE CLICK ON BACK BUTTON OF THE SEARCH VIEW.
+*       THE SAME THING WHEN WE CLICK ON THE BACK BUTTON OF THE CELLPHONE
+*********************************************************************************************************************************
+* AMELIORATION : MAYBE FIND ANOTHER WAY TO HIDE THE TEXTVIEWS AND MAKE THE rv APPEAR*/
+
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
@@ -9,7 +20,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -44,21 +54,20 @@ import java.util.Map;
 
 public class Search extends AppCompatActivity {
 
-    private Toolbar searchToolbar ;                                         //Toolbar of the intent
     private TextView toolbarTitle;                                          //The title of the searchToolbar. In this case 'Discover'
     private SearchView sv;                                                  //The Search View. (When u click the button search)
     private RecyclerView rv;                                                //The recycle view containing the users that you are searching
     private TextView chapter1,chapter2,chapter3,chapter4,chapter5;          //Maximum 5 TextView that correspond to our chapters
     private Topic topic;                                                    //The topic
-    private RelativeLayout rvContainer;                                     //The container who has the rv. Is invisible in the beginning
-    private SearchAdapter adapter;                                          //The adapter of the rv
     private ImageButton backIcon;                                           //It is the mint back icon in the searchToolbar
     private View dividerBackIcon;                                           //The divider near the back icon in the searchToolbar
     private Boolean isVisible;                                              //True if chapters are visible. False if not
     private int chapterId1,chapterId2,chapterId3,chapterId4,chapterId5;     //Chapter Id's. Numbers taken from the server
     private int topicId;                                                    //The id of the topic
 
-    //THIS METHOD IS TRIGGERED WHEN THE INTENT IS CREATED
+/**
+    THIS METHOD IS TRIGGERED WHEN THE INTENT IS CREATED
+*/
     @Override
     public void onCreate(Bundle savedInstanceState)  {
         super.onCreate(savedInstanceState);
@@ -68,26 +77,36 @@ public class Search extends AppCompatActivity {
 
     }
 
-    //THIS METHOD INITIATES searchToolbar, backIcon, dividerBackIcon, toolbarTitle, rvContainer, SETS THE VISIBILITY OF THE CHAPTERS TRUE
+/**
+    THIS METHOD INITIATES searchToolbar, backIcon, dividerBackIcon, toolbarTitle, rvContainer, SETS THE VISIBILITY OF THE CHAPTERS TRUE
+*/
     public void initiateComponents(){
-        searchToolbar = (Toolbar) findViewById(R.id.toolbar_of_search);             //Affects this xml element to the searchToolbar
+        Toolbar searchToolbar = (Toolbar) findViewById(R.id.toolbar_of_search);
         setSupportActionBar(searchToolbar);                                         //Sets the searchToolbar as an action bar
         backIcon = (ImageButton)findViewById(R.id.blitzone_from_search);            //Affects this xml element to the backIcon
-        dividerBackIcon = (View)findViewById(R.id.divider1);                        //Affects this xml element to the dividerBackIcon
+        dividerBackIcon = findViewById(R.id.divider1);                              //Affects this xml element to the dividerBackIcon
         toolbarTitle = (TextView) findViewById(R.id.search_toolbar_title);          //Affects this xml element to the toolbarTitle
-        rvContainer = (RelativeLayout) findViewById(R.id.container);                //Affects this xml element to the rvContainer
+
+        @SuppressWarnings("unused")
+        RelativeLayout rvContainer = (RelativeLayout) findViewById(R.id.container); //Affects this xml element to the rVContainer
         isVisible=true;                                                             //The chapters are visible
     }
 
-    //THIS METHOD INITIATES THE RV WITH ALL ITS PROPERTIES (LayoutManager, adapter)
+/**
+    THIS METHOD INITIATES THE RV WITH ALL ITS PROPERTIES (LayoutManager, adapter)
+    @param searchModels, the ArrayList needed for the adapter constructor
+*/
     public void initiateRV(ArrayList<SearchModel> searchModels){
         rv= (RecyclerView) findViewById(R.id.myRecycler);               //Affects this xml element to the rv
         rv.setLayoutManager(new LinearLayoutManager(this));             //Sets its LayoutManager
-        adapter=new SearchAdapter(this,searchModels);                   //Initiates the adapter. Its constructor takes the context and the ArrayList<SearchModel>
+        SearchAdapter adapter = new SearchAdapter(this, searchModels);  //Creates the adapter
         rv.setAdapter(adapter);                                         //Sets the adapter of the rv
     }
 
-    //THIS METHOD INITIATES THE CHAPTERS (TextViews). TRY AND CATCH BECAUSE WE DON'T ALWAYS HAVE 5 CHAPTERS COMING FROM THE SERVER
+/**
+    THIS METHOD INITIATES THE CHAPTERS (TextViews). TRY AND CATCH BECAUSE WE DON'T ALWAYS HAVE 5 CHAPTERS COMING FROM THE SERVER
+    @param isVisible, a boolean that tells if we should initiate visible or invisible
+*/
     public void initiateTextViews(Boolean isVisible){
         try{
 
@@ -167,23 +186,31 @@ public class Search extends AppCompatActivity {
 
     }
 
-    //THIS METHOD SETS THE CHAPTERS (TextViews), INVISIBLE
+/**
+    THIS METHOD SETS THE CHAPTERS (TextViews), INVISIBLE
+    @param tv, the TextView that we want to set invisible
+*/
     public void invisibleTextView(TextView tv){
         tv.setVisibility(View.GONE);    //tv is now invisible
     }
 
-    //THIS METHOD SETS THE CHAPTERS (TextViews), VISIBLE
+/**
+    THIS METHOD SETS THE CHAPTERS (TextViews), VISIBLE
+    @param tv, the TextView that we want to set visible
+*/
     public void visibleTextView(TextView tv){
         tv.setVisibility(View.VISIBLE);     //tv is now visible
     }
 
-    //THIS METHOD CHANGES THE COLOR OF THE TEXTS WHEN WE TYPE SOMETHING IN THE EditText OF THE SearchView
+/**
+    THIS METHOD CHANGES THE COLOR OF THE TEXTS WHEN WE TYPE SOMETHING IN THE EditText OF THE SearchView
+    @param view, the view that we want to change its colour
+*/
     private void changeSearchViewTextColor(View view) {
         if (view != null) {                                                 //Enters the loop if the view is not null
 
             if (view instanceof TextView) {                                 //If this view is a TextView
                 ((TextView) view).setTextColor(Color.DKGRAY);               //Sets the color of this TextView
-                return;                                                     //Finish
 
             }
             else if (view instanceof ViewGroup) {                           //If this this view is a ViewGroup
@@ -196,7 +223,10 @@ public class Search extends AppCompatActivity {
         }
     }
 
-    //THIS METHOD INITIATES THE SearchView
+/**
+    THIS METHOD INITIATES THE SearchView
+    @param menu, the menu where we have our search view
+*/
     public void initiateSearchView (Menu menu){
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE); //Associates searchable configuration with the SearchView
         sv= (SearchView) menu.findItem(R.id.action_search).getActionView();                     //Affects this menu element to sv
@@ -205,7 +235,10 @@ public class Search extends AppCompatActivity {
         sv.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));              //Sets the SearchableInfo for the sv
     }
 
-    //THIS METHOD HANDLES THE BEHAVIOUR OF THE SEARCHVIEW
+/**
+    THIS METHOD HANDLES THE BEHAVIOUR OF THE SEARCHVIEW
+    @param menu, the menu we want to handle its behaviour
+*/
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -226,6 +259,7 @@ public class Search extends AppCompatActivity {
                 dividerBackIcon.setVisibility(View.GONE);       //Makes the divideBarcIcon invisible
                 rv.setVisibility(View.VISIBLE);                 //Sets the rv visible
                 isVisible = false;                              //TextViews are not visible because this is false
+                //noinspection ConstantConditions
                 initiateTextViews(isVisible);                   //Triggers this method
                 return true;
             }
@@ -238,6 +272,8 @@ public class Search extends AppCompatActivity {
                 dividerBackIcon.setVisibility(View.VISIBLE);  //Makes the divider back icon visble
                 rv.setVisibility(View.GONE);                  //Makes the rv invisible
                 isVisible = true;                             //TextViews are visible because this is true
+
+                //noinspection ConstantConditions
                 initiateTextViews(isVisible);                 //Triggers this method
                 return true;
             }
@@ -264,14 +300,21 @@ public class Search extends AppCompatActivity {
         return true;
     }
 
-    //THIS METHOD RETURNS A JSONObject WITH THE PARAMS NEEDED FOR THE MRequest
+/**
+    THIS METHOD PUTS THE PARAMS NEEDED FOR THE MRequest IN A JSONObject
+    @param query, the query we put on the key 'query'
+    @return the params for the MRequest
+*/
     private JSONObject getSearchUserParams(String query){
-        Map<String, String> params = new HashMap<String, String>(); //Creates the HashMap
+        Map<String, String> params = new HashMap<>(); //Creates the HashMap
         params.put("query", query);                                 //Puts in this HashMap , query to the key 'query'
         return new JSONObject(params);                              //Returns JSONObject with the params
     }
 
-    //THIS METHOD SENDS THE MRequest TO GET THE RESPONSE FOR THE searchUserList WITH THE PARAMS TAKEN FROM getSearchUserParams
+/**
+    THIS METHOD SENDS THE MRequest TO GET THE RESPONSE FOR THE searchUserList WITH THE PARAMS TAKEN FROM getSearchUserParams
+    @param query, the query we put in the MRequest
+*/
     private void getSearchUserList(final String query){
 
         //Adds a listener to the response. In this case the response of the server will trigger the method updateSearchList
@@ -306,14 +349,18 @@ public class Search extends AppCompatActivity {
         RequestQueueSingleton.getInstance(Search.this).addToRequestQueue(mRequest); //Sends the request
     }
 
-    //THIS METHOD UPDATES THE SEARCH LIST. IN PARAMETER IS THE RESPONSE FROM THE SERVER AND THE QUERY INSERTED
+/**
+    THIS METHOD UPDATES THE SEARCH LIST. IN PARAMETER IS THE RESPONSE FROM THE SERVER AND THE QUERY INSERTED
+    @param searchUser, JSONObject given from the server that we want to take its elements (response)
+    @param query, the query related to what we type in the search edit text
+*/
     private void updateSearchList(JSONObject searchUser, String query) {
 
         //We user a try and catch to handle JSONExceptions
         try {
 
             ArrayList<SearchModel> users=new ArrayList<>();                             //Creates a new ArrayList<SearchModel>
-            JSONArray searchUserList=(JSONArray)searchUser.getJSONArray("userList");    //Takes the JSONArray from the response
+            JSONArray searchUserList= searchUser.getJSONArray("userList");    //Takes the JSONArray from the response
             int searchUserListSize = searchUserList.length();                           //Length of searchUserList
 
             //Enters in the loop if query is not empty
@@ -342,7 +389,10 @@ public class Search extends AppCompatActivity {
         }
     }
 
-    //THIS METHOD IS TRIGGERED WHEN WE CLICK TO A CHAPTER
+/**
+    THIS METHOD IS TRIGGERED WHEN WE CLICK TO A CHAPTER
+    @param textView, the TextView that we will click
+*/
     public void chapterCallback (TextView textView){
 
         //Enters if we click on chapter1
@@ -428,7 +478,9 @@ public class Search extends AppCompatActivity {
         }
     }
 
-    //THIS METHOD SENDS THE MRequest TO GET THE RESPONSE FOR THE TOPIC
+/**
+    THIS METHOD SENDS THE MRequest TO GET THE RESPONSE FOR THE TOPIC
+*/
     private void getTopic() {
 
         //Adds a listener to the response. In this case the response of the server will trigger the method updateTopic
@@ -463,7 +515,10 @@ public class Search extends AppCompatActivity {
         RequestQueueSingleton.getInstance(this).addToRequestQueue(mRequest);    //Sends the request
     }
 
-    //THIS METHOD UPDATES THE TOPIC. IN PARAMETER IS THE RESPONSE FROM THE SERVER
+/**
+    THIS METHOD UPDATES THE TOPIC. IN PARAMETER IS THE RESPONSE FROM THE SERVER
+    @param response, the response from the server
+*/
     private void updateTopic(JSONObject response) {
 
         //We user a try and catch to handle JSONExceptions
@@ -484,7 +539,10 @@ public class Search extends AppCompatActivity {
 
     }
 
-    //THIS METHOD UPDATES THE CHAPTERS. IN PARAMETER IS THE chapterList TAKEN FROM THE RESPONSE
+/**
+    THIS METHOD UPDATES THE CHAPTERS. IN PARAMETER IS THE chapterList TAKEN FROM THE RESPONSE
+    @param chapterList, the ArrayList which has all the chapters from the server
+*/
     private void updateChapters(JSONArray chapterList) {
 
         //We user a try and catch to handle JSONExceptions
@@ -495,7 +553,7 @@ public class Search extends AppCompatActivity {
 
             //Browses the chapterList
             for (int i = 0; i < chapterListSize; i++) {
-                JSONObject jsonChapter = (JSONObject) chapterList.getJSONObject(i); //Every item of this list is a chapter
+                JSONObject jsonChapter = chapterList.getJSONObject(i);              //Every item of this list is a chapter
                 Integer chapterId = (Integer) jsonChapter.get("id");                //Takes the id of the jsonChapter created
                 String chapterName = jsonChapter.get("name").toString();            //Takes the name of the jsonChapter created
                 topic.addPhotoChapter(chapterId, chapterName);                      //Adds in topic.photoChapters a new PhotoChapter with its Id and name
@@ -512,7 +570,10 @@ public class Search extends AppCompatActivity {
         initiateTextViews(isVisible);   //Initiates the chapters (TextViews)
     }
 
-    //THIS METHOD IS THE CALLBACK OF THE backIcon. GOES BACK TO BLITZONE
+/**
+    THIS METHOD IS THE CALLBACK OF THE backIcon. GOES BACK TO BLITZONE
+    @param view, the view we are clicking. This case tha backIcon
+*/
     public void blitzoneFromSearchButtonCallback (View view)
     {
         finish();

@@ -1,5 +1,15 @@
 package com.example.bsaraci.blitzone.Search;
 
+/**This class represents the behaviour of our search user list. It is related to classes : Search, SearchModel, SearchViewHolder and CustomFilter
+* SearchAdapter affects to all elements of the row of our list of users we want to search, all the data needed to initiate it. Also
+* it sends the request for following or unfollowing a user to the server. Then when the buttons add or remove are clicked the request
+* is sent. Also it filters the list as we start typing a letter in the search EditText
+*************************************************************************************************************************************
+* BUGS : NO BUGS DETECTED FOR THE MOMENT
+*************************************************************************************************************************************
+* AMELIORATION : NO AMELIORATION DETECTED FOR THE MOMENT */
+
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -32,23 +42,36 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchViewHolder> implem
     ArrayList<SearchModel> users,filterList;    //Two ArrayList<SearchModel>, one for users, the second one for filtered list
     CustomFilter filter;                        //The filter
 
-    //CONSTRUCTOR OF THE SEARCH ADAPTER
+/**
+    CONSTRUCTOR OF THE SEARCH ADAPTER
+    @param ctx, the context where we are calling the adapter
+    @param users, the ArrayList of the users that is related to the other methods of this class
+*/
     public SearchAdapter(Context ctx,ArrayList<SearchModel> users) {
         this.c=ctx;
         this.users=users;
         this.filterList=users;
     }
 
-    //THIS METHOD INFLATES THE ROW MODEL OF THE LIST AND THEN CREATES A SearchViewHolder WITH THE INFLATED ROW AS PARAMETER
+/**
+    THIS METHOD IS CALLED WHEN RecyclerView NEEDS A NEW RecyclerView.ViewHolder OF THE GIVEN TYPE TO REPRESENT AND ITEM
+    @param parent, the ViewGroup into which the new View will be added after it is bound to an adapter position
+    @param viewType, the view type of the new View
+    @return a new ViewHolder that holds a View of the given view type
+*/
     @Override
     public SearchViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        View v= LayoutInflater.from(parent.getContext()).inflate(R.layout.search_item_model,null); //Inflates the xml element to the view v
-        SearchViewHolder holder=new SearchViewHolder(v); //Creates a new SearchViewHolder
+        @SuppressLint("InflateParams") View v= LayoutInflater.from(parent.getContext()).inflate(R.layout.search_item_model,null); //Inflates the xml element to the view v
+        @SuppressWarnings("UnnecessaryLocalVariable") SearchViewHolder holder=new SearchViewHolder(v); //Creates a new SearchViewHolder
         return holder;
     }
 
-    //THIS METHOD BOUNDS DATA TO VIEWS
+/**
+    THIS METHOD IS CALLED BY RecyclerView TO DISPLAY THE DATA AT THE SPECIFIED POSITION
+    @param holder, the ViewHolder which should be updated to represent the contents of the item at the given position in the data set
+    @param position, the position of the item within the adapter's data set.
+*/
     @Override
     public void onBindViewHolder(final SearchViewHolder holder, int position) {
 
@@ -114,13 +137,19 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchViewHolder> implem
 
     }
 
-    //THIS METHOD GETS THE TOTAL NUMBERS OF USERS
+/**
+    THIS METHOD GETS THE TOTAL NUMBERS OF USERS
+    @return the total number of items in the data set hold by the adapter
+*/
     @Override
     public int getItemCount() {
         return users.size();
     }
 
-    //THIS METHOD RETURNS THE FILTER LIST
+/**
+    THIS METHOD RETURNS THE FILTER LIST
+    @return a new filter for the ArrayList<SearchModel>
+*/
     @Override
     public Filter getFilter() {
         //ENTERS IF WE DONT HAVE A FILTER
@@ -132,23 +161,34 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchViewHolder> implem
         return filter;
     }
 
-    //THIS METHOD RETURNS A JSONObject WITH THE PARAMS NEEDED FOR THE MRequest getFollowUser
+/**
+    THIS METHOD CREATES THE PARAMS NEEDED FOR THE MRequest getFollowUser
+    @param username, the username to put in the HashMap
+    @return the params needed for the MRequest
+*/
     private JSONObject getFollowUserParams(String username){
 
-        Map<String, String> params = new HashMap<String, String>(); //Creates the HashMap
+        Map<String, String> params = new HashMap<>(); //Creates the HashMap
         params.put("followedUser", username);          //Puts username in key 'followedUser'
         return new JSONObject(params);                 //Returns the params
     }
 
-    //THIS METHOD RETURNS A JSONObject WITH THE PARAMS NEEDED FOR THE MRequest getUnfollowUser
+/**
+    THIS METHOD CREATES THE PARAMS NEEDED FOR THE MRequest getUnfollowUser
+    @param username, the username to put in the HashMap
+    @return the params needed for the MRequest
+*/
     private JSONObject getUnfollowUserParams(String username){
 
-        Map<String, String> params = new HashMap<String, String>(); //Creates the HashMap
+        Map<String, String> params = new HashMap<>(); //Creates the HashMap
         params.put("followedUser", username);          //Puts username in key 'followedUser'
         return new JSONObject(params);                 //Returns the params
     }
 
-    //THIS METHOD SENDS THE MRequest TO UNFOLLOW AN USER. TAKES IN PARAMETER THE USERNAME NEEDED TO COMPLETE THE REQUEST
+/**
+    THIS METHOD SENDS THE MRequest TO UNFOLLOW AN USER. TAKES IN PARAMETER THE USERNAME NEEDED TO COMPLETE THE REQUEST
+    @param username, the username of the user we want to unfollow
+*/
     private void getUnfollowUser(String username){
 
         //Adds a listener to the response. In this case it will alert user if the user is added or remove correctly.
@@ -202,7 +242,10 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchViewHolder> implem
         RequestQueueSingleton.getInstance(c).addToRequestQueue(mRequest);   //Sends the request
     }
 
-    //THIS METHOD SENDS THE MRequest TO FOLLOW AN USER. TAKES IN PARAMETER THE USERNAME NEEDED TO COMPLETE THE REQUEST
+/**
+    THIS METHOD SENDS THE MRequest TO FOLLOW AN USER. TAKES IN PARAMETER THE USERNAME NEEDED TO COMPLETE THE REQUEST
+    @param username, the username of the user we want to follow
+*/
     private void getFollowUser(String username){
 
         //Adds a listener to the response. In this case it will alert user if the user is added or remove correctly.

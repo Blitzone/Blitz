@@ -1,22 +1,24 @@
 package com.example.bsaraci.blitzone.Search;
 
+/**This class represents the intent of the GridViewSearch. Here users can search for other users by looking the photos of the same
+* chapter. When u click on a grid element it animates a fullsize image of this photo. This class updates the adapter of the grid
+* and also sends some request to the server like; taking chapter photos, follow or unfollow a user etc .
+**********************************************************************************************************************************
+* BUGS : WE DON'T HAVE ANY BUGS FOR THE MOMENT
+**********************************************************************************************************************************
+* AMELIORATION : FIND A NEW WAY TO UPDATE THE ADD OR REMOVE BUTTON AFTER REOPENING THE FULLSIZE BECAUSE WE CALL EVERY TIME THE
+                 METHOD getPhotoChapter()*/
+
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
-import android.content.Intent;
-import android.content.res.TypedArray;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.Rect;
-import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.Layout;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
@@ -25,10 +27,8 @@ import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -37,89 +37,110 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
-import com.example.bsaraci.blitzone.Profile.PhotoChapter;
-import com.example.bsaraci.blitzone.Profile.ProfileRecyclerviewAdapter;
-import com.example.bsaraci.blitzone.Profile.Topic;
 import com.example.bsaraci.blitzone.R;
 import com.example.bsaraci.blitzone.ServerComm.JWTManager;
 import com.example.bsaraci.blitzone.ServerComm.MRequest;
 import com.example.bsaraci.blitzone.ServerComm.RequestQueueSingleton;
 import com.example.bsaraci.blitzone.ServerComm.RequestURL;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-
 public class GridViewSearch extends AppCompatActivity {
-    private Toolbar gridViewToolbar ;
-    private TextView toolbarTitle;
-    private GridView gridView;
-    private GridViewAdapter gridAdapter;
-    private Integer topicId;
-    private Integer chapterId;
-    private Animator mCurrentAnimator;
-    private int mShortAnimationDuration;
-    private TextView usernameInToolbar;
-    boolean isFullsize;
-    private View thumbView;
-    private ImageButton gridViewFromFullsize;
-    private ImageButton backFromGrid;
-    private TextView points;
-    private ImageView blitz;
-    private Button add;
-    private Button remove;
-    private String uname;
 
+    private TextView toolbarTitle;                  //The title of the toolbar corresponding to the chapter name
+    private Integer topicId;                        //The Id of the topic
+    private Integer chapterId;                      //The Id of the chapter
+    private Animator mCurrentAnimator;              //The animator when we click to a grid element
+    private int mShortAnimationDuration;            //The duration of the animation
+    private TextView usernameInToolbar;             //The username in the toolbar when we click to a grid element
+    private boolean isFullsize;                     //True if we click a grid element
+    private View thumbView;                         //The small picture in grid
+    private ImageButton gridViewFromFullsize;       //The back button when we are in full size. Goes back to the grid
+    private ImageButton backFromGrid;               //The back button when we are in the grid layout. Goes back to search
+    private TextView points;                        //Points when we are in fullsize
+    private ImageView blitz;                        //The small orange blitz near points
+    private Button add;                             //Add button when the photo is in fullsize
+    private Button remove;                          //Remove button when the photo is in fullsize
+    private String uname;                           //The string of the username
 
+/**
+    THIS METHOD IS TRIGGERED WHEN THE INTENT IS CREATED
+*/
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.grid_view_search);
-        initiateComponents();
-        getGridPhotoChapters();
+        initiateComponents();       //Initiates the components of this intent
+        getGridPhotoChapters();     //Triggers the method which sends the request to the server
 
     }
 
+/**
+    METHOD THAT INITIATES THE INTENT COMPONENTS
+*/
     public void initiateComponents(){
-        String title = getIntent().getExtras().getString("toolbarTitle");
-        chapterId = getIntent().getExtras().getInt("chapterId");
-        topicId = getIntent().getExtras().getInt("topicId");
-        gridViewToolbar = (Toolbar) findViewById(R.id.toolbar_of_gridView_search);
-        toolbarTitle = (TextView) findViewById(R.id.gridView_search_toolbar_title);
-        toolbarTitle.setText(title);
-        usernameInToolbar = (TextView) findViewById(R.id.username_search_toolbar);
-        gridViewFromFullsize = (ImageButton) findViewById(R.id.gridView_from_fullsize);
-        backFromGrid = (ImageButton) findViewById(R.id.search_from_gridViewSearch);
-        points = (TextView) findViewById(R.id.pointsGridView);
-        blitz = (ImageView) findViewById(R.id.blitzGridView);
-        add = (Button) findViewById(R.id.addGridView);
-        remove = (Button) findViewById(R.id.removeGridView);
-        mShortAnimationDuration = getResources().getInteger(android.R.integer.config_shortAnimTime);
+        String title = getIntent().getExtras().getString("toolbarTitle");                   //Title of the toolbar. Takes it from the previous intent
+        chapterId = getIntent().getExtras().getInt("chapterId");                            //The id of the chapter. Takes it from the previous intent
+        topicId = getIntent().getExtras().getInt("topicId");                                //The id of the topic. Takes it from the previous intent
+
+        @SuppressWarnings("unused")
+        Toolbar gridViewToolbar = (Toolbar) findViewById(R.id.toolbar_of_gridView_search);  //Affects this xml element to the gridViewToolbar
+
+        toolbarTitle = (TextView) findViewById(R.id.gridView_search_toolbar_title);         //Affects this xml element to the toolbarTitle
+        toolbarTitle.setText(title);                                                        //Sets the toolbarTitle
+        usernameInToolbar = (TextView) findViewById(R.id.username_search_toolbar);          //Affects this xml element to the usernameInToolbar
+        gridViewFromFullsize = (ImageButton) findViewById(R.id.gridView_from_fullsize);     //Affects this xml element to the gridViewFromFullsize
+        backFromGrid = (ImageButton) findViewById(R.id.search_from_gridViewSearch);         //Affects this xml element to the backFromGrid
+        points = (TextView) findViewById(R.id.pointsGridView);                              //Affects this xml element to the points
+        blitz = (ImageView) findViewById(R.id.blitzGridView);                               //Affects this xml element to the blitz
+        add = (Button) findViewById(R.id.addGridView);                                      //Affects this xml element to the add button
+        remove = (Button) findViewById(R.id.removeGridView);                                //Affects this xml element to the remove button
+        mShortAnimationDuration = getResources().getInteger(android.R.integer.config_shortAnimTime); //Sets the animation duration
     }
 
+/**
+    METHOD THAT INITIATES THE GRID
+    @param gridItems, the ArrayList that the adapter takes in its constructor
+*/
     public void initiateGrid(final ArrayList<GridItem> gridItems){
-        gridView = (GridView) findViewById(R.id.gridView);
-        gridAdapter = new GridViewAdapter(this, R.layout.grid_view_item, gridItems);
-        gridView.setAdapter(gridAdapter);
+        GridView gridView = (GridView) findViewById(R.id.gridView);  //Affects this xml to the gridView
+        GridViewAdapter gridAdapter = new GridViewAdapter(this, R.layout.grid_view_item, gridItems);    //Creates the adapter
+        gridView.setAdapter(gridAdapter);   //Sets the adapter of the gridView
+
+        //Sets an ItemClickListener for the gridView
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-                isFullsize=true;
-                thumbView=v;
-                String url = gridItems.get(position).getUrl();
-                User u = gridItems.get(position).getUser();
-                usernameInToolbar.setText(u.getUsername());
-                boolean followed = u.isFollowing();
-                uname=u.getUsername();
-                zoomImageFromThumb(points,blitz,add,remove,backFromGrid,gridViewFromFullsize,toolbarTitle,usernameInToolbar,v, url,followed);
+                thumbView = v;
+                isFullsize = true;                                //Now we are in full size
+                String url = gridItems.get(position).getUrl();  //Sets the url of the picture
+                User u = gridItems.get(position).getUser();     //Sets the user who posted that picture
+                uname = u.getUsername();                          //Gets the username of the user u
+                usernameInToolbar.setText(uname);               //Sets the username of the username TextView when we are in full size
+                boolean followed = u.isFollowing();             //True if you follow User u. False if not
+
+                //Triggers the method of animation
+                zoomImageFromThumb(points, blitz, add, remove, backFromGrid, gridViewFromFullsize, toolbarTitle, usernameInToolbar, v, url, followed);
             }
         });
+            }
 
-    }
-
+/**
+    METHOD THAT ANIMATES THE PASSAGE FROM THUMBVIEW TO FULLSIZE
+    @param pts, TextView of points
+    @param blz, ImageView of orange blitz icon
+    @param addUser, add User button
+    @param removeUser, remove User button
+    @param backFromGrid, back Button to go on discover layout again
+    @param backFromFullSize, back Button to go on grid layout again
+    @param title, chapter title
+    @param username, username in toolbar
+    @param thumbView, the grid square that holds the photo
+    @param url, the url of the photo
+    @param followed, boolean if is followed or not
+*/
     private void zoomImageFromThumb(final View pts, final View blz, final View addUser, final View removeUser, final View backFromGrid, final View backFromFullSize, final View title, final View username,final View thumbView, String url, boolean followed) {
         // If there's an animation in progress, cancel it
         // immediately and proceed with this one.
@@ -188,7 +209,7 @@ public class GridViewSearch extends AppCompatActivity {
             startBounds.bottom += deltaHeight;
         }
 
-        // Hide the thumbnail and show the zoomed-in view. When the animation
+        // Hide the thumbnail and other components and show the zoomed-in view. When the animation
         // begins, it will position the zoomed-in view in the place of the
         // thumbnail.
         thumbView.setAlpha(0f);
@@ -307,8 +328,12 @@ public class GridViewSearch extends AppCompatActivity {
         });
     }
 
+/**
+    METHOD THAT SEND REQUEST TO THE SERVER TO GET THE PHOTO CHAPTERS
+*/
     private void getGridPhotoChapters() {
 
+        //Adds a listener to the response. In this case the response of the server will trigger the method updateGridPhotoChapters
         Response.Listener<JSONObject> listener = new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -325,137 +350,205 @@ public class GridViewSearch extends AppCompatActivity {
             }
         };
 
-        JWTManager jwtManager = new JWTManager(getApplicationContext());
-        //Put everything in the request
+        JWTManager jwtManager = new JWTManager(getApplicationContext());    //Creates the JWTMangaer
 
+        //Put everything in the request
         MRequest mRequest = new MRequest(
-                RequestURL.GRID_SEARCH_PHOTOS,
-                Request.Method.POST,
-                getGridPhotoChapterParams(topicId,chapterId), //Put the parameters of the request here (JSONObject format)
-                listener,
-                errorListener,
-                jwtManager
+                RequestURL.GRID_SEARCH_PHOTOS,                  //The url (/images/searchPhotoChapters/)
+                Request.Method.POST,                            //Type of the method
+                getGridPhotoChapterParams(topicId,chapterId),   //Put the parameters of the request here (JSONObject format)
+                listener,                                       //The listener
+                errorListener,                                  //The errorListener
+                jwtManager                                      //The JWTManager
         );
 
-        RequestQueueSingleton.getInstance(this).addToRequestQueue(mRequest);
+        RequestQueueSingleton.getInstance(this).addToRequestQueue(mRequest);    //Sends the request
     }
 
+/**
+    METHOD THAT UPDATES THE GRID PHOTO CHAPTERS WHEN THE SERVER RESPONDS
+    @param response, what the servers gives us
+*/
     private void updateGridPhotoChapters(JSONObject response) {
 
+        //We use try and catch to handle JSONExceptions
         try {
-            final ArrayList<GridItem> items = new ArrayList<>();
-            JSONArray photoChapterGrid = (JSONArray) response.get("searchPhotoChapters");
-            int photoChapterGridSize = photoChapterGrid.length();
-            for (int i = 0; i < photoChapterGridSize; i++) {
-                JSONObject jsonPhotoChapter = (JSONObject) photoChapterGrid.getJSONObject(i);
-                JSONObject jsonUser = (JSONObject) jsonPhotoChapter.getJSONObject("user");
-                String username=jsonUser.getString("user");
-                Integer blitzCount = jsonUser.getInt("blitzCount");
-                boolean isFollowed = jsonPhotoChapter.getBoolean("is_followed");
-                GridItem gridItem = new GridItem();
-                User u = new User();
-                u.setUsername(username);
-                u.setBlitz(blitzCount);
-                String blz = blitzCount.toString();
-                points.setText(blz);
-                u.setFollowing(isFollowed);
-                gridItem.setUrl(RequestURL.IP_ADDRESS + jsonPhotoChapter.getString("image"));
-                gridItem.setUser(u);
-                items.add(gridItem);
-            }
-            initiateGrid(items);
 
-        } catch (JSONException e) {
+            final ArrayList<GridItem> items = new ArrayList<>();                                //Creates a new ArrayList of GridItems
+            JSONArray photoChapterGrid = (JSONArray) response.get("searchPhotoChapters");       //Takes the JSONArray from response
+            int photoChapterGridSize = photoChapterGrid.length();                               //The length of JSONArray
+
+            //Browses the JSONArray
+            for (int i = 0; i < photoChapterGridSize; i++) {
+
+                JSONObject jsonPhotoChapter = photoChapterGrid.getJSONObject(i);                //Every object of an array is a jsonPhotoChapter
+                JSONObject jsonUser = jsonPhotoChapter.getJSONObject("user");                   //Takes the user that corresponds to the jsonPhotoChapter
+                String username=jsonUser.getString("user");                                     //Takes the username corresponding to the user
+                Integer blitzCount = jsonUser.getInt("blitzCount");                             //Takes the number of blitzes corresponding to the user
+                boolean isFollowed = jsonPhotoChapter.getBoolean("is_followed");                //Takes information if the user is followed or not
+
+                GridItem gridItem = new GridItem();                                             //Creates a new gridItem
+                User u = new User();                                                            //Creates a new user
+                u.setUsername(username);                                                        //Sets the username taken from the server
+                u.setBlitz(blitzCount);                                                         //Sets the blitzes taken from the server
+                String blz = blitzCount.toString();                                             //Convert blitzes to string
+                points.setText(blz);                                                            //Sets the text of points
+                u.setFollowing(isFollowed);                                                     //Sets the following boolean on user taken from server
+                gridItem.setUrl(RequestURL.IP_ADDRESS + jsonPhotoChapter.getString("image"));   //Sets the image url taken from server
+                gridItem.setUser(u);                                                            //Sets an user for the gridItem
+                items.add(gridItem);                                                            //Adds the gridItem created
+            }
+            initiateGrid(items);    //Initiates the grid passing the list that we filled
+
+        }
+
+        //In case of an JSONException
+        catch (JSONException e) {
             e.printStackTrace();
         }
     }
 
+/**
+    METHOD THAT TRIGGERS WHEN WE CLICK THE BACK BUTTON OF OUR PHONE
+*/
     @Override
     public void onBackPressed() {
+
+        //Enters if it is in full size
         if(isFullsize){
-            initiateComponents();
-            final ImageView expandedImageView = (ImageView) findViewById(R.id.expandedImage);
-            thumbView.setAlpha(1f);
-            toolbarTitle.setAlpha(1f);
-            backFromGrid.setAlpha(1f);
-            gridViewFromFullsize.setVisibility(View.GONE);
-            expandedImageView.setVisibility(View.GONE);
-            points.setVisibility(View.GONE);
-            blitz.setVisibility(View.GONE);
-            add.setVisibility(View.GONE);
-            remove.setVisibility(View.GONE);
-            usernameInToolbar.setVisibility(View.GONE);
-            isFullsize=false;
-            getGridPhotoChapters();
+
+            initiateComponents();                                                               //Initiates components of the GridViewSearch
+            final ImageView expandedImageView = (ImageView) findViewById(R.id.expandedImage);   //Affects this xml file to expandedImageView
+            thumbView.setAlpha(1f);                                                             //thumbView is now visible
+            toolbarTitle.setAlpha(1f);                                                          //toolbarTitle is now visible
+            backFromGrid.setAlpha(1f);                                                          //backFromGrid is now visible
+            gridViewFromFullsize.setVisibility(View.GONE);                                      //gridFromFullSize is now invisible
+            expandedImageView.setVisibility(View.GONE);                                         //expandedImageView is now invisible
+            points.setVisibility(View.GONE);                                                    //points is now invisible
+            blitz.setVisibility(View.GONE);                                                     //blitz is now invisible
+            add.setVisibility(View.GONE);                                                       //add is now invisible
+            remove.setVisibility(View.GONE);                                                    //remove is now invisible
+            usernameInToolbar.setVisibility(View.GONE);                                         //username is now invisible
+            isFullsize=false;                                                                   //We're not in full size anymore
+            getGridPhotoChapters();                                                             //Reinitialise the grid photos
         }
+
+        //Enters if it is not in full size
         else{
-            finish();
+            finish(); //Goes back to Discover
         }
     }
 
+/**
+    METHOD THAT HANDLES THE BEHAVIOUR WHEN THE ACTIVITY RESUMES
+*/
     @Override
     public void onResume(){
         super.onResume();
     }
 
+/**
+    THIS METHOD PUTS THE PARAMS NEEDED FOR THE MRequest IN A JSONObject
+    @param topicId, the id of the topic
+    @param chapterId, the id of the chapter
+    @return the params needed for the MRequest
+*/
     private JSONObject getGridPhotoChapterParams(Integer topicId,Integer chapterId) {
 
-        Map<String, String> params = new HashMap<String, String>();
-        params.put("chapter", chapterId.toString());
-        params.put("topic", topicId.toString());
+        Map<String, String> params = new HashMap<>(); //Creates the HashMap
+        params.put("chapter", chapterId.toString());                //Puts the chapterId to the key 'chapter'
+        params.put("topic", topicId.toString());                    //Puts the topicId to the key 'topic'
 
         return new JSONObject(params);
     }
 
+/**
+    METHOD THAT HANDLES THE CLICK ON THE BACK BUTTON WHEN WE ARE IN THE GRID LAYOUT
+    @param view, the view we are clicking, this case the button back
+*/
     public void searchFromGridViewSearch (View view){finish();}
 
+/**
+    METHOD THAT HANDLES THE CLICK OF THE BACK BUTTON WHEN WE ARE IN THE FULLSIZE LAYOUT
+    @param view, the view we are clicking, this case the button back from fullsize
+*/
     public void gridFromFullsize (View view){
-        initiateComponents();
-        final ImageView expandedImageView = (ImageView) findViewById(R.id.expandedImage);
-        thumbView.setAlpha(1f);
-        toolbarTitle.setAlpha(1f);
-        backFromGrid.setAlpha(1f);
-        gridViewFromFullsize.setVisibility(View.GONE);
-        expandedImageView.setVisibility(View.GONE);
-        points.setVisibility(View.GONE);
-        blitz.setVisibility(View.GONE);
-        add.setVisibility(View.GONE);
-        remove.setVisibility(View.GONE);
-        usernameInToolbar.setVisibility(View.GONE);
-        isFullsize=false;
-        getGridPhotoChapters();
+
+        initiateComponents();                                                               //Initiates components of the GridViewSearch
+        final ImageView expandedImageView = (ImageView) findViewById(R.id.expandedImage);   //Affects this xml file to expandedImageView
+        thumbView.setAlpha(1f);                                                             //thumbView is now visible
+        toolbarTitle.setAlpha(1f);                                                          //toolbarTitle is now visible
+        backFromGrid.setAlpha(1f);                                                          //backFromGrid is now visible
+        gridViewFromFullsize.setVisibility(View.GONE);                                      //gridFromFullSize is now invisible
+        expandedImageView.setVisibility(View.GONE);                                         //expandedImageView is now invisible
+        points.setVisibility(View.GONE);                                                    //points is now invisible
+        blitz.setVisibility(View.GONE);                                                     //blitz is now invisible
+        add.setVisibility(View.GONE);                                                       //add is now invisible
+        remove.setVisibility(View.GONE);                                                    //remove is now invisible
+        usernameInToolbar.setVisibility(View.GONE);                                         //username is now invisible
+        isFullsize=false;                                                                   //We're not in full size anymore
+        getGridPhotoChapters();                                                             //Reinitialise the grid photos
     }
 
+/**
+    METHOD THAT HANDLES THE CLICK OF THE ADD BUTTON WHEN WE ARE IN THE FULLSIZE LAYOUT
+    @param view, the view we are clicking, this case the add button in fullsize
+*/
     public void addCallback(View view){
-        view.setVisibility(View.GONE);
-        getFollowUser(uname);
-        remove.setVisibility(View.VISIBLE);
+
+        view.setVisibility(View.GONE);          //Sets the add button invisible
+        getFollowUser(uname);                   //Send the request followUser to the server
+        remove.setVisibility(View.VISIBLE);     //Sets the remove button visible
     }
 
+/**
+    METHOD THAT HANDLES THE CLICK OF THE REMOVE BUTTON WHEN WE ARE IN THE FULLSIZE LAYOUT
+    @param view, the view we are clicking, this case the remove button in fullsize
+*/
     public void removeCallback(View view){
-        view.setVisibility(View.GONE);
-        getUnfollowUser(uname);
-        add.setVisibility(View.VISIBLE);
+
+        view.setVisibility(View.GONE);          //Sets the remove button invisible
+        getUnfollowUser(uname);                 //Sends the request unfollowUser to the server
+        add.setVisibility(View.VISIBLE);        //Sets the add button visible
     }
 
+/**
+    THIS METHOD CREATES THE PARAMS NEEDED FOR THE MRequest getFollowUser
+    @param username, the username to put in the HashMap
+    @return the params needed for the MRequest
+*/
     private JSONObject getFollowUserParams(String username){
-        Map<String, String> params = new HashMap<String, String>();
-        params.put("followedUser", username);
+        Map<String, String> params = new HashMap<>();     //Creates the HashMap
+        params.put("followedUser", username);                           //Puts username in the key 'followedUser'
         return new JSONObject(params);
     }
 
+/**
+    THIS METHOD SENDS THE MRequest TO FOLLOW AN USER. TAKES IN PARAMETER THE USERNAME NEEDED TO COMPLETE THE REQUEST
+    @param username, the username of the user we want to follow
+*/
     private void getFollowUser(String username){
+
+        //Adds a listener to the response. In this case it will alert user if the user is added or remove correctly.
         Response.Listener<JSONObject> listener = new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
+
+                //We use try and catch to handle JSONExceptions
                 try {
+
+                    //Enters if statusCode is 200
                     if((int)response.get("statusCode")==200){
-                        Toast.makeText(GridViewSearch.this,"User added successfully",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(GridViewSearch.this,"User added successfully",Toast.LENGTH_SHORT).show();  //Alerts user
                     }
+
+                    //Enters when status code !=200 (=400)
                     else {
-                        Toast.makeText(GridViewSearch.this,"There was an error when adding this user",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(GridViewSearch.this,"There was an error when adding this user",Toast.LENGTH_SHORT).show(); //Alerts user
                     }
                 }
+
+                //In case of JSONException
                 catch (JSONException e){
                     e.printStackTrace();
 
@@ -472,39 +565,59 @@ public class GridViewSearch extends AppCompatActivity {
             }
         };
 
-        JWTManager jwtManager = new JWTManager(GridViewSearch.this);
-        //Put everything in the request
+        JWTManager jwtManager = new JWTManager(GridViewSearch.this);  //Creates the JWTManager
 
+        //Put everything in the request
         MRequest mRequest = new MRequest(
-                RequestURL.FOLLOW_USER,
-                Request.Method.POST,
-                getFollowUserParams(username), //Put the parameters of the request here (JSONObject format)
-                listener,
-                errorListener,
-                jwtManager
+                RequestURL.FOLLOW_USER,         //The Url (/accounts/addFollow/)
+                Request.Method.POST,            //The type of method
+                getFollowUserParams(username),  //Put the parameters of the request here (JSONObject format)
+                listener,                       //The listener
+                errorListener,                  //The errorListener
+                jwtManager                      //The JWTManager
         );
 
-        RequestQueueSingleton.getInstance(GridViewSearch.this).addToRequestQueue(mRequest);
+        RequestQueueSingleton.getInstance(GridViewSearch.this).addToRequestQueue(mRequest);   //Sends the request
     }
 
+/**
+    THIS METHOD CREATES THE PARAMS NEEDED FOR THE MRequest getUnfollowUser
+    @param username, the username to put in the HashMap
+    @return the params needed for the MRequest
+*/
     private JSONObject getUnfollowUserParams(String username){
-        Map<String, String> params = new HashMap<String, String>();
-        params.put("followedUser", username);
-        return new JSONObject(params);
+
+        Map<String, String> params = new HashMap<>(); //Creates the HashMap
+        params.put("followedUser", username);          //Puts username in key 'followedUser'
+        return new JSONObject(params);                 //Returns the params
     }
 
+/**
+    THIS METHOD SENDS THE MRequest TO UNFOLLOW AN USER. TAKES IN PARAMETER THE USERNAME NEEDED TO COMPLETE THE REQUEST
+    @param username, the username of the user we want to unfollow
+*/
     private void getUnfollowUser(String username){
+
+        //Adds a listener to the response. In this case it will alert user if the user is added or remove correctly.
         Response.Listener<JSONObject> listener = new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
+
+                //We use try and catch to handle JSONExceptions
                 try {
+
+                    //Enters if statusCode is 200
                     if((int)response.get("statusCode")==200){
-                        Toast.makeText(GridViewSearch.this,"User removed successfully",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(GridViewSearch.this,"User removed successfully",Toast.LENGTH_SHORT).show(); //Alerts user
                     }
+
+                    //Enters when status code !=200 (=400)
                     else {
-                        Toast.makeText(GridViewSearch.this,"There was an error when removing this user",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(GridViewSearch.this,"There was an error when removing this user",Toast.LENGTH_SHORT).show(); //Alerts user
                     }
                 }
+
+                //In case of an exception
                 catch (JSONException e){
                     e.printStackTrace();
 
@@ -521,18 +634,19 @@ public class GridViewSearch extends AppCompatActivity {
             }
         };
 
-        JWTManager jwtManager = new JWTManager(GridViewSearch.this);
-        //Put everything in the request
+        JWTManager jwtManager = new JWTManager(GridViewSearch.this);  //Creates the JWTManager
 
+        //Put everything in the request
         MRequest mRequest = new MRequest(
-                RequestURL.UNFOLLOW_USER,
-                Request.Method.POST,
-                getUnfollowUserParams(username), //Put the parameters of the request here (JSONObject format)
-                listener,
-                errorListener,
-                jwtManager
+                RequestURL.UNFOLLOW_USER,           //The URL (/accounts/delFollow/)
+                Request.Method.POST,                //Type of method
+                getUnfollowUserParams(username),    //Put the parameters of the request here (JSONObject format)
+                listener,                           //The listener
+                errorListener,                      //The errorListener
+                jwtManager                          //The JWTManager
         );
 
-        RequestQueueSingleton.getInstance(GridViewSearch.this).addToRequestQueue(mRequest);
+        RequestQueueSingleton.getInstance(GridViewSearch.this).addToRequestQueue(mRequest);   //Sends the request
     }
+
 }

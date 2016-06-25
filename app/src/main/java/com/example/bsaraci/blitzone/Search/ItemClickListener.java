@@ -1,11 +1,13 @@
 package com.example.bsaraci.blitzone.Search;
 
+/*IT IS AN INTERFACE THAT ALLOWS TO CREATE AN ItemClickListener FOR A RECYCLER VIEW*/
 
 import android.view.View;
 
-//IT IS AN INTERFACE THAT ALLOWS TO CREATE AN ItemClickListener FOR A RECYCLER VIEW
 public interface ItemClickListener {
 
-    //Method onItemClick that should be called whenever we use this interface.
+/**
+    METHOD onItemClick THAT SHOULD BE CALLED WHENEVER WE USE THIS INTERFACE
+*/
     void onItemClick(View v,int pos);
 }
