@@ -11,7 +11,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
-
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.Response.Listener;
@@ -23,10 +22,8 @@ import com.example.bsaraci.blitzone.ServerComm.JWTManager;
 import com.example.bsaraci.blitzone.ServerComm.MRequest;
 import com.example.bsaraci.blitzone.ServerComm.RequestQueueSingleton;
 import com.example.bsaraci.blitzone.ServerComm.RequestURL;
-
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.net.HttpURLConnection;
 import java.util.HashMap;
 import java.util.Map;

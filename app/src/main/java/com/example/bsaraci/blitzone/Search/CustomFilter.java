@@ -9,7 +9,7 @@ package com.example.bsaraci.blitzone.Search;
 import android.widget.Filter;
 import java.util.ArrayList;
 
-public class CustomFilter extends Filter{
+public class CustomFilter extends Filter {
 
     SearchAdapter adapter;              //A SearchAdapter
     ArrayList<SearchModel> filterList;  //The filtered ArrayList

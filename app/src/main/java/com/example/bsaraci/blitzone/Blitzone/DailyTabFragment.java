@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.bsaraci.blitzone.R;
 
@@ -116,8 +117,6 @@ public class DailyTabFragment extends Fragment implements SwipeRefreshLayout.OnR
     }
 
 
-
-
     private void initRecyclerView() {
         linearLayoutManager = new LinearLayoutManager(this.getContext(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setHasFixedSize(true);
@@ -145,28 +144,11 @@ public class DailyTabFragment extends Fragment implements SwipeRefreshLayout.OnR
         }
     }
 
-    //Takes the list from the database
-    public void modifyDataOnRefresh (){
-        usernames.add("testUsername");
-        points.add("testPoints");
-        blitz.add(0);
-        blitzClicked.add(0);
-        like.add(R.mipmap.ic_gray_like);
-        likeClicked.add(R.mipmap.ic_like_clicked);
-        dislike.add(R.mipmap.ic_gray_dislike);
-        dislikeClicked.add(R.mipmap.ic_dislike_clicked);
-
-        ViewDataProvider l =new ViewDataProvider(usernames.get(usernames.size()-1) ,points.get(points.size()-1) ,blitz.get(points.size()-1),blitzClicked.get(points.size()-1),like.get(points.size()-1),likeClicked.get(points.size()-1),dislike.get(points.size()-1),dislikeClicked.get(points.size()-1),singleViewModels);
-        list.add(0, l);
-
-
-    }
-
-
     @Override
     public void onRefresh() {
         executeSchedule(); //Necessary. If not it wont refresh
-        modifyDataOnRefresh();
+
+        Toast.makeText(getContext(), "Test Refreshing", Toast.LENGTH_LONG).show();
     }
 
     @Override

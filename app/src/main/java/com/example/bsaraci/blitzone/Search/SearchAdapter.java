@@ -168,7 +168,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchViewHolder> implem
 */
     private JSONObject getFollowUserParams(String username){
 
-        Map<String, String> params = new HashMap<>(); //Creates the HashMap
+        Map<String, String> params = new HashMap<>();  //Creates the HashMap
         params.put("followedUser", username);          //Puts username in key 'followedUser'
         return new JSONObject(params);                 //Returns the params
     }
