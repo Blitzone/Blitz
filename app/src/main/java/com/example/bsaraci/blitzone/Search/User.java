@@ -30,6 +30,7 @@ public class User implements Comparable<User> {
     private Integer blitz;                      //Integer for number of blitzes
     private ArrayList <User> followedUserList;  //ArrayList for the followed users
     private boolean following;                  //boolean that tells if you're following an user or not
+    private Integer primaryKey;                 //the key that identifies an user
 
 /**
     EMPTY CONSTRUCTOR
@@ -182,6 +183,22 @@ public class User implements Comparable<User> {
                         //never called
                     }
                 });
+    }
+
+/**
+    GETTER FOR primaryKey
+    @return the key related to the user
+*/
+    public Integer getPrimaryKey() {
+        return primaryKey;
+    }
+
+/**
+    SETTER FOR primaryKey
+    @param primaryKey, the new key we want to affect to an user
+*/
+    public void setPrimaryKey(Integer primaryKey) {
+        this.primaryKey = primaryKey;
     }
 
 /**

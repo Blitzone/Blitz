@@ -9,22 +9,35 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.example.bsaraci.blitzone.R;
 import com.example.bsaraci.blitzone.Search.User;
+import com.example.bsaraci.blitzone.ServerComm.JWTManager;
+import com.example.bsaraci.blitzone.ServerComm.MRequest;
+import com.example.bsaraci.blitzone.ServerComm.RequestQueueSingleton;
+import com.example.bsaraci.blitzone.ServerComm.RequestURL;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
 public class BestTabFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener{
 
-    private List<RowDataProvider> rowDataProviderList = new ArrayList<RowDataProvider>();
+    private ArrayList<RowDataProvider> rowDataProviderList = new ArrayList<RowDataProvider>();
     private ArrayList<User> followingUserList = new ArrayList<User>();
     RecyclerView recyclerView;
     TextView tvEmptyView;
@@ -42,10 +55,7 @@ public class BestTabFragment extends Fragment implements SwipeRefreshLayout.OnRe
         tvEmptyView = (TextView)v.findViewById(R.id.emptyView);
         handler = new Handler();
 
-        prepareUserList();
-        User.order(followingUserList);
-        prepareData();
-        initRecyclerView();
+        getBestFollowingUsers(rowDataProviderList);
 
         if (rowDataProviderList.isEmpty()) {
             recyclerView.setVisibility(View.GONE);
@@ -67,18 +77,7 @@ public class BestTabFragment extends Fragment implements SwipeRefreshLayout.OnRe
                     @Override
                     public void run() {
                         //   remove progress item
-                        rowDataProviderList.remove(rowDataProviderList.size() - 1);
-                        adap.notifyItemRemoved(rowDataProviderList.size());
-                        //add items one by one
-                        int start = rowDataProviderList.size();
-                        int end = start + 2;
-
-                        for (int i = start + 1; i <= end; i++) {
-                            //TODO COUNTING VIEWS FOR TESTING. REMOVE WHEN YOU DEPLOY
-                            teaCount++;
-                            rowDataProviderList.add(new RowDataProvider());
-                            adap.notifyItemInserted(rowDataProviderList.size());
-                        }
+                        getBestFollowingUsers(rowDataProviderList);
                         adap.setLoaded();
                         //or you can add all at once but do not forget to call mAdapter.notifyDataSetChanged();
                     }
@@ -107,31 +106,85 @@ public class BestTabFragment extends Fragment implements SwipeRefreshLayout.OnRe
         recyclerView.setAdapter(adap);
     }
 
-    public void prepareData (){
-        for(int i = 0; i<30 ; i++){
-            RowDataProvider rowDataProvider = new RowDataProvider();
-            rowDataProvider.setUser(followingUserList.get(i));
-            rowDataProviderList.add(rowDataProvider);
+    public JSONObject getBestFollowingUsersParams(ArrayList<RowDataProvider> bestUserList){
+
+        HashMap<String,String> params = new HashMap<>();
+        JSONArray keys = new JSONArray();
+        for(int i = 0; i<bestUserList.size(); i++){
+            try {
+                keys.put(i, bestUserList.get(i).getUser().getPrimaryKey());
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
+
+        params.put("client_pks", keys.toString());
+
+        return new JSONObject(params);
+
     }
 
-    public void prepareUserList(){
-        for(int i = 0; i<30 ; i++){
-            Random random = new Random();
-            int r = random.nextInt(1000);
-            User u = new User();
-            u.setUsername("user " + (i + 1));
-            u.setBlitz(r);
-            u.setProfilePicture(BitmapFactory.decodeResource(this.getResources(), R.drawable.b));
-            u.setFollowing(true);
-            followingUserList.add(u);
+    public void getBestFollowingUsers(ArrayList<RowDataProvider> bestUserList){
+        //Adds a listener to the response. In this case the response of the server will trigger the method updateTopic
+        Response.Listener<JSONObject> listener = new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                updateFollowingUserList(response);
+            }
+        };
+
+        //Function to be executed in case of an error
+        Response.ErrorListener errorListener = new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("Error", error.toString());
+            }
+        };
+
+        JWTManager jwtManager = new JWTManager(getContext());    //Creates the new JWTManager
+
+        //Put everything in the request
+        MRequest mRequest = new MRequest(
+                RequestURL.BEST_USERS,                                       //The Url (/accounts/getFollowing/)
+                Request.Method.POST,                                         //Type of the method
+                getBestFollowingUsersParams(bestUserList),                   //Put the parameters of the request here (JSONObject format)
+                listener,                                                    //The listener
+                errorListener,                                               //The errorListener
+                jwtManager                                                   //The jwtManager
+        );
+
+        RequestQueueSingleton.getInstance(getContext()).addToRequestQueue(mRequest);    //Sends the request
+    }
+
+    public void updateFollowingUserList (JSONObject response){
+        try{
+            JSONArray userList = response.getJSONArray("following");
+            for(int i = 0; i<userList.length() ; i++){
+                User u = new User();
+                RowDataProvider rowDataProvider = new RowDataProvider();
+                JSONObject jsonUser = (JSONObject) userList.get(i);
+                u.setUsername(jsonUser.getString("user"));
+                u.setBlitz(jsonUser.getInt("blitzCount"));
+                u.setProfilePictureUrl(jsonUser.getString("avatar"));
+                u.setPrimaryKey(jsonUser.getInt("pk"));
+                followingUserList.add(i,u);
+                rowDataProvider.setUser(followingUserList.get(i));
+                rowDataProviderList.add(rowDataProvider);
+            }
+            initRecyclerView();
+            }
+        catch (JSONException e){
+            e.printStackTrace();
         }
+
     }
 
     @Override
     public void onRefresh() {
         executeSchedule();
-        Toast.makeText(getContext(),"Test Refreshing", Toast.LENGTH_LONG).show();
+        rowDataProviderList= new ArrayList<>();
+        getBestFollowingUsers(rowDataProviderList);
     }
 
     @Override

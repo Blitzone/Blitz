@@ -5,7 +5,7 @@ package com.example.bsaraci.blitzone.ServerComm;
  */
 public class RequestURL {
 
-    public final static String IP_ADDRESS = "http://52.38.241.194";
+    public final static String IP_ADDRESS = "http://52.38.241.194:8000";
 
     public static final String REGISTER                 = IP_ADDRESS + "/accounts/register/";
     public static final String LOGIN                    = IP_ADDRESS + "/accounts/login/";
@@ -22,6 +22,7 @@ public class RequestURL {
     public static final String GRID_SEARCH_PHOTOS       = IP_ADDRESS + "/images/searchPhotoChapters/";
     public static final String FOLLOW_USER              = IP_ADDRESS + "/accounts/addFollow/";
     public static final String UNFOLLOW_USER            = IP_ADDRESS + "/accounts/delFollow/";
+    public static final String BEST_USERS               = IP_ADDRESS + "/accounts/getFollowing/";
 
     public static boolean _needsAuth(String url)
     {
@@ -40,7 +41,8 @@ public class RequestURL {
             case SEARCH_USER:           return true;
             case GRID_SEARCH_PHOTOS:    return true;
             case FOLLOW_USER:           return true;
-            case UNFOLLOW_USER:          return true;
+            case UNFOLLOW_USER:         return true;
+            case BEST_USERS:            return true;
             default:                    return false;
         }
     }
