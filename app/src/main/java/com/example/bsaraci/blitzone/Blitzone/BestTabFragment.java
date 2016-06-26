@@ -108,7 +108,7 @@ public class BestTabFragment extends Fragment implements SwipeRefreshLayout.OnRe
 
     public JSONObject getBestFollowingUsersParams(ArrayList<RowDataProvider> bestUserList){
 
-        HashMap<String,String> params = new HashMap<>();
+        HashMap<String,JSONArray> params = new HashMap<>();
         JSONArray keys = new JSONArray();
         for(int i = 0; i<bestUserList.size(); i++){
             try {
@@ -118,7 +118,7 @@ public class BestTabFragment extends Fragment implements SwipeRefreshLayout.OnRe
             }
         }
 
-        params.put("client_pks", keys.toString());
+        params.put("client_pks", keys);
 
         return new JSONObject(params);
 
