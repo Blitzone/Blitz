@@ -1,5 +1,7 @@
 package com.example.bsaraci.blitzone.Blitzone;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -37,16 +39,17 @@ public class BestTabFragment extends Fragment implements SwipeRefreshLayout.OnRe
     protected Handler handler;
     private SwipeRefreshLayout swipeLayout;
     RecyclerowAdapter adap ;
+    LinearLayoutManager linearLayoutManager;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View v = inflater.inflate(R.layout.best_tab_content, container, false);
+        linearLayoutManager = new LinearLayoutManager(this.getContext(), LinearLayoutManager.VERTICAL, false);
         recyclerView = (RecyclerView) v.findViewById(R.id.bestList);
         tvEmptyView = (TextView)v.findViewById(R.id.emptyView);
+        prepareData();
         handler = new Handler();
-
-        getBestFollowingUsers(rowDataProviderList);
 
         if (rowDataProviderList.isEmpty()) {
             recyclerView.setVisibility(View.GONE);
@@ -90,7 +93,6 @@ public class BestTabFragment extends Fragment implements SwipeRefreshLayout.OnRe
     }
 
     private void initRecyclerView(ArrayList<RowDataProvider> rowDataProviderList) {
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this.getContext(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(linearLayoutManager);
         adap = new RecyclerowAdapter(getContext(),rowDataProviderList,recyclerView);
@@ -171,11 +173,24 @@ public class BestTabFragment extends Fragment implements SwipeRefreshLayout.OnRe
 
     }
 
+    public void prepareData(){
+        for (int i =0 ; i<20; i++){
+            User user = new User();
+            RowDataProvider r = new RowDataProvider();
+            user.setUsername("brajan");
+            user.setBlitz(155);
+            Bitmap bm = BitmapFactory.decodeResource(getResources(), R.drawable.b);
+            user.setProfilePicture(bm);
+            r.setUser(user);
+            rowDataProviderList.add(r);
+        }
+
+        initRecyclerView(rowDataProviderList);
+    }
+
     @Override
     public void onRefresh() {
         executeSchedule();
-        rowDataProviderList= new ArrayList<>();
-        getBestFollowingUsers(rowDataProviderList);
     }
 
     @Override
@@ -205,6 +220,8 @@ public class BestTabFragment extends Fragment implements SwipeRefreshLayout.OnRe
 
             //this method will be running on background thread so don't update UI from here
             //do your long running http tasks here,you dont want to pass argument and u can access the parent class' variable url over here
+            rowDataProviderList= new ArrayList<>();
+            getBestFollowingUsers(rowDataProviderList);
             return null;
         }
 
