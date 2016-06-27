@@ -1,6 +1,5 @@
 package com.example.bsaraci.blitzone.Blitzone;
 
-import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -14,8 +13,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -25,27 +22,21 @@ import com.example.bsaraci.blitzone.ServerComm.JWTManager;
 import com.example.bsaraci.blitzone.ServerComm.MRequest;
 import com.example.bsaraci.blitzone.ServerComm.RequestQueueSingleton;
 import com.example.bsaraci.blitzone.ServerComm.RequestURL;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Random;
+
 
 public class BestTabFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener{
 
-    private ArrayList<RowDataProvider> rowDataProviderList = new ArrayList<RowDataProvider>();
-    private ArrayList<User> followingUserList = new ArrayList<User>();
+    private ArrayList<RowDataProvider> rowDataProviderList = new ArrayList<>();
     RecyclerView recyclerView;
     TextView tvEmptyView;
     protected Handler handler;
     private SwipeRefreshLayout swipeLayout;
     RecyclerowAdapter adap ;
-    //TODO TESTING ONLY
-    private Integer teaCount = 0;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -66,7 +57,7 @@ public class BestTabFragment extends Fragment implements SwipeRefreshLayout.OnRe
             tvEmptyView.setVisibility(View.GONE);
         }
 
-        adap.setOnLoadMoreListener(new OnLoadMoreListener() {
+        /*adap.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore() {
                 //add null , so the adapter will check view_type and show progress bar at bottom
@@ -84,7 +75,7 @@ public class BestTabFragment extends Fragment implements SwipeRefreshLayout.OnRe
                 }, 2000);
 
             }
-        });
+        });*/
 
         swipeLayout = (SwipeRefreshLayout) v.findViewById(R.id.swipeContainer);
         swipeLayout.setOnRefreshListener(this);
@@ -98,7 +89,7 @@ public class BestTabFragment extends Fragment implements SwipeRefreshLayout.OnRe
 
     }
 
-    private void initRecyclerView() {
+    private void initRecyclerView(ArrayList<RowDataProvider> rowDataProviderList) {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this.getContext(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(linearLayoutManager);
@@ -125,6 +116,7 @@ public class BestTabFragment extends Fragment implements SwipeRefreshLayout.OnRe
     }
 
     public void getBestFollowingUsers(ArrayList<RowDataProvider> bestUserList){
+
         //Adds a listener to the response. In this case the response of the server will trigger the method updateTopic
         Response.Listener<JSONObject> listener = new Response.Listener<JSONObject>() {
             @Override
@@ -168,11 +160,10 @@ public class BestTabFragment extends Fragment implements SwipeRefreshLayout.OnRe
                 u.setBlitz(jsonUser.getInt("blitzCount"));
                 u.setProfilePictureUrl(jsonUser.getString("avatar"));
                 u.setPrimaryKey(jsonUser.getInt("pk"));
-                followingUserList.add(i,u);
-                rowDataProvider.setUser(followingUserList.get(i));
+                rowDataProvider.setUser(u);
                 rowDataProviderList.add(rowDataProvider);
             }
-            initRecyclerView();
+            initRecyclerView(rowDataProviderList);
             }
         catch (JSONException e){
             e.printStackTrace();
