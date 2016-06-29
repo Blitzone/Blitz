@@ -47,7 +47,6 @@ public class BestTabFragment extends Fragment implements SwipeRefreshLayout.OnRe
         recyclerView = (RecyclerView) v.findViewById(R.id.bestList);
         tvEmptyView = (TextView)v.findViewById(R.id.emptyView);
         prepareData();
-        initRecyclerView(rowDataProviderList);
         handler = new Handler();
 
         if (rowDataProviderList.isEmpty()) {
@@ -91,11 +90,10 @@ public class BestTabFragment extends Fragment implements SwipeRefreshLayout.OnRe
 
     }
 
-    private void initRecyclerView(ArrayList<RowDataProvider> rowDataProviderList) {
+    private void initRecyclerView(RecyclerowAdapter adap) {
         linearLayoutManager = new LinearLayoutManager(this.getContext(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(linearLayoutManager);
-        adap = new RecyclerowAdapter(getContext(),rowDataProviderList,recyclerView);
         recyclerView.setAdapter(adap);
     }
 
@@ -167,9 +165,11 @@ public class BestTabFragment extends Fragment implements SwipeRefreshLayout.OnRe
             }
             adap = new RecyclerowAdapter(getContext(),rowDataProviderList,recyclerView);
             adap.notifyDataSetChanged();
+            initRecyclerView(adap);
 
 
-            }
+
+        }
         catch (JSONException e){
             e.printStackTrace();
         }
