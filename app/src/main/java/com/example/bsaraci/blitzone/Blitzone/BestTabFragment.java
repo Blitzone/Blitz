@@ -46,7 +46,8 @@ public class BestTabFragment extends Fragment implements SwipeRefreshLayout.OnRe
         View v = inflater.inflate(R.layout.best_tab_content, container, false);
         recyclerView = (RecyclerView) v.findViewById(R.id.bestList);
         tvEmptyView = (TextView)v.findViewById(R.id.emptyView);
-        prepareData();
+        //prepareData();
+        initRecyclerView(adap);
         handler = new Handler();
 
         if (rowDataProviderList.isEmpty()) {
@@ -163,7 +164,18 @@ public class BestTabFragment extends Fragment implements SwipeRefreshLayout.OnRe
                 rowDataProvider.setUser(u);
                 rowDataProviderList.add(i, rowDataProvider);
             }
-            adap = new RecyclerowAdapter(getContext(),rowDataProviderList,recyclerView);
+            Log.i("asdasd", "" + rowDataProviderList.size());
+            recyclerView.setAdapter(adap);
+            swipeLayout.setRefreshing(false);
+            if (rowDataProviderList.isEmpty()) {
+                recyclerView.setVisibility(View.GONE);
+                tvEmptyView.setVisibility(View.VISIBLE);
+
+            } else {
+                recyclerView.setVisibility(View.VISIBLE);
+                tvEmptyView.setVisibility(View.GONE);
+            }
+
             adap.notifyDataSetChanged();
             initRecyclerView(adap);
 
@@ -223,13 +235,12 @@ public class BestTabFragment extends Fragment implements SwipeRefreshLayout.OnRe
             //do your long running http tasks here,you dont want to pass argument and u can access the parent class' variable url over here
             rowDataProviderList= new ArrayList<>();
             getBestFollowingUsers(rowDataProviderList);
+            adap = new RecyclerowAdapter(getContext(),rowDataProviderList,recyclerView);
             return null;
         }
 
         @Override
         protected void onPostExecute(Void result) {
-            recyclerView.setAdapter(adap);
-            swipeLayout.setRefreshing(false);
 
         }
 
