@@ -46,38 +46,7 @@ public class BestTabFragment extends Fragment implements SwipeRefreshLayout.OnRe
         View v = inflater.inflate(R.layout.best_tab_content, container, false);
         recyclerView = (RecyclerView) v.findViewById(R.id.bestList);
         tvEmptyView = (TextView)v.findViewById(R.id.emptyView);
-        //prepareData();
-        initRecyclerView(adap);
         handler = new Handler();
-
-        if (rowDataProviderList.isEmpty()) {
-            recyclerView.setVisibility(View.GONE);
-            tvEmptyView.setVisibility(View.VISIBLE);
-
-        } else {
-            recyclerView.setVisibility(View.VISIBLE);
-            tvEmptyView.setVisibility(View.GONE);
-        }
-
-        /*adap.setOnLoadMoreListener(new OnLoadMoreListener() {
-            @Override
-            public void onLoadMore() {
-                //add null , so the adapter will check view_type and show progress bar at bottom
-                rowDataProviderList.add(null);
-
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        //   remove progress item
-                        getBestFollowingUsers(rowDataProviderList);
-                        adap.notifyItemInserted(rowDataProviderList.size() - 1); //if u take this the rowDataProviderList does back to the beggining everytime
-                        adap.setLoaded();
-                        //or you can add all at once but do not forget to call mAdapter.notifyDataSetChanged();
-                    }
-                }, 2000);
-
-            }
-        });*/
 
         swipeLayout = (SwipeRefreshLayout) v.findViewById(R.id.swipeContainer);
         swipeLayout.setOnRefreshListener(this);
@@ -159,14 +128,14 @@ public class BestTabFragment extends Fragment implements SwipeRefreshLayout.OnRe
                 JSONObject jsonUser = (JSONObject) userList.get(i);
                 u.setUsername(jsonUser.getString("user"));
                 u.setBlitz(jsonUser.getInt("blitzCount"));
-                u.setProfilePictureUrl(jsonUser.getString("avatar"));
+                u.setProfilePictureUrl(RequestURL.IP_ADDRESS + jsonUser.getString("avatar"));
                 u.setPrimaryKey(jsonUser.getInt("pk"));
                 rowDataProvider.setUser(u);
                 rowDataProviderList.add(i, rowDataProvider);
             }
-            Log.i("asdasd", "" + rowDataProviderList.size());
-            recyclerView.setAdapter(adap);
+
             swipeLayout.setRefreshing(false);
+
             if (rowDataProviderList.isEmpty()) {
                 recyclerView.setVisibility(View.GONE);
                 tvEmptyView.setVisibility(View.VISIBLE);
@@ -178,6 +147,26 @@ public class BestTabFragment extends Fragment implements SwipeRefreshLayout.OnRe
 
             adap.notifyDataSetChanged();
             initRecyclerView(adap);
+
+            adap.setOnLoadMoreListener(new OnLoadMoreListener() {
+                @Override
+                public void onLoadMore() {
+                    //add null , so the adapter will check view_type and show progress bar at bottom
+                    rowDataProviderList.add(null);
+
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            //   remove progress item
+                            getBestFollowingUsers(rowDataProviderList);
+                            adap.notifyItemInserted(rowDataProviderList.size() - 1); //if u take this the rowDataProviderList goes back to the beginning every time
+                            adap.setLoaded();
+                            //or you can add all at once but do not forget to call mAdapter.notifyDataSetChanged();
+                        }
+                    }, 2000);
+
+                }
+            });
 
 
 

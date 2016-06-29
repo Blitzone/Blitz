@@ -39,8 +39,8 @@ public class RecyclerowAdapter extends  RecyclerView.Adapter<RecyclerView.ViewHo
                     super.onScrolled(recyclerView, dx, dy);
 
                     totalItemCount = linearLayoutManager.getItemCount();
-                    lastVisibleItem = linearLayoutManager
-                            .findLastVisibleItemPosition();
+                    lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition();
+
                     if (!loading && totalItemCount <= (lastVisibleItem + visibleThreshold)) {
                         // End has been reached
                         // Do something
@@ -75,7 +75,6 @@ public class RecyclerowAdapter extends  RecyclerView.Adapter<RecyclerView.ViewHo
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof RowViewHolder) {
             RowDataProvider listDataProvider = list.get(position);
-            ((RowViewHolder)holder).mProfile.setImageBitmap(listDataProvider.getUser().getProfilePicture());
             ((RowViewHolder)holder).mUsername.setText(listDataProvider.getUser().getUsername());
         String pts = listDataProvider.getUser().getBlitz().toString();
             ((RowViewHolder)holder).mPoints.setText(pts);
@@ -85,6 +84,13 @@ public class RecyclerowAdapter extends  RecyclerView.Adapter<RecyclerView.ViewHo
         else{
             ((RowViewHolder)holder).mBlitz.setImageResource(0);
         }
+            String url = listDataProvider.getUser().getProfilePictureUrl();
+            if(url != null){
+                listDataProvider.getUser().loadPicture(context,url,((RowViewHolder)holder).mProfile);
+            }
+            else{
+                ((RowViewHolder)holder).mProfile.setImageResource(R.color.boldGray);  //Loads a gray picture
+            }
         }
         else {
             ((ProgressViewHolder) holder).progressBar.setIndeterminate(true);
