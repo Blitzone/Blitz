@@ -27,6 +27,7 @@ public class RecyclerowAdapter extends  RecyclerView.Adapter<RecyclerView.ViewHo
     private OnLoadMoreListener onLoadMoreListener;
 
     public RecyclerowAdapter(Context context, List<RowDataProvider> list, RecyclerView recyclerView) {
+
         this.context = context;
         this.list=list;
 

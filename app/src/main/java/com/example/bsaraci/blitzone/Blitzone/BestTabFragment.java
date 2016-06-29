@@ -43,9 +43,7 @@ public class BestTabFragment extends Fragment implements SwipeRefreshLayout.OnRe
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
         View v = inflater.inflate(R.layout.best_tab_content, container, false);
-        linearLayoutManager = new LinearLayoutManager(this.getContext(), LinearLayoutManager.VERTICAL, false);
         recyclerView = (RecyclerView) v.findViewById(R.id.bestList);
         tvEmptyView = (TextView)v.findViewById(R.id.emptyView);
         prepareData();
@@ -61,7 +59,7 @@ public class BestTabFragment extends Fragment implements SwipeRefreshLayout.OnRe
             tvEmptyView.setVisibility(View.GONE);
         }
 
-        adap.setOnLoadMoreListener(new OnLoadMoreListener() {
+        /*adap.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore() {
                 //add null , so the adapter will check view_type and show progress bar at bottom
@@ -79,7 +77,7 @@ public class BestTabFragment extends Fragment implements SwipeRefreshLayout.OnRe
                 }, 2000);
 
             }
-        });
+        });*/
 
         swipeLayout = (SwipeRefreshLayout) v.findViewById(R.id.swipeContainer);
         swipeLayout.setOnRefreshListener(this);
@@ -94,6 +92,7 @@ public class BestTabFragment extends Fragment implements SwipeRefreshLayout.OnRe
     }
 
     private void initRecyclerView(ArrayList<RowDataProvider> rowDataProviderList) {
+        linearLayoutManager = new LinearLayoutManager(this.getContext(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(linearLayoutManager);
         adap = new RecyclerowAdapter(getContext(),rowDataProviderList,recyclerView);
@@ -164,10 +163,12 @@ public class BestTabFragment extends Fragment implements SwipeRefreshLayout.OnRe
                 u.setProfilePictureUrl(jsonUser.getString("avatar"));
                 u.setPrimaryKey(jsonUser.getInt("pk"));
                 rowDataProvider.setUser(u);
-                rowDataProviderList.add(rowDataProvider);
-
+                rowDataProviderList.add(i, rowDataProvider);
             }
+            adap = new RecyclerowAdapter(getContext(),rowDataProviderList,recyclerView);
             adap.notifyDataSetChanged();
+
+
             }
         catch (JSONException e){
             e.printStackTrace();

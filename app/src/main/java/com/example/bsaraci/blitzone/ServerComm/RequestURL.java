@@ -5,7 +5,7 @@ package com.example.bsaraci.blitzone.ServerComm;
  */
 public class RequestURL {
 
-    public final static String IP_ADDRESS = "http://52.38.241.194:8000";
+    public final static String IP_ADDRESS = "http://52.38.241.194";
 
     public static final String REGISTER                 = IP_ADDRESS + "/accounts/register/";
     public static final String LOGIN                    = IP_ADDRESS + "/accounts/login/";
