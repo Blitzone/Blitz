@@ -3,6 +3,7 @@ package com.example.bsaraci.blitzone.Blitzone;
 import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,10 +27,17 @@ public class RecyclerowAdapter extends  RecyclerView.Adapter<RecyclerView.ViewHo
     private boolean loading;
     private OnLoadMoreListener onLoadMoreListener;
 
+    public void setList(List<RowDataProvider> list) {
+        this.list = list;
+    }
+
     public RecyclerowAdapter(Context context, List<RowDataProvider> list, RecyclerView recyclerView) {
 
         this.context = context;
         this.list=list;
+
+        Log.i("Is not", recyclerView.getLayoutManager() instanceof LinearLayoutManager ? "is?" : "is not?");
+        Log.i("Is not", recyclerView.getLayoutManager() == null ? "is null?" : "is not?");
 
         if(recyclerView.getLayoutManager() instanceof LinearLayoutManager){
             final LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
@@ -38,6 +46,7 @@ public class RecyclerowAdapter extends  RecyclerView.Adapter<RecyclerView.ViewHo
                 public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                     super.onScrolled(recyclerView, dx, dy);
 
+                    Log.i("amga", "nagato");
                     totalItemCount = linearLayoutManager.getItemCount();
                     lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition();
 
@@ -72,9 +81,9 @@ public class RecyclerowAdapter extends  RecyclerView.Adapter<RecyclerView.ViewHo
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(final RecyclerView.ViewHolder holder,final int position) {
         if (holder instanceof RowViewHolder) {
-            RowDataProvider listDataProvider = list.get(position);
+            RowDataProvider listDataProvider = (RowDataProvider)list.get(position);
             ((RowViewHolder)holder).mUsername.setText(listDataProvider.getUser().getUsername());
         String pts = listDataProvider.getUser().getBlitz().toString();
             ((RowViewHolder)holder).mPoints.setText(pts);

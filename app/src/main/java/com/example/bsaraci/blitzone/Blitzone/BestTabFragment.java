@@ -33,7 +33,7 @@ import java.util.HashMap;
 
 public class BestTabFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener{
 
-    private ArrayList<RowDataProvider> rowDataProviderList = new ArrayList<>();
+    private ArrayList<RowDataProvider> rowDataProviderList;
     RecyclerView recyclerView;
     TextView tvEmptyView;
     protected Handler handler;
@@ -56,15 +56,35 @@ public class BestTabFragment extends Fragment implements SwipeRefreshLayout.OnRe
                 R.color.mint,
                 R.color.mint);
 
-        return v;
+        rowDataProviderList = new ArrayList<>();
 
-    }
-
-    private void initRecyclerView(RecyclerowAdapter adap) {
+        Log.i("Added teh ", "beach");
         linearLayoutManager = new LinearLayoutManager(this.getContext(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(linearLayoutManager);
+
+        adap = new RecyclerowAdapter(getContext(), rowDataProviderList, recyclerView);
+        adap.setOnLoadMoreListener(new OnLoadMoreListener() {
+            @Override
+            public void onLoadMore() {
+
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        //   remove progress item
+                        Log.i("am here", "am here" + rowDataProviderList.size());
+
+                        getBestFollowingUsers(rowDataProviderList);
+                    }
+                }, 2000);
+
+            }
+        });
+
         recyclerView.setAdapter(adap);
+
+        return v;
+
     }
 
     public JSONObject getBestFollowingUsersParams(ArrayList<RowDataProvider> bestUserList){
@@ -131,10 +151,8 @@ public class BestTabFragment extends Fragment implements SwipeRefreshLayout.OnRe
                 u.setProfilePictureUrl(RequestURL.IP_ADDRESS + jsonUser.getString("avatar"));
                 u.setPrimaryKey(jsonUser.getInt("pk"));
                 rowDataProvider.setUser(u);
-                rowDataProviderList.add(i, rowDataProvider);
+                rowDataProviderList.add(rowDataProvider);
             }
-
-            swipeLayout.setRefreshing(false);
 
             if (rowDataProviderList.isEmpty()) {
                 recyclerView.setVisibility(View.GONE);
@@ -146,27 +164,10 @@ public class BestTabFragment extends Fragment implements SwipeRefreshLayout.OnRe
             }
 
             adap.notifyDataSetChanged();
-            initRecyclerView(adap);
+            adap.setLoaded();
+            //or you can add all at once but do not forget to call mAdapter.notifyDataSetChanged();
 
-            adap.setOnLoadMoreListener(new OnLoadMoreListener() {
-                @Override
-                public void onLoadMore() {
-                    //add null , so the adapter will check view_type and show progress bar at bottom
-                    rowDataProviderList.add(null);
 
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            //   remove progress item
-                            getBestFollowingUsers(rowDataProviderList);
-                            adap.notifyItemInserted(rowDataProviderList.size() - 1); //if u take this the rowDataProviderList goes back to the beginning every time
-                            adap.setLoaded();
-                            //or you can add all at once but do not forget to call mAdapter.notifyDataSetChanged();
-                        }
-                    }, 2000);
-
-                }
-            });
 
 
 
@@ -175,19 +176,6 @@ public class BestTabFragment extends Fragment implements SwipeRefreshLayout.OnRe
             e.printStackTrace();
         }
 
-    }
-
-    public void prepareData(){
-        for (int i =0 ; i<1; i++){
-            User user = new User();
-            RowDataProvider r = new RowDataProvider();
-            user.setUsername("user");
-            user.setBlitz(0);
-            Bitmap bm = BitmapFactory.decodeResource(getResources(), R.color.lightGray);
-            user.setProfilePicture(bm);
-            r.setUser(user);
-            rowDataProviderList.add(r);
-        }
     }
 
     @Override
@@ -199,6 +187,7 @@ public class BestTabFragment extends Fragment implements SwipeRefreshLayout.OnRe
     public void onStart() {
         super.onStart();
         executeSchedule(); //First execution and data loading.
+
     }
 
     public void executeSchedule() {
@@ -223,13 +212,14 @@ public class BestTabFragment extends Fragment implements SwipeRefreshLayout.OnRe
             //this method will be running on background thread so don't update UI from here
             //do your long running http tasks here,you dont want to pass argument and u can access the parent class' variable url over here
             rowDataProviderList= new ArrayList<>();
+            adap.setList(rowDataProviderList);
             getBestFollowingUsers(rowDataProviderList);
-            adap = new RecyclerowAdapter(getContext(),rowDataProviderList,recyclerView);
             return null;
         }
 
         @Override
         protected void onPostExecute(Void result) {
+            swipeLayout.setRefreshing(false);
 
         }
 

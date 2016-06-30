@@ -4,6 +4,7 @@ import android.content.Context;
 import android.media.Image;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,9 +44,9 @@ public class RecycleviewAdapter extends  RecyclerView.Adapter<RecyclerView.ViewH
                 public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                     super.onScrolled(recyclerView, dx, dy);
 
+                    Log.i("amga", "nagato");
                     totalItemCount = linearLayoutManager.getItemCount();
-                    lastVisibleItem = linearLayoutManager
-                            .findLastVisibleItemPosition();
+                    lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition();
                     if (!loading && totalItemCount <= (lastVisibleItem + visibleThreshold)) {
                         // End has been reached
                         // Do something
