@@ -42,5 +42,5 @@
             android:layout_centerVertical="true"
             android:layout_alignLeft="@+id/photo"
             android:layout_alignStart="@+id/photo"
-            android:visibility="invisible"/>
+            android:visibility="invisible" />
 </RelativeLayout>

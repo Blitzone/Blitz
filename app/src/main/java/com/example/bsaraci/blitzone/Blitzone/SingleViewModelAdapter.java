@@ -56,7 +56,6 @@ public class SingleViewModelAdapter extends RecyclerView.Adapter<SingleViewModel
         if(url!=null){
 
             loadWithGlide(mContext, url, holder.itemImage);
-            blurWithGlide(mContext,url,holder.transparentItemImage);
         }
 
         else{
@@ -68,7 +67,6 @@ public class SingleViewModelAdapter extends RecyclerView.Adapter<SingleViewModel
             @Override
             public void onItemClick(View v, int pos) {
                 if(v==holder.itemImage){
-                    v.setVisibility(View.GONE);
                     holder.tvChapter.setVisibility(View.VISIBLE);
                     holder.transparentItemImage.setVisibility(View.VISIBLE);
                 }
@@ -83,14 +81,6 @@ public class SingleViewModelAdapter extends RecyclerView.Adapter<SingleViewModel
 
     }
 
-    public void blurWithGlide(Context context, String url, ImageView imageView){
-        Glide
-                .with( context )
-                .load(url)
-                .transform( new BlurTransformation( context ) )
-                        //.bitmapTransform( new BlurTransformation( context ) ) // this would work too!
-                .into(imageView);
-    }
     public void loadWithGlide(Context context, String url, ImageView imageView){
         Glide.with(context)
                 .load(url)
