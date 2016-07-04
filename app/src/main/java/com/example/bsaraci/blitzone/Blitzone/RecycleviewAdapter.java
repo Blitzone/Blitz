@@ -61,6 +61,10 @@ public class RecycleviewAdapter extends  RecyclerView.Adapter<RecyclerView.ViewH
 
     }
 
+    public void setList(List<ViewDataProvider> list) {
+        this.list = list;
+    }
+
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -84,14 +88,14 @@ public class RecycleviewAdapter extends  RecyclerView.Adapter<RecyclerView.ViewH
 
             ViewDataProvider viewDataProvider= (ViewDataProvider) list.get(position);
 
-            ((DailyViewHolder) holder).mUsername.setText(viewDataProvider.getUsername());
+//            ((DailyViewHolder) holder).mUsername.setText(viewDataProvider.getUsername());
             ((DailyViewHolder) holder).mBlitz.setImageResource(viewDataProvider.getBlitz());
             ((DailyViewHolder) holder).mBlitzClicked.setImageResource(viewDataProvider.getBlitzClicked());
             ((DailyViewHolder) holder).mLike.setImageResource(viewDataProvider.getLike());
             ((DailyViewHolder) holder).mLikeClicked.setImageResource(viewDataProvider.getLikeClicked());
             ((DailyViewHolder) holder).mDislike.setImageResource(viewDataProvider.getDislike());
             ((DailyViewHolder) holder).mDislikeClicked.setImageResource(viewDataProvider.getDislikeClicked());
-            ((DailyViewHolder) holder).mPoints.setText(viewDataProvider.getPoints());
+//            ((DailyViewHolder) holder).mPoints.setText(viewDataProvider.getPoints());
 
             ArrayList singleViewModels = list.get(position).getAllTopicPhotos();
 

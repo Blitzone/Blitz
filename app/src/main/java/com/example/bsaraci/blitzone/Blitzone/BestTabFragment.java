@@ -58,7 +58,6 @@ public class BestTabFragment extends Fragment implements SwipeRefreshLayout.OnRe
 
         rowDataProviderList = new ArrayList<>();
 
-        Log.i("Added teh ", "beach");
         linearLayoutManager = new LinearLayoutManager(this.getContext(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(linearLayoutManager);
@@ -67,13 +66,10 @@ public class BestTabFragment extends Fragment implements SwipeRefreshLayout.OnRe
         adap.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore() {
-
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         //   remove progress item
-                        Log.i("am here", "am here" + rowDataProviderList.size());
-
                         getBestFollowingUsers(rowDataProviderList);
                     }
                 }, 2000);
@@ -166,10 +162,6 @@ public class BestTabFragment extends Fragment implements SwipeRefreshLayout.OnRe
             adap.notifyDataSetChanged();
             adap.setLoaded();
             //or you can add all at once but do not forget to call mAdapter.notifyDataSetChanged();
-
-
-
-
 
         }
         catch (JSONException e){

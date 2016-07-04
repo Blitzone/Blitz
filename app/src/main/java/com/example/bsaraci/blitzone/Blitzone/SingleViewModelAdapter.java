@@ -3,6 +3,7 @@ package com.example.bsaraci.blitzone.Blitzone;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.renderscript.Allocation;
 import android.renderscript.Element;
 import android.renderscript.RenderScript;
@@ -12,12 +13,21 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.example.bsaraci.blitzone.R;
 import com.example.bsaraci.blitzone.Search.ItemClickListener;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 
 public class SingleViewModelAdapter extends RecyclerView.Adapter<SingleViewModelAdapter.SingleItemRowHolder> {
@@ -33,20 +43,28 @@ public class SingleViewModelAdapter extends RecyclerView.Adapter<SingleViewModel
     @Override
     public SingleItemRowHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.blitzone_single_view_model, null);
-        SingleItemRowHolder mh = new SingleItemRowHolder(v);
-        return mh;
+        return new SingleItemRowHolder(v);
     }
 
     @Override
     public void onBindViewHolder(final SingleItemRowHolder holder, int i) {
 
         SingleViewModel singleItem = itemsList.get(i);
+        String url = singleItem.getChapterPhotoUrl();
 
-        Bitmap blurred = blurRenderScript(mContext,singleItem.getImage(), 15);
+        holder.tvChapter.setText(singleItem.getChapterName());
+        if(url!=null){
 
-        holder.tvChapter.setText(singleItem.getChapter());
-        holder.itemImage.setImageBitmap(singleItem.getImage());
-        holder.transparentItemImage.setImageBitmap(blurred);
+            Bitmap b = getBitmapFromURL(url);
+            Bitmap blurred = blurRenderScript(mContext,b, 15);
+            loadWithGlide(mContext,url,holder.itemImage);
+            holder.transparentItemImage.setImageBitmap(blurred);
+        }
+
+        else{
+            holder.itemImage.setImageResource(R.color.boldGray);
+        }
+
 
         holder.setItemClickListener(new ItemClickListener() {
             @Override
@@ -67,6 +85,39 @@ public class SingleViewModelAdapter extends RecyclerView.Adapter<SingleViewModel
 
     }
 
+    public static Bitmap getBitmapFromURL(String src) {
+        try {
+            URL url = new URL(src);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setDoInput(true);
+            connection.connect();
+            InputStream input = connection.getInputStream();
+            Bitmap myBitmap = BitmapFactory.decodeStream(input);
+            return myBitmap;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public void loadWithGlide(Context context, String url, ImageView imageView){
+        Glide.with(context)
+                .load(url)
+                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                .listener(new RequestListener<String, GlideDrawable>() {
+                    @Override
+                    public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                        return false;
+                    }
+                })
+                .into(imageView);
+    }
+
     @Override
     public int getItemCount() {
         return (null != itemsList ? itemsList.size() : 0);
@@ -84,7 +135,7 @@ public class SingleViewModelAdapter extends RecyclerView.Adapter<SingleViewModel
         public SingleItemRowHolder(View view) {
             super(view);
 
-            this.tvChapter = (TextView) view.findViewById(R.id.chapter);
+            this.tvChapter = (TextView) view.findViewById(R.id.chapterName);
             this.itemImage = (ImageView) view.findViewById(R.id.photo);
             this.transparentItemImage = (ImageView) view.findViewById(R.id.transparentPhoto);
 

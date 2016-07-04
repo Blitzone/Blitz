@@ -30,12 +30,12 @@
 
 
         <TextView
-            android:id="@+id/chapter"
+            android:id="@+id/chapterName"
             android:layout_width="350dp"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:padding="5dp"
-            android:text="Sample chapter"
+            android:text="Sample chapterName"
             android:textColor="@color/boldGray"
             android:textStyle="bold"
             android:textSize="15sp"

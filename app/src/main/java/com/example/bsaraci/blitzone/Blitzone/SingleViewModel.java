@@ -1,29 +1,30 @@
 package com.example.bsaraci.blitzone.Blitzone;
 
-import android.graphics.Bitmap;
 
 public class SingleViewModel {
-    private Bitmap image;
-    private String chapter;
+    private String chapterPhotoUrl;
+    private String chapterName;
 
-    public SingleViewModel(Bitmap image, String chapter) {
-        this.image = image;
-        this.chapter = chapter;
+    public SingleViewModel(){}
+
+    public SingleViewModel(String chapterPhotoUrl, String chapterName) {
+        this.chapterPhotoUrl = chapterPhotoUrl;
+        this.chapterName = chapterName;
     }
 
-    public Bitmap getImage() {
-        return image;
+    public String getChapterPhotoUrl() {
+        return chapterPhotoUrl;
     }
 
-    public void setImage(Bitmap image) {
-        this.image = image;
+    public void setChapterPhotoUrl(String chapterPhotoUrl) {
+        this.chapterPhotoUrl = chapterPhotoUrl;
     }
 
-    public String getChapter() {
-        return chapter;
+    public String getChapterName() {
+        return chapterName;
     }
 
-    public void setChapter(String chapter) {
-        this.chapter = chapter;
+    public void setChapterName(String chapterName) {
+        this.chapterName = chapterName;
     }
 }

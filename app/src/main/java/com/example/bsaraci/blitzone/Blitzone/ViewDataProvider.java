@@ -1,11 +1,12 @@
 package com.example.bsaraci.blitzone.Blitzone;
 
+import com.example.bsaraci.blitzone.Search.User;
+
 import java.util.ArrayList;
 
 public class ViewDataProvider {
 
-    private String username;
-    private String points;
+    private User user;
     private int blitz;
     private int blitzClicked;
     private int like;
@@ -18,18 +19,6 @@ public class ViewDataProvider {
 
     }
 
-    public ViewDataProvider(String username, String points, int blitz, int blitzClicked,int like, int likeClicked, int dislike,int dislikeClicked, ArrayList<SingleViewModel> allTopicPhotos) {
-        this.setUsername(username);
-        this.setPoints(points);
-        this.setBlitz(blitz);
-        this.setBlitzClicked(blitzClicked);
-        this.setLike(like);
-        this.setLikeClicked(likeClicked);
-        this.setDislike(dislike);
-        this.setDislikeClicked(dislikeClicked);
-        this.setAllTopicPhotos(allTopicPhotos);
-    }
-
     public ArrayList<SingleViewModel> getAllTopicPhotos() {
         return allTopicPhotos;
     }
@@ -38,12 +27,12 @@ public class ViewDataProvider {
         this.allTopicPhotos = allTopicPhotos;
     }
 
-    public String getUsername() {
-        return username;
+    public User getUser() {
+        return user;
     }
 
-    public String getPoints() {
-        return points;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public int getBlitz() {
@@ -60,10 +49,6 @@ public class ViewDataProvider {
 
     public int getDislikeClicked() {return dislikeClicked;}
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
     public void setBlitz(int blitz) {
         this.blitz = blitz;
     }
@@ -78,6 +63,5 @@ public class ViewDataProvider {
 
     public void setDislikeClicked(int dislikeClicked) {this.dislikeClicked = dislikeClicked;}
 
-    public void setPoints(String points) {this.points = points;}
 
 }

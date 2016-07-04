@@ -2,10 +2,6 @@ package com.example.bsaraci.blitzone.Profile;
 
 import android.graphics.Bitmap;
 
-
-/**
- * Created by bsaraci on 5/1/2016.
- */
 public class PhotoChapter {
 
     private Integer chapterId;

@@ -1,7 +1,5 @@
 package com.example.bsaraci.blitzone.Blitzone;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -10,37 +8,40 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.example.bsaraci.blitzone.R;
+import com.example.bsaraci.blitzone.Search.User;
+import com.example.bsaraci.blitzone.ServerComm.JWTManager;
+import com.example.bsaraci.blitzone.ServerComm.MRequest;
+import com.example.bsaraci.blitzone.ServerComm.RequestQueueSingleton;
+import com.example.bsaraci.blitzone.ServerComm.RequestURL;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 
 public class DailyTabFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener{
 
-    private List<ViewDataProvider> list = new ArrayList<>();
-    private List <String> usernames = new ArrayList<>();
-    private List <String> points = new ArrayList<>();
-    private List <Integer> blitz = new ArrayList<>();
-    private List <Integer> blitzClicked = new ArrayList<>();
-    private List <Integer> like = new ArrayList<>();
-    private List <Integer> likeClicked = new ArrayList<>();
-    private List <Integer> dislike = new ArrayList<>();
-    private List <Integer> dislikeClicked = new ArrayList<>();
-    ArrayList <SingleViewModel> singleViewModels = new ArrayList<SingleViewModel>();
+    private ArrayList<ViewDataProvider> viewDataProviderList = new ArrayList<>();
+    ArrayList <SingleViewModel> singleViewModelList = new ArrayList<>();
     private SwipeRefreshLayout swipeLayout;
     RecyclerView recyclerView;
     RecycleviewAdapter adap ;
     LinearLayoutManager linearLayoutManager;
     private TextView tvEmptyView;
     protected Handler handler;
-    //TODO TESTING ONLY
-    private Integer teaCount = 0;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -50,61 +51,6 @@ public class DailyTabFragment extends Fragment implements SwipeRefreshLayout.OnR
         tvEmptyView = (TextView)view.findViewById(R.id.emptyView);
         handler = new Handler();
 
-        Bitmap bm = BitmapFactory.decodeResource(getResources(), R.drawable.b);
-        SingleViewModel singleViewModel = new SingleViewModel(bm,"test");
-        singleViewModels.add(singleViewModel);
-        singleViewModels.add(singleViewModel);
-        singleViewModels.add(singleViewModel);
-        singleViewModels.add(singleViewModel);
-        singleViewModels.add(singleViewModel);
-        singleViewModels.add(singleViewModel);
-
-        prepareData();
-        initRecyclerView();
-
-
-        if (list.isEmpty()) {
-            recyclerView.setVisibility(View.GONE);
-            tvEmptyView.setVisibility(View.VISIBLE);
-
-        } else {
-            recyclerView.setVisibility(View.VISIBLE);
-            tvEmptyView.setVisibility(View.GONE);
-        }
-
-        adap.setOnLoadMoreListener(new OnLoadMoreListener() {
-            @Override
-            public void onLoadMore() {
-                //add null , so the adapter will check view_type and show progress bar at bottom
-                list.add(null);
-                adap.notifyItemInserted(list.size() - 1); //if u take this the list does back to the beggining everytime
-
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        //   remove progress item
-                        list.remove(list.size() - 1);
-                        adap.notifyItemRemoved(list.size());
-                        //add items one by one
-                        int start = list.size();
-                        int end = start + 2;
-
-                        for (int i = start + 1; i <= end; i++) {
-                            //TODO COUNTING VIEWS FOR TESTING. REMOVE WHEN YOU DEPLOY
-                            teaCount++;
-                            list.add(new ViewDataProvider("teasaraci" + teaCount.toString(), "200", 0,0,R.mipmap.ic_gray_like,R.mipmap.ic_like_clicked, R.mipmap.ic_gray_dislike, R.mipmap.ic_dislike_clicked,singleViewModels));
-                            adap.notifyItemInserted(list.size());
-                        }
-                        adap.setLoaded();
-                        //or you can add all at once but do not forget to call mAdapter.notifyDataSetChanged();
-                    }
-                }, 2000);
-
-            }
-        });
-
-
-
         swipeLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipeContainer);
         swipeLayout.setOnRefreshListener(this);
         swipeLayout.setColorSchemeResources(
@@ -112,43 +58,142 @@ public class DailyTabFragment extends Fragment implements SwipeRefreshLayout.OnR
                 R.color.mint,
                 R.color.mint,
                 R.color.mint);
+
+        viewDataProviderList = new ArrayList<>();
+
+        linearLayoutManager = new LinearLayoutManager(this.getContext(), LinearLayoutManager.VERTICAL, false);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(linearLayoutManager);
+
+        adap = new RecycleviewAdapter(getContext(), viewDataProviderList, recyclerView);
+        adap.setOnLoadMoreListener(new OnLoadMoreListener() {
+            @Override
+            public void onLoadMore() {
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        //   remove progress item
+                        getDailyUsers(viewDataProviderList);
+                    }
+                }, 2000);
+
+            }
+        });
+
+        recyclerView.setAdapter(adap);
+
         return view;
 
     }
 
+    public JSONObject getDailyFollowingUsersParams(ArrayList<ViewDataProvider> dailyUserList){
 
-    private void initRecyclerView() {
-        linearLayoutManager = new LinearLayoutManager(this.getContext(), LinearLayoutManager.VERTICAL, false);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(linearLayoutManager);
-        adap = new RecycleviewAdapter(getContext(),list,recyclerView);
-        recyclerView.setAdapter(adap);
+        HashMap<String,JSONArray> params = new HashMap<>();
+        JSONArray keys = new JSONArray();
+        for(int i = 0; i<dailyUserList.size(); i++){
+            try {
+                keys.put(i, dailyUserList.get(i).getUser().getPrimaryKey());
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        params.put("client_pks", keys);
+
+        return new JSONObject(params);
+
     }
 
+    public void getDailyUsers(ArrayList<ViewDataProvider> dailyUserList){
 
-    public void prepareData (){
+        //Adds a listener to the response. In this case the response of the server will trigger the method updateTopic
+        Response.Listener<JSONObject> listener = new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                updateDailyUserList(response);
+            }
+        };
 
-        for(int i =0;i<10; i++){
-            usernames.add(i,"jv21");
-            points.add(i,"15");
-            blitz.add(i,R.mipmap.ic_gray_blitz);
-            blitzClicked.add(i,R.mipmap.ic_orange_blitz);
-            like.add(i,R.mipmap.ic_gray_like);
-            likeClicked.add(i,R.mipmap.ic_like_clicked);
-            dislike.add(i,R.mipmap.ic_gray_dislike);
-            dislikeClicked.add(i,R.mipmap.ic_dislike_clicked);
+        //Function to be executed in case of an error
+        Response.ErrorListener errorListener = new Response.ErrorListener() {
 
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("Error", error.toString());
+            }
+        };
 
-            ViewDataProvider l =new ViewDataProvider(usernames.get(i) ,points.get(i) ,blitz.get(i),blitzClicked.get(i),like.get(i),likeClicked.get(i),dislike.get(i),dislikeClicked.get(i),singleViewModels);
-            list.add(l);
+        JWTManager jwtManager = new JWTManager(getContext());    //Creates the new JWTManager
+
+        //Put everything in the request
+        MRequest mRequest = new MRequest(
+                RequestURL.DAILY_USERS,                                       //The Url (/accounts/getFollowing/)
+                Request.Method.POST,                                         //Type of the method
+                getDailyFollowingUsersParams(dailyUserList),                 //Put the parameters of the request here (JSONObject format)
+                listener,                                                    //The listener
+                errorListener,                                               //The errorListener
+                jwtManager                                                   //The jwtManager
+        );
+
+        RequestQueueSingleton.getInstance(getContext()).addToRequestQueue(mRequest);    //Sends the request
+    }
+
+    public void updateDailyUserList (JSONObject response){
+        try{
+            JSONArray userTopics = response.getJSONArray("userTopics");
+            for(int i = 0; i<userTopics.length() ; i++){
+                User u = new User();
+                SingleViewModel singleViewModel = new SingleViewModel();
+                ViewDataProvider viewDataProvider = new ViewDataProvider();
+                JSONObject jsonUser = userTopics.getJSONObject(i);
+                JSONArray jsonPhotoChapters = jsonUser.getJSONArray("photoChapters");
+                JSONObject jsonChapter = jsonPhotoChapters.getJSONObject(i);
+                singleViewModel.setChapterPhotoUrl(RequestURL.IP_ADDRESS + jsonChapter.getString("image") );
+                singleViewModel.setChapterName(jsonChapter.getString("chapter"));
+                u.setUsername(jsonUser.getString("user"));
+                u.setBlitz(jsonUser.getInt("blitzCount"));
+                u.setProfilePictureUrl(RequestURL.IP_ADDRESS + jsonUser.getString("avatar"));
+                u.setPrimaryKey(jsonUser.getInt("pk"));
+                u.setNumFollowers(jsonUser.getInt("followers"));
+                u.setLikes(jsonUser.getInt("likes"));
+                u.setDislikes(jsonUser.getInt("dislikes"));
+                u.setIs_liked(jsonUser.getBoolean("is_liked"));
+                u.setIs_disliked(jsonUser.getBoolean("is_disliked"));
+                viewDataProvider.setUser(u);
+                singleViewModelList.add(i,singleViewModel);
+                viewDataProvider.setAllTopicPhotos(singleViewModelList);
+                viewDataProvider.setBlitz(R.mipmap.ic_gray_blitz);
+                viewDataProvider.setBlitzClicked(R.mipmap.ic_orange_blitz);
+                viewDataProvider.setLike(R.mipmap.ic_gray_like);
+                viewDataProvider.setLikeClicked(R.mipmap.ic_like_clicked);
+                viewDataProvider.setDislike(R.mipmap.ic_gray_dislike);
+                viewDataProvider.setDislikeClicked(R.mipmap.ic_dislike_clicked);
+                viewDataProviderList.add(viewDataProvider);
+            }
+
+            if (viewDataProviderList.isEmpty()) {
+                recyclerView.setVisibility(View.GONE);
+                tvEmptyView.setVisibility(View.VISIBLE);
+
+            } else {
+                recyclerView.setVisibility(View.VISIBLE);
+                tvEmptyView.setVisibility(View.GONE);
+            }
+
+            adap.notifyDataSetChanged();
+            adap.setLoaded();
+            //or you can add all at once but do not forget to call mAdapter.notifyDataSetChanged();
+
         }
+        catch (JSONException e){
+            e.printStackTrace();
+        }
+
     }
 
     @Override
     public void onRefresh() {
         executeSchedule(); //Necessary. If not it wont refresh
-
-        Toast.makeText(getContext(), "Test Refreshing", Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -178,6 +223,11 @@ public class DailyTabFragment extends Fragment implements SwipeRefreshLayout.OnR
 
             //this method will be running on background thread so don't update UI from here
             //do your long running http tasks here,you dont want to pass argument and u can access the parent class' variable url over here
+
+            viewDataProviderList= new ArrayList<>();
+            adap.setList(viewDataProviderList);
+            getDailyUsers(viewDataProviderList);
+
             return null;
         }
 

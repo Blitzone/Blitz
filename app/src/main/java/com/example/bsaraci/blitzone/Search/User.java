@@ -31,13 +31,58 @@ public class User implements Comparable<User> {
     private ArrayList <User> followedUserList;  //ArrayList for the followed users
     private boolean following;                  //boolean that tells if you're following an user or not
     private Integer primaryKey;                 //the key that identifies an user
+    private Integer likes;                      //the likes of the topic
+    private Integer dislikes;                   //the dislikes of the topic
+    private boolean is_liked;                   //if the user likes a topic or not
+    private boolean is_disliked;                //if the user dislikes a topic or not
+    private Integer numFollowers;               //the number of followers
 
 /**
     EMPTY CONSTRUCTOR
 */
     public User() {}
 
-/**
+    public Integer getLikes() {
+        return likes;
+    }
+
+    public void setLikes(Integer likes) {
+        this.likes = likes;
+    }
+
+    public Integer getDislikes() {
+        return dislikes;
+    }
+
+    public void setDislikes(Integer dislikes) {
+        this.dislikes = dislikes;
+    }
+
+    public boolean is_liked() {
+        return is_liked;
+    }
+
+    public void setIs_liked(boolean is_liked) {
+        this.is_liked = is_liked;
+    }
+
+    public boolean is_disliked() {
+        return is_disliked;
+    }
+
+    public void setIs_disliked(boolean is_disliked) {
+        this.is_disliked = is_disliked;
+    }
+
+    public Integer getNumFollowers() {
+        return numFollowers;
+    }
+
+    public void setNumFollowers(Integer numFollowers) {
+        this.numFollowers = numFollowers;
+    }
+
+    /**
     CONSTRUCTOR
     @param username, the username of the user
 */

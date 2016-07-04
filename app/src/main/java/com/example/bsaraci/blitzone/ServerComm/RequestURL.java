@@ -23,6 +23,7 @@ public class RequestURL {
     public static final String FOLLOW_USER              = IP_ADDRESS + "/accounts/addFollow/";
     public static final String UNFOLLOW_USER            = IP_ADDRESS + "/accounts/delFollow/";
     public static final String BEST_USERS               = IP_ADDRESS + "/accounts/getFollowing/";
+    public static final String DAILY_USERS              = IP_ADDRESS + "/images/daily/";
 
     public static boolean _needsAuth(String url)
     {
@@ -43,6 +44,7 @@ public class RequestURL {
             case FOLLOW_USER:           return true;
             case UNFOLLOW_USER:         return true;
             case BEST_USERS:            return true;
+            case DAILY_USERS:           return true;
             default:                    return false;
         }
     }
