@@ -13,7 +13,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -35,7 +34,6 @@ import java.util.HashMap;
 public class DailyTabFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener{
 
     private ArrayList<ViewDataProvider> viewDataProviderList = new ArrayList<>();
-    ArrayList <SingleViewModel> singleViewModelList = new ArrayList<>();
     private SwipeRefreshLayout swipeLayout;
     RecyclerView recyclerView;
     RecycleviewAdapter adap ;
@@ -127,7 +125,7 @@ public class DailyTabFragment extends Fragment implements SwipeRefreshLayout.OnR
 
         //Put everything in the request
         MRequest mRequest = new MRequest(
-                RequestURL.DAILY_USERS,                                       //The Url (/accounts/getFollowing/)
+                RequestURL.DAILY_USERS,                                       //The Url (/images/daily/)
                 Request.Method.POST,                                         //Type of the method
                 getDailyFollowingUsersParams(dailyUserList),                 //Put the parameters of the request here (JSONObject format)
                 listener,                                                    //The listener
@@ -143,25 +141,29 @@ public class DailyTabFragment extends Fragment implements SwipeRefreshLayout.OnR
             JSONArray userTopics = response.getJSONArray("userTopics");
             for(int i = 0; i<userTopics.length() ; i++){
                 User u = new User();
-                SingleViewModel singleViewModel = new SingleViewModel();
                 ViewDataProvider viewDataProvider = new ViewDataProvider();
-                JSONObject jsonUser = userTopics.getJSONObject(i);
-                JSONArray jsonPhotoChapters = jsonUser.getJSONArray("photoChapters");
-                JSONObject jsonChapter = jsonPhotoChapters.getJSONObject(i);
-                singleViewModel.setChapterPhotoUrl(RequestURL.IP_ADDRESS + jsonChapter.getString("image") );
-                singleViewModel.setChapterName(jsonChapter.getString("chapter"));
+                JSONObject jsonUserTopic = userTopics.getJSONObject(i);
+                JSONObject jsonUser = jsonUserTopic.getJSONObject("user");
+                JSONArray jsonPhotoChapters = jsonUserTopic.getJSONArray("photoChapters");
+                ArrayList<SingleViewModel> singleViewModels = new ArrayList<>();
+                for(int j = 0; j<jsonPhotoChapters.length(); j++){
+                    SingleViewModel singleViewModel = new SingleViewModel();
+                    JSONObject jsonChapter = jsonPhotoChapters.getJSONObject(j);
+                    singleViewModel.setChapterPhotoUrl(RequestURL.IP_ADDRESS + jsonChapter.getString("image") );
+                    singleViewModel.setChapterName(jsonChapter.getString("chapter"));
+                    singleViewModels.add(singleViewModel);
+                }
                 u.setUsername(jsonUser.getString("user"));
                 u.setBlitz(jsonUser.getInt("blitzCount"));
                 u.setProfilePictureUrl(RequestURL.IP_ADDRESS + jsonUser.getString("avatar"));
                 u.setPrimaryKey(jsonUser.getInt("pk"));
                 u.setNumFollowers(jsonUser.getInt("followers"));
-                u.setLikes(jsonUser.getInt("likes"));
-                u.setDislikes(jsonUser.getInt("dislikes"));
-                u.setIs_liked(jsonUser.getBoolean("is_liked"));
-                u.setIs_disliked(jsonUser.getBoolean("is_disliked"));
+                u.setLikes(jsonUserTopic.getInt("likes"));
+                u.setDislikes(jsonUserTopic.getInt("dislikes"));
+                u.setIs_liked(jsonUserTopic.getBoolean("is_liked"));
+                u.setIs_disliked(jsonUserTopic.getBoolean("is_disliked"));
                 viewDataProvider.setUser(u);
-                singleViewModelList.add(i,singleViewModel);
-                viewDataProvider.setAllTopicPhotos(singleViewModelList);
+                viewDataProvider.setPhotoChapters(singleViewModels);
                 viewDataProvider.setBlitz(R.mipmap.ic_gray_blitz);
                 viewDataProvider.setBlitzClicked(R.mipmap.ic_orange_blitz);
                 viewDataProvider.setLike(R.mipmap.ic_gray_like);
@@ -233,7 +235,6 @@ public class DailyTabFragment extends Fragment implements SwipeRefreshLayout.OnR
 
         @Override
         protected void onPostExecute(Void result) {
-            recyclerView.setAdapter(adap);
             swipeLayout.setRefreshing(false);
 
         }

@@ -1,7 +1,6 @@
 package com.example.bsaraci.blitzone.Blitzone;
 
 import android.content.Context;
-import android.media.Image;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -12,7 +11,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.bsaraci.blitzone.Profile.RoundedImageView;
 import com.example.bsaraci.blitzone.R;
@@ -86,18 +84,26 @@ public class RecycleviewAdapter extends  RecyclerView.Adapter<RecyclerView.ViewH
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
         if (holder instanceof DailyViewHolder) {
 
-            ViewDataProvider viewDataProvider= (ViewDataProvider) list.get(position);
+            ViewDataProvider viewDataProvider= list.get(position);
 
-//            ((DailyViewHolder) holder).mUsername.setText(viewDataProvider.getUsername());
+            String profilePictureUrl = viewDataProvider.getUser().getProfilePictureUrl();
+
+            if(profilePictureUrl!=null){
+                viewDataProvider.getUser().loadPicture(context,profilePictureUrl,((DailyViewHolder) holder).mProfile);
+            }
+            else{
+                ((DailyViewHolder) holder).mProfile.setImageResource(R.color.boldGray);
+            }
+            ((DailyViewHolder) holder).mUsername.setText(viewDataProvider.getUser().getUsername());
             ((DailyViewHolder) holder).mBlitz.setImageResource(viewDataProvider.getBlitz());
             ((DailyViewHolder) holder).mBlitzClicked.setImageResource(viewDataProvider.getBlitzClicked());
             ((DailyViewHolder) holder).mLike.setImageResource(viewDataProvider.getLike());
             ((DailyViewHolder) holder).mLikeClicked.setImageResource(viewDataProvider.getLikeClicked());
             ((DailyViewHolder) holder).mDislike.setImageResource(viewDataProvider.getDislike());
             ((DailyViewHolder) holder).mDislikeClicked.setImageResource(viewDataProvider.getDislikeClicked());
-//            ((DailyViewHolder) holder).mPoints.setText(viewDataProvider.getPoints());
+            ((DailyViewHolder) holder).mPoints.setText(viewDataProvider.getUser().getBlitz());
 
-            ArrayList singleViewModels = list.get(position).getAllTopicPhotos();
+            ArrayList singleViewModels = viewDataProvider.getPhotoChapters();
 
             SingleViewModelAdapter singleViewModelAdapter = new SingleViewModelAdapter(context,singleViewModels);
 

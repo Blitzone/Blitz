@@ -1,7 +1,5 @@
 package com.example.bsaraci.blitzone.Blitzone;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -162,6 +160,7 @@ public class BestTabFragment extends Fragment implements SwipeRefreshLayout.OnRe
             adap.notifyDataSetChanged();
             adap.setLoaded();
             //or you can add all at once but do not forget to call mAdapter.notifyDataSetChanged();
+
 
         }
         catch (JSONException e){

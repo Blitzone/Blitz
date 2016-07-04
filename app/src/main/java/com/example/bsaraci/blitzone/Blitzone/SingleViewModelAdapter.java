@@ -85,7 +85,7 @@ public class SingleViewModelAdapter extends RecyclerView.Adapter<SingleViewModel
 
     }
 
-    public static Bitmap getBitmapFromURL(String src) {
+    public Bitmap getBitmapFromURL(String src) {
         try {
             URL url = new URL(src);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();

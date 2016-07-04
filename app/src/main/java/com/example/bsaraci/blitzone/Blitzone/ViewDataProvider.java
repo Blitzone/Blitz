@@ -13,18 +13,18 @@ public class ViewDataProvider {
     private int likeClicked;
     private int dislike;
     private int dislikeClicked;
-    private ArrayList <SingleViewModel> allTopicPhotos;
+    private ArrayList <SingleViewModel> photoChapters;
 
     public ViewDataProvider(){
 
     }
 
-    public ArrayList<SingleViewModel> getAllTopicPhotos() {
-        return allTopicPhotos;
+    public ArrayList<SingleViewModel> getPhotoChapters() {
+        return photoChapters;
     }
 
-    public void setAllTopicPhotos(ArrayList<SingleViewModel> allTopicPhotos) {
-        this.allTopicPhotos = allTopicPhotos;
+    public void setPhotoChapters(ArrayList<SingleViewModel> photoChapters) {
+        this.photoChapters = photoChapters;
     }
 
     public User getUser() {
