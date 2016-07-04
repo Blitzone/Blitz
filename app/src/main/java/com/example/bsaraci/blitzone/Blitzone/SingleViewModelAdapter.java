@@ -55,10 +55,10 @@ public class SingleViewModelAdapter extends RecyclerView.Adapter<SingleViewModel
         holder.tvChapter.setText(singleItem.getChapterName());
         if(url!=null){
 
-            Bitmap b = getBitmapFromURL(url);
-            Bitmap blurred = blurRenderScript(mContext,b, 15);
+            /*Bitmap b = getBitmapFromURL(url);
+            Bitmap blurred = blurRenderScript(mContext,b, 15);*/
             loadWithGlide(mContext,url,holder.itemImage);
-            holder.transparentItemImage.setImageBitmap(blurred);
+            holder.transparentItemImage.setImageResource(R.color.white);
         }
 
         else{

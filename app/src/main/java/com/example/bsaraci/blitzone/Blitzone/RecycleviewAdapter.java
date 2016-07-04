@@ -101,7 +101,7 @@ public class RecycleviewAdapter extends  RecyclerView.Adapter<RecyclerView.ViewH
             ((DailyViewHolder) holder).mLikeClicked.setImageResource(viewDataProvider.getLikeClicked());
             ((DailyViewHolder) holder).mDislike.setImageResource(viewDataProvider.getDislike());
             ((DailyViewHolder) holder).mDislikeClicked.setImageResource(viewDataProvider.getDislikeClicked());
-            ((DailyViewHolder) holder).mPoints.setText(viewDataProvider.getUser().getBlitz());
+            ((DailyViewHolder) holder).mPoints.setText(viewDataProvider.getUser().getBlitz().toString());
 
             ArrayList singleViewModels = viewDataProvider.getPhotoChapters();
 

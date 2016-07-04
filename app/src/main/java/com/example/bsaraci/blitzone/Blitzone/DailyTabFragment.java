@@ -125,7 +125,7 @@ public class DailyTabFragment extends Fragment implements SwipeRefreshLayout.OnR
 
         //Put everything in the request
         MRequest mRequest = new MRequest(
-                RequestURL.DAILY_USERS,                                       //The Url (/images/daily/)
+                RequestURL.DAILY_USERS,                                      //The Url (/images/daily/)
                 Request.Method.POST,                                         //Type of the method
                 getDailyFollowingUsersParams(dailyUserList),                 //Put the parameters of the request here (JSONObject format)
                 listener,                                                    //The listener
@@ -161,7 +161,7 @@ public class DailyTabFragment extends Fragment implements SwipeRefreshLayout.OnR
                 u.setLikes(jsonUserTopic.getInt("likes"));
                 u.setDislikes(jsonUserTopic.getInt("dislikes"));
                 u.setIs_liked(jsonUserTopic.getBoolean("is_liked"));
-                u.setIs_disliked(jsonUserTopic.getBoolean("is_disliked"));
+//                u.setIs_disliked(jsonUserTopic.getBoolean("is_disliked"));
                 viewDataProvider.setUser(u);
                 viewDataProvider.setPhotoChapters(singleViewModels);
                 viewDataProvider.setBlitz(R.mipmap.ic_gray_blitz);
