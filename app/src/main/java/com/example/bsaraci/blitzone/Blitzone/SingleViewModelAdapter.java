@@ -50,19 +50,17 @@ public class SingleViewModelAdapter extends RecyclerView.Adapter<SingleViewModel
     public void onBindViewHolder(final SingleItemRowHolder holder, int i) {
 
         SingleViewModel singleItem = itemsList.get(i);
-        String url = singleItem.getChapterPhotoUrl();
+        final String url = singleItem.getChapterPhotoUrl();
 
         holder.tvChapter.setText(singleItem.getChapterName());
         if(url!=null){
 
-            /*Bitmap b = getBitmapFromURL(url);
-            Bitmap blurred = blurRenderScript(mContext,b, 15);*/
-            loadWithGlide(mContext,url,holder.itemImage);
-            holder.transparentItemImage.setImageResource(R.color.white);
+            loadWithGlide(mContext, url, holder.itemImage);
+            blurWithGlide(mContext,url,holder.transparentItemImage);
         }
 
         else{
-            holder.itemImage.setImageResource(R.color.boldGray);
+            holder.itemImage.setImageResource(R.color.white);
         }
 
 
@@ -85,21 +83,14 @@ public class SingleViewModelAdapter extends RecyclerView.Adapter<SingleViewModel
 
     }
 
-    public Bitmap getBitmapFromURL(String src) {
-        try {
-            URL url = new URL(src);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setDoInput(true);
-            connection.connect();
-            InputStream input = connection.getInputStream();
-            Bitmap myBitmap = BitmapFactory.decodeStream(input);
-            return myBitmap;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
+    public void blurWithGlide(Context context, String url, ImageView imageView){
+        Glide
+                .with( context )
+                .load(url)
+                .transform( new BlurTransformation( context ) )
+                        //.bitmapTransform( new BlurTransformation( context ) ) // this would work too!
+                .into(imageView);
     }
-
     public void loadWithGlide(Context context, String url, ImageView imageView){
         Glide.with(context)
                 .load(url)

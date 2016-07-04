@@ -146,6 +146,7 @@ public class DailyTabFragment extends Fragment implements SwipeRefreshLayout.OnR
                 JSONObject jsonUser = jsonUserTopic.getJSONObject("user");
                 JSONArray jsonPhotoChapters = jsonUserTopic.getJSONArray("photoChapters");
                 ArrayList<SingleViewModel> singleViewModels = new ArrayList<>();
+
                 for(int j = 0; j<jsonPhotoChapters.length(); j++){
                     SingleViewModel singleViewModel = new SingleViewModel();
                     JSONObject jsonChapter = jsonPhotoChapters.getJSONObject(j);
