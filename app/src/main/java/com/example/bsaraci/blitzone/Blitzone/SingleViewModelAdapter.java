@@ -4,6 +4,8 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.PorterDuff;
 import android.renderscript.Allocation;
 import android.renderscript.Element;
 import android.renderscript.RenderScript;
@@ -56,6 +58,10 @@ public class SingleViewModelAdapter extends RecyclerView.Adapter<SingleViewModel
         if(url!=null){
 
             loadWithGlide(mContext, url, holder.itemImage);
+            Bitmap bMap = BitmapFactory.decodeResource(this.mContext.getResources(), R.drawable.b);
+            Bitmap newBitmap = adjustOpacity(bMap, 255);
+            Bitmap blurredBitmap = blurRenderScript(mContext,newBitmap,25);
+            holder.transparentItemImage.setImageBitmap(blurredBitmap);
         }
 
         else{
@@ -136,6 +142,14 @@ public class SingleViewModelAdapter extends RecyclerView.Adapter<SingleViewModel
             this.itemClickListener=ic;
         }
 
+    }
+
+    private Bitmap adjustOpacity(Bitmap bitmap, int opacity) {
+        Bitmap mutableBitmap = bitmap.isMutable() ? bitmap : bitmap.copy(Bitmap.Config.ARGB_8888, true);
+        Canvas canvas = new Canvas(mutableBitmap);
+        int colour = (opacity & 0xFF) << 24;
+        canvas.drawColor(colour, PorterDuff.Mode.DST_IN);
+        return mutableBitmap;
     }
 
     @SuppressLint("NewApi")
