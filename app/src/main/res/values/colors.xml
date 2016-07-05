@@ -9,6 +9,7 @@
     <color name="transparentGreen">#203d9f3d</color>
     <color name="white">#ffffff</color>
     <color name="transparentWhite">#90ffffff</color>
+    <color name="red">#FF0037</color>
     <color name="indicator">#008080</color>
 
 </resources>
