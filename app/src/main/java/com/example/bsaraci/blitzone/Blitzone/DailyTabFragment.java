@@ -162,7 +162,7 @@ public class DailyTabFragment extends Fragment implements SwipeRefreshLayout.OnR
                 u.setLikes(jsonUserTopic.getInt("likes"));
                 u.setDislikes(jsonUserTopic.getInt("dislikes"));
                 u.setIs_liked(jsonUserTopic.getBoolean("is_liked"));
-//                u.setIs_disliked(jsonUserTopic.getBoolean("is_disliked"));
+                u.setIs_disliked(jsonUserTopic.getBoolean("is_disliked"));
                 viewDataProvider.setUser(u);
                 viewDataProvider.setPhotoChapters(singleViewModels);
                 viewDataProvider.setBlitz(R.mipmap.ic_gray_blitz);

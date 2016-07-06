@@ -11,13 +11,26 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.example.bsaraci.blitzone.Profile.RoundedImageView;
 import com.example.bsaraci.blitzone.R;
 import com.example.bsaraci.blitzone.Search.ItemClickListener;
+import com.example.bsaraci.blitzone.ServerComm.JWTManager;
+import com.example.bsaraci.blitzone.ServerComm.MRequest;
+import com.example.bsaraci.blitzone.ServerComm.RequestQueueSingleton;
+import com.example.bsaraci.blitzone.ServerComm.RequestURL;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class RecycleviewAdapter extends  RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -88,12 +101,9 @@ public class RecycleviewAdapter extends  RecyclerView.Adapter<RecyclerView.ViewH
 
             String profilePictureUrl = viewDataProvider.getUser().getProfilePictureUrl();
 
-            if(profilePictureUrl!=null){
-                viewDataProvider.getUser().loadPicture(context,profilePictureUrl,((DailyViewHolder) holder).mProfile);
-            }
-            else{
-                ((DailyViewHolder) holder).mProfile.setImageResource(R.color.boldGray);
-            }
+            boolean isLiked = viewDataProvider.getUser().is_liked();
+            boolean isDisliked = viewDataProvider.getUser().is_disliked();
+
             ((DailyViewHolder) holder).mUsername.setText(viewDataProvider.getUser().getUsername());
             ((DailyViewHolder) holder).mBlitz.setImageResource(viewDataProvider.getBlitz());
             ((DailyViewHolder) holder).mBlitzClicked.setImageResource(viewDataProvider.getBlitzClicked());
@@ -111,6 +121,28 @@ public class RecycleviewAdapter extends  RecyclerView.Adapter<RecyclerView.ViewH
             ((DailyViewHolder) holder).mRecyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
             ((DailyViewHolder) holder).mRecyclerView.setAdapter(singleViewModelAdapter);
 
+            if(isLiked){
+                ((DailyViewHolder) holder).mLike.setVisibility(View.GONE);
+                ((DailyViewHolder) holder).mLikeClicked.setVisibility(View.VISIBLE);
+                ((DailyViewHolder) holder).mDislike.setVisibility(View.GONE);
+                ((DailyViewHolder) holder).mDislikeClicked.setVisibility(View.GONE);
+            }
+
+            else if(isDisliked){
+                ((DailyViewHolder) holder).mLike.setVisibility(View.GONE);
+                ((DailyViewHolder) holder).mLikeClicked.setVisibility(View.GONE);
+                ((DailyViewHolder) holder).mDislike.setVisibility(View.GONE);
+                ((DailyViewHolder) holder).mDislikeClicked.setVisibility(View.VISIBLE);
+            }
+
+            if(profilePictureUrl!=null){
+                viewDataProvider.getUser().loadPicture(context,profilePictureUrl,((DailyViewHolder) holder).mProfile);
+            }
+            else{
+                ((DailyViewHolder) holder).mProfile.setImageResource(R.color.boldGray);
+            }
+
+            final Integer userPrimaryKey = viewDataProvider.getUser().getPrimaryKey();
 
                     ((DailyViewHolder) holder).setItemClickListener(new ItemClickListener() {
                 @Override
@@ -122,18 +154,22 @@ public class RecycleviewAdapter extends  RecyclerView.Adapter<RecyclerView.ViewH
                         v.setVisibility(View.GONE);
                         ((DailyViewHolder) holder).mBlitz.setVisibility(View.VISIBLE);
                     } else if (v == ((DailyViewHolder) holder).mLike) {
+                        likeUserTopic(userPrimaryKey);
                         v.setVisibility(View.GONE);
                         ((DailyViewHolder) holder).mDislike.setVisibility(View.GONE);
                         ((DailyViewHolder) holder).mLikeClicked.setVisibility(View.VISIBLE);
                     } else if (v == ((DailyViewHolder) holder).mLikeClicked) {
+                        unlikeUserTopic(userPrimaryKey);
                         v.setVisibility(View.GONE);
                         ((DailyViewHolder) holder).mDislike.setVisibility(View.VISIBLE);
                         ((DailyViewHolder) holder).mLike.setVisibility(View.VISIBLE);
                     } else if (v == ((DailyViewHolder) holder).mDislike) {
+                        dislikeUserTopic(userPrimaryKey);
                         v.setVisibility(View.GONE);
                         ((DailyViewHolder) holder).mLike.setVisibility(View.GONE);
                         ((DailyViewHolder) holder).mDislikeClicked.setVisibility(View.VISIBLE);
                     } else if (v == ((DailyViewHolder) holder).mDislikeClicked) {
+                        undislikeUserTopic(userPrimaryKey);
                         v.setVisibility(View.GONE);
                         ((DailyViewHolder) holder).mLike.setVisibility(View.VISIBLE);
                         ((DailyViewHolder) holder).mDislike.setVisibility(View.VISIBLE);
@@ -145,6 +181,239 @@ public class RecycleviewAdapter extends  RecyclerView.Adapter<RecyclerView.ViewH
             ((ProgressViewHolder) holder).progressBar.setIndeterminate(true);
         }
     }
+
+    public JSONObject likeUserTopicParams(Integer userPrimaryKey){
+        Map<String, Integer> params = new HashMap<>();        //Creates the HashMap
+        params.put("user", userPrimaryKey);                   //Puts username in key 'followedUser'
+        return new JSONObject(params);                        //Returns the params
+    }
+
+    public void likeUserTopic(Integer userPrimaryKey){
+        //Adds a listener to the response. In this case it will alert user if the user is added or remove correctly.
+        Response.Listener<JSONObject> listener = new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+
+                //We use try and catch to handle JSONExceptions
+                try {
+
+                    //Enters if statusCode is 200
+                    if((int)response.get("statusCode")==200){
+                        Toast.makeText(context, "Liked", Toast.LENGTH_SHORT).show(); //Alerts user
+                    }
+
+                    //Enters when status code !=200 (=400)
+                    else {
+                        Toast.makeText(context,"There was an error",Toast.LENGTH_SHORT).show(); //Alerts user
+                    }
+                }
+
+                //In case of an exception
+                catch (JSONException e){
+                    e.printStackTrace();
+
+                }
+            }
+        };
+
+        //Function to be executed in case of an error
+        Response.ErrorListener errorListener = new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("Error", error.toString());
+            }
+        };
+
+        JWTManager jwtManager = new JWTManager(context);  //Creates the JWTManager
+
+        //Put everything in the request
+        MRequest mRequest = new MRequest(
+                RequestURL.LIKE_TOPIC,                  //The URL (/images/likeTopic/)
+                Request.Method.POST,                    //Type of method
+                likeUserTopicParams(userPrimaryKey),    //Put the parameters of the request here (JSONObject format)
+                listener,                               //The listener
+                errorListener,                          //The errorListener
+                jwtManager                              //The JWTManager
+        );
+
+        RequestQueueSingleton.getInstance(context).addToRequestQueue(mRequest);   //Sends the request
+    }
+
+    public JSONObject unlikeUserTopicParams(Integer userPrimaryKey){
+        Map<String, Integer> params = new HashMap<>();        //Creates the HashMap
+        params.put("user", userPrimaryKey);                   //Puts username in key 'followedUser'
+        return new JSONObject(params);                        //Returns the params
+    }
+
+    public void unlikeUserTopic(Integer userPrimaryKey){
+        //Adds a listener to the response. In this case it will alert user if the user is added or remove correctly.
+        Response.Listener<JSONObject> listener = new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+
+                //We use try and catch to handle JSONExceptions
+                try {
+
+                    //Enters if statusCode is 200
+                    if((int)response.get("statusCode")==200){
+                        Toast.makeText(context, "Unliked", Toast.LENGTH_SHORT).show(); //Alerts user
+                    }
+
+                    //Enters when status code !=200 (=400)
+                    else {
+                        Toast.makeText(context,"There was an error",Toast.LENGTH_SHORT).show(); //Alerts user
+                    }
+                }
+
+                //In case of an exception
+                catch (JSONException e){
+                    e.printStackTrace();
+
+                }
+            }
+        };
+
+        //Function to be executed in case of an error
+        Response.ErrorListener errorListener = new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("Error", error.toString());
+            }
+        };
+
+        JWTManager jwtManager = new JWTManager(context);  //Creates the JWTManager
+
+        //Put everything in the request
+        MRequest mRequest = new MRequest(
+                RequestURL.UNLIKE_TOPIC,                //The URL (/images/unlikeTopic/)
+                Request.Method.POST,                    //Type of method
+                unlikeUserTopicParams(userPrimaryKey),  //Put the parameters of the request here (JSONObject format)
+                listener,                               //The listener
+                errorListener,                          //The errorListener
+                jwtManager                              //The JWTManager
+        );
+
+        RequestQueueSingleton.getInstance(context).addToRequestQueue(mRequest);   //Sends the request
+    }
+
+    public JSONObject dislikeUserTopicParams(Integer userPrimaryKey){
+        Map<String, Integer> params = new HashMap<>();        //Creates the HashMap
+        params.put("user", userPrimaryKey);                   //Puts username in key 'followedUser'
+        return new JSONObject(params);                        //Returns the params
+    }
+
+    public void dislikeUserTopic(Integer userPrimaryKey){
+        //Adds a listener to the response. In this case it will alert user if the user is added or remove correctly.
+        Response.Listener<JSONObject> listener = new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+
+                //We use try and catch to handle JSONExceptions
+                try {
+
+                    //Enters if statusCode is 200
+                    if((int)response.get("statusCode")==200){
+                        Toast.makeText(context, "Disiked", Toast.LENGTH_SHORT).show(); //Alerts user
+                    }
+
+                    //Enters when status code !=200 (=400)
+                    else {
+                        Toast.makeText(context,"There was an error",Toast.LENGTH_SHORT).show(); //Alerts user
+                    }
+                }
+
+                //In case of an exception
+                catch (JSONException e){
+                    e.printStackTrace();
+
+                }
+            }
+        };
+
+        //Function to be executed in case of an error
+        Response.ErrorListener errorListener = new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("Error", error.toString());
+            }
+        };
+
+        JWTManager jwtManager = new JWTManager(context);  //Creates the JWTManager
+
+        //Put everything in the request
+        MRequest mRequest = new MRequest(
+                RequestURL.DISLIKE_TOPIC,                   //The URL (/images/dislikeTopic/)
+                Request.Method.POST,                        //Type of method
+                dislikeUserTopicParams(userPrimaryKey),     //Put the parameters of the request here (JSONObject format)
+                listener,                                   //The listener
+                errorListener,                              //The errorListener
+                jwtManager                                  //The JWTManager
+        );
+
+        RequestQueueSingleton.getInstance(context).addToRequestQueue(mRequest);   //Sends the request
+    }
+
+    public JSONObject undislikeUserTopicParams(Integer userPrimaryKey){
+        Map<String, Integer> params = new HashMap<>();        //Creates the HashMap
+        params.put("user", userPrimaryKey);                   //Puts username in key 'followedUser'
+        return new JSONObject(params);                        //Returns the params
+    }
+
+    public void undislikeUserTopic(Integer userPrimaryKey){
+        //Adds a listener to the response. In this case it will alert user if the user is added or remove correctly.
+        Response.Listener<JSONObject> listener = new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+
+                //We use try and catch to handle JSONExceptions
+                try {
+
+                    //Enters if statusCode is 200
+                    if((int)response.get("statusCode")==200){
+                        Toast.makeText(context, "Undisiked", Toast.LENGTH_SHORT).show(); //Alerts user
+                    }
+
+                    //Enters when status code !=200 (=400)
+                    else {
+                        Toast.makeText(context,"There was an error",Toast.LENGTH_SHORT).show(); //Alerts user
+                    }
+                }
+
+                //In case of an exception
+                catch (JSONException e){
+                    e.printStackTrace();
+
+                }
+            }
+        };
+
+        //Function to be executed in case of an error
+        Response.ErrorListener errorListener = new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("Error", error.toString());
+            }
+        };
+
+        JWTManager jwtManager = new JWTManager(context);  //Creates the JWTManager
+
+        //Put everything in the request
+        MRequest mRequest = new MRequest(
+                RequestURL.UNDISLIKE_TOPIC,                 //The URL (/images/undislikeTopic/)
+                Request.Method.POST,                        //Type of method
+                undislikeUserTopicParams(userPrimaryKey),   //Put the parameters of the request here (JSONObject format)
+                listener,                                   //The listener
+                errorListener,                              //The errorListener
+                jwtManager                                  //The JWTManager
+        );
+
+        RequestQueueSingleton.getInstance(context).addToRequestQueue(mRequest);   //Sends the request
+    }
+
 
     public void setLoaded() {
         loading = false;

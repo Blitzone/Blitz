@@ -24,6 +24,10 @@ public class RequestURL {
     public static final String UNFOLLOW_USER            = IP_ADDRESS + "/accounts/delFollow/";
     public static final String BEST_USERS               = IP_ADDRESS + "/accounts/getFollowing/";
     public static final String DAILY_USERS              = IP_ADDRESS + "/images/daily/";
+    public static final String LIKE_TOPIC               = IP_ADDRESS + "/images/likeTopic/";
+    public static final String UNLIKE_TOPIC             = IP_ADDRESS + "/images/unlikeTopic/";
+    public static final String DISLIKE_TOPIC            = IP_ADDRESS + "/images/dislikeTopic/";
+    public static final String UNDISLIKE_TOPIC          = IP_ADDRESS + "/images/undislikeTopic/";
 
     public static boolean _needsAuth(String url)
     {
@@ -45,6 +49,10 @@ public class RequestURL {
             case UNFOLLOW_USER:         return true;
             case BEST_USERS:            return true;
             case DAILY_USERS:           return true;
+            case LIKE_TOPIC:            return true;
+            case UNLIKE_TOPIC:          return true;
+            case DISLIKE_TOPIC:         return true;
+            case UNDISLIKE_TOPIC:       return true;
             default:                    return false;
         }
     }
