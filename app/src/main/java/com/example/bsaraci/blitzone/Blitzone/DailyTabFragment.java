@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -23,6 +24,7 @@ import com.example.bsaraci.blitzone.ServerComm.JWTManager;
 import com.example.bsaraci.blitzone.ServerComm.MRequest;
 import com.example.bsaraci.blitzone.ServerComm.RequestQueueSingleton;
 import com.example.bsaraci.blitzone.ServerComm.RequestURL;
+import com.yalantis.phoenix.PullToRefreshView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -31,15 +33,15 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class DailyTabFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener{
+public class DailyTabFragment extends Fragment{
 
     private ArrayList<ViewDataProvider> viewDataProviderList = new ArrayList<>();
-    private SwipeRefreshLayout swipeLayout;
     RecyclerView recyclerView;
     RecycleviewAdapter adap ;
     LinearLayoutManager linearLayoutManager;
     private TextView tvEmptyView;
     protected Handler handler;
+    PullToRefreshView mPullToRefreshView ;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -49,13 +51,22 @@ public class DailyTabFragment extends Fragment implements SwipeRefreshLayout.OnR
         tvEmptyView = (TextView)view.findViewById(R.id.emptyView);
         handler = new Handler();
 
-        swipeLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipeContainer);
-        swipeLayout.setOnRefreshListener(this);
-        swipeLayout.setColorSchemeResources(
-                R.color.mint,
-                R.color.mint,
-                R.color.mint,
-                R.color.mint);
+        mPullToRefreshView = (PullToRefreshView)view.findViewById(R.id.pull_to_refresh);
+
+        mPullToRefreshView.setOnRefreshListener(new PullToRefreshView.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                mPullToRefreshView.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        viewDataProviderList= new ArrayList<>();
+                        adap.setList(viewDataProviderList);
+                        getDailyUsers(viewDataProviderList);
+                        mPullToRefreshView.setRefreshing(false);
+                    }
+                }, 1000);
+            }
+        });
 
         viewDataProviderList = new ArrayList<>();
 
@@ -195,11 +206,6 @@ public class DailyTabFragment extends Fragment implements SwipeRefreshLayout.OnR
     }
 
     @Override
-    public void onRefresh() {
-        executeSchedule(); //Necessary. If not it wont refresh
-    }
-
-    @Override
     public void onStart() {
         super.onStart();
         executeSchedule(); //First execution and data loading.
@@ -215,10 +221,6 @@ public class DailyTabFragment extends Fragment implements SwipeRefreshLayout.OnR
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            if(!swipeLayout.isRefreshing()) {
-                swipeLayout.measure(10, 10);
-                swipeLayout.setRefreshing(true); //set refresh state
-            }
         }
 
         @Override
@@ -236,8 +238,6 @@ public class DailyTabFragment extends Fragment implements SwipeRefreshLayout.OnR
 
         @Override
         protected void onPostExecute(Void result) {
-            swipeLayout.setRefreshing(false);
-
         }
 
     }

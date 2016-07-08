@@ -1,18 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.SwipeRefreshLayout
-
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/swipeContainer"
-    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white">
-
-
-<android.support.v7.widget.RecyclerView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/dailyList"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" />
+    android:orientation="vertical">
+
+    <com.yalantis.phoenix.PullToRefreshView
+        android:id="@+id/pull_to_refresh"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <android.support.v7.widget.RecyclerView
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/dailyList"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </com.yalantis.phoenix.PullToRefreshView>
 
     <TextView
         android:id="@+id/emptyView"
@@ -22,5 +27,7 @@
         android:text="@string/noRecords_daily_tab_content"
         android:visibility="gone" />
 
+</LinearLayout>
 
-</android.support.v4.widget.SwipeRefreshLayout>
+
+

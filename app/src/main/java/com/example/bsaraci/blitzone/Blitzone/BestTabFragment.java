@@ -22,6 +22,8 @@ import com.example.bsaraci.blitzone.ServerComm.JWTManager;
 import com.example.bsaraci.blitzone.ServerComm.MRequest;
 import com.example.bsaraci.blitzone.ServerComm.RequestQueueSingleton;
 import com.example.bsaraci.blitzone.ServerComm.RequestURL;
+import com.yalantis.phoenix.PullToRefreshView;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -29,15 +31,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 
-public class BestTabFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener{
+public class BestTabFragment extends Fragment{
 
     private ArrayList<RowDataProvider> rowDataProviderList;
     RecyclerView recyclerView;
     TextView tvEmptyView;
     protected Handler handler;
-    private SwipeRefreshLayout swipeLayout;
     RecyclerowAdapter adap ;
     LinearLayoutManager linearLayoutManager;
+    PullToRefreshView mPullToRefreshView ;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -46,13 +48,23 @@ public class BestTabFragment extends Fragment implements SwipeRefreshLayout.OnRe
         tvEmptyView = (TextView)v.findViewById(R.id.emptyView);
         handler = new Handler();
 
-        swipeLayout = (SwipeRefreshLayout) v.findViewById(R.id.swipeContainer);
-        swipeLayout.setOnRefreshListener(this);
-        swipeLayout.setColorSchemeResources(
-                R.color.mint,
-                R.color.mint,
-                R.color.mint,
-                R.color.mint);
+        mPullToRefreshView = (PullToRefreshView)v.findViewById(R.id.pull_to_refresh);
+
+        mPullToRefreshView.setOnRefreshListener(new PullToRefreshView.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                mPullToRefreshView.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        rowDataProviderList= new ArrayList<>();
+                        adap.setList(rowDataProviderList);
+                        getBestFollowingUsers(rowDataProviderList);
+                        mPullToRefreshView.setRefreshing(false);
+                    }
+                }, 1000);
+            }
+        });
+
 
         rowDataProviderList = new ArrayList<>();
 
@@ -64,10 +76,10 @@ public class BestTabFragment extends Fragment implements SwipeRefreshLayout.OnRe
         adap.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore() {
+
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        //   remove progress item
                         getBestFollowingUsers(rowDataProviderList);
                     }
                 }, 2000);
@@ -170,11 +182,6 @@ public class BestTabFragment extends Fragment implements SwipeRefreshLayout.OnRe
     }
 
     @Override
-    public void onRefresh() {
-        executeSchedule();
-    }
-
-    @Override
     public void onStart() {
         super.onStart();
         executeSchedule(); //First execution and data loading.
@@ -191,10 +198,6 @@ public class BestTabFragment extends Fragment implements SwipeRefreshLayout.OnRe
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            if(!swipeLayout.isRefreshing()) {
-                swipeLayout.measure(10, 10);
-                swipeLayout.setRefreshing(true); //set refresh state
-            }
         }
 
         @Override
@@ -210,7 +213,6 @@ public class BestTabFragment extends Fragment implements SwipeRefreshLayout.OnRe
 
         @Override
         protected void onPostExecute(Void result) {
-            swipeLayout.setRefreshing(false);
 
         }
 
