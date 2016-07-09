@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -42,6 +43,9 @@ import com.example.bsaraci.blitzone.ServerComm.PhotoUploadRequest;
 import com.example.bsaraci.blitzone.ServerComm.PhotoUploadResponse;
 import com.example.bsaraci.blitzone.ServerComm.RequestQueueSingleton;
 import com.example.bsaraci.blitzone.ServerComm.RequestURL;
+import com.theartofdev.edmodo.cropper.CropImage;
+import com.theartofdev.edmodo.cropper.CropImageView;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -85,13 +89,6 @@ public class Profile extends AppCompatActivity {
 
         profileToolbar = (Toolbar) findViewById(R.id.toolbar_of_profile);
         toolbarTitle = (TextView) findViewById(R.id.profile_toolbar_title);
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-    }
-    @Override
-    public void onResume(){
-        super.onResume();
-        getProfileData();
 
     }
 
@@ -103,15 +100,29 @@ public class Profile extends AppCompatActivity {
 
         if (requestCode == requestGallery && resultCode == RESULT_OK && null != data && data.getData() != null) {
             Uri selectedImage = data.getData();
+            startCropImageActivity(selectedImage);
+        }
 
-            Bitmap photo = photoSaveFromGallery(selectedImage);
-
-            if (requestGallery == UPLOAD_PROFILE_IMAGE_FROM_GALLERY) {
+        else if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE && requestGallery == UPLOAD_PROFILE_IMAGE_FROM_GALLERY ) {
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+            if (resultCode == RESULT_OK) {
+                Uri resultUri = result.getUri();
+                Bitmap photo = photoSaveFromGallery(resultUri);
                 ImageView imageView1 = (ImageView) this.findViewById(R.id.profile_picture);
                 dialog = ProgressDialog.show(Profile.this, "", "Uploading profile image ...", true);
                 uploadPicture(photo, RequestURL.AVATAR, null);
                 imageView1.setImageBitmap(photo);
-            } else if (requestGallery == UPLOAD_CHAPTER_IMAGE_FROM_GALLERY) {
+            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                Exception error = result.getError();
+            }
+
+
+        } else if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE && requestGallery == UPLOAD_CHAPTER_IMAGE_FROM_GALLERY) {
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+            if (resultCode == RESULT_OK) {
+                Uri resultUri = result.getUri();
+                Bitmap photo = photoSaveFromGallery(resultUri);
+
                 PhotoChapter photoChapter = topic.getPhotoChapterFromPosition(chapterClicked);
                 photoChapter.setPhoto(photo);
                 Integer chapterId = photoChapter.getChapterId();
@@ -121,8 +132,23 @@ public class Profile extends AppCompatActivity {
                 mAdapter = new ProfileRecyclerviewAdapter(topic, this);
                 mAdapter.notifyDataSetChanged();
                 mRecyclerView.setAdapter(mAdapter);
+            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                Exception error = result.getError();
             }
+
+
         }
+
+    }
+
+    private void startCropImageActivity(Uri imageUri) {
+        CropImage.activity(imageUri)
+                .setGuidelines(CropImageView.Guidelines.ON)
+                .setMinCropResultSize(1200, 1200)
+                .setMaxCropResultSize(1200, 1200)
+                .setInitialCropWindowPaddingRatio(0)
+                .setAllowRotation(false)
+                .start(this);
     }
 
 

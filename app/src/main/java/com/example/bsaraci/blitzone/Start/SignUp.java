@@ -194,7 +194,7 @@ public class SignUp extends AppCompatActivity {
             public void afterTextChanged(Editable editable) {
             }
         };
-        
+
         username.addTextChangedListener(textWatcher);
         pass.addTextChangedListener(textWatcher);
         pass1.addTextChangedListener(textWatcher);
