@@ -22,6 +22,7 @@ import com.example.bsaraci.blitzone.ServerComm.JWTManager;
 import com.example.bsaraci.blitzone.ServerComm.MRequest;
 import com.example.bsaraci.blitzone.ServerComm.RequestURL;
 import com.example.bsaraci.blitzone.ServerComm.RequestQueueSingleton;
+import com.rengwuxian.materialedittext.MaterialEditText;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -34,20 +35,20 @@ import java.util.regex.Pattern;
 
 public class SignUp extends AppCompatActivity {
 
-    private EditText username;
-    private EditText pass;
-    private EditText pass1;
-    private EditText eMail;
+    private MaterialEditText username;
+    private MaterialEditText pass;
+    private MaterialEditText pass1;
+    private MaterialEditText eMail;
     private ProgressBar spinner;
 
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.signup);
-        username = (EditText)findViewById(R.id.username_signup);
-        pass = (EditText)findViewById(R.id.password_signup);
-        pass1 = (EditText)findViewById(R.id.password_again_signup);
-        eMail = (EditText)findViewById(R.id.email);
+        username = (MaterialEditText)findViewById(R.id.username_signup);
+        pass = (MaterialEditText)findViewById(R.id.password_signup);
+        pass1 = (MaterialEditText)findViewById(R.id.password_again_signup);
+        eMail = (MaterialEditText)findViewById(R.id.email);
         username.setTypeface(Typeface.DEFAULT);
         pass.setTypeface(Typeface.DEFAULT);
         pass1.setTypeface(Typeface.DEFAULT);
@@ -132,9 +133,9 @@ public class SignUp extends AppCompatActivity {
     private JSONObject getSignUpParams()
     {
         Map<String, String> params = new HashMap<String, String>();
-        params.put("username", ((EditText) findViewById(R.id.username_signup)).getText().toString());
-        params.put("password", ((EditText) findViewById(R.id.password_signup)).getText().toString());
-        params.put("email", ((EditText) findViewById(R.id.email)).getText().toString());
+        params.put("username", ((MaterialEditText) findViewById(R.id.username_signup)).getText().toString());
+        params.put("password", ((MaterialEditText) findViewById(R.id.password_signup)).getText().toString());
+        params.put("email", ((MaterialEditText) findViewById(R.id.email)).getText().toString());
 
         return new JSONObject(params);
     }
@@ -193,12 +194,7 @@ public class SignUp extends AppCompatActivity {
             public void afterTextChanged(Editable editable) {
             }
         };
-
-        username = (EditText)findViewById(R.id.username_signup);
-        pass = (EditText)findViewById(R.id.password_signup);
-        pass1 = (EditText)findViewById(R.id.password_again_signup);
-        eMail = (EditText)findViewById(R.id.email);
-
+        
         username.addTextChangedListener(textWatcher);
         pass.addTextChangedListener(textWatcher);
         pass1.addTextChangedListener(textWatcher);
