@@ -1,52 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/mint">
 
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:text="@string/SignUp_fromLogin_button"
         android:id="@+id/sign_up_gray_button"
-        android:background="@drawable/rectangular_filled_green_button"
-        android:textColor="@color/white"
+        android:textColor="@color/green"
+        android:gravity="center"
         android:onClick="signupButtonCallback"
-        android:layout_alignParentBottom="true"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        android:layout_below="@+id/forgotPasswordTextView"
         android:layout_centerHorizontal="true"
-        android:textSize="10sp"/>
+        android:layout_marginTop="20dp"/>
 
-    <EditText
+    <com.rengwuxian.materialedittext.MaterialEditText
         android:layout_width="300dp"
-        android:layout_height="40dp"
-        android:id="@+id/username_login"
-        android:layout_marginTop="30dp"
+        android:layout_height="60dp"
         android:hint="@string/usernameHint_login"
-        android:background="@drawable/rounded_edittext"
-        android:textColor="@color/white"
+        android:id="@+id/username_login"
+        app:met_baseColor="@color/white"
+        app:met_primaryColor="@color/green"
+        app:met_textColor="@color/white"
+        app:met_textColorHint="@color/white"
+        app:met_floatingLabel="highlight"
+        app:met_floatingLabelText="@string/usernameHint_login"
+        app:met_iconLeft="@mipmap/ic_profile"
+        app:met_iconPadding="0dp"
+        android:layout_marginTop="30dp"
         android:textSize="15sp"
-        android:textColorHint="@color/white"
         android:singleLine="true"
         android:layout_below="@+id/blitz_login"
-        android:layout_alignLeft="@+id/log_in_home_button"
-        android:layout_alignStart="@+id/log_in_home_button" />
+        android:layout_marginLeft="20dp"
+        android:layout_marginStart="20dp"/>
 
-    <EditText
+    <com.rengwuxian.materialedittext.MaterialEditText
         android:layout_width="300dp"
-        android:layout_height="40dp"
-        android:id="@+id/password_login"
+        android:layout_height="60dp"
         android:hint="@string/passwordHint_login"
+        android:id="@+id/password_login"
         android:inputType="textPassword"
-        android:background="@drawable/rounded_edittext"
+        app:met_baseColor="@color/white"
+        app:met_primaryColor="@color/green"
+        app:met_textColor="@color/white"
+        app:met_textColorHint="@color/white"
+        app:met_floatingLabel="highlight"
+        app:met_floatingLabelText="@string/passwordHint_login"
+        app:met_iconLeft="@mipmap/ic_password"
+        app:met_iconPadding="0dp"
         android:layout_below="@+id/username_login"
         android:layout_alignLeft="@+id/username_login"
         android:layout_alignStart="@+id/username_login"
         android:layout_marginTop="10dp"
-        android:textColor="@color/white"
         android:textSize="15sp"
-        android:textColorHint="@color/white"
         android:singleLine="true"/>
 
     <Button

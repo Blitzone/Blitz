@@ -29,11 +29,7 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-import rb.popview.PopField;
 
-/**
- * Created by bsaraci on 4/3/2016.
- */
 public class StartActivity extends Activity {
     private int durationOfAnimation =0;
     private static final int SPLASH_SCREEN_DURATION = 5000;

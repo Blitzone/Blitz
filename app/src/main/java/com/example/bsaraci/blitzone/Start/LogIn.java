@@ -1,6 +1,7 @@
 package com.example.bsaraci.blitzone.Start;
 
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
@@ -8,7 +9,6 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 import com.android.volley.Request;
@@ -22,6 +22,8 @@ import com.example.bsaraci.blitzone.ServerComm.JWTManager;
 import com.example.bsaraci.blitzone.ServerComm.MRequest;
 import com.example.bsaraci.blitzone.ServerComm.RequestQueueSingleton;
 import com.example.bsaraci.blitzone.ServerComm.RequestURL;
+import com.rengwuxian.materialedittext.MaterialEditText;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.net.HttpURLConnection;
@@ -30,8 +32,8 @@ import java.util.Map;
 
 
 public class  LogIn  extends AppCompatActivity {
-    private EditText usernameEditText;
-    private EditText passwordEditText;
+    private MaterialEditText usernameEditText;
+    private MaterialEditText passwordEditText;
     private ProgressBar spinner;
     String username;
     Integer blitzNumber;
@@ -40,8 +42,11 @@ public class  LogIn  extends AppCompatActivity {
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
+        usernameEditText = ((MaterialEditText) findViewById(R.id.username_login));
+        passwordEditText = ((MaterialEditText) findViewById(R.id.password_login));
+        usernameEditText.setTypeface(Typeface.DEFAULT);
+        passwordEditText.setTypeface(Typeface.DEFAULT);
         loginEnabled();
-        getProfileData();
     }
 
     public void loginHomeButtonCallback(View view)
@@ -112,8 +117,8 @@ public class  LogIn  extends AppCompatActivity {
     private JSONObject getLoginParams()
     {
         Map<String, String> params = new HashMap<String, String>();
-        params.put("username", ((EditText) findViewById(R.id.username_login)).getText().toString());
-        params.put("password", ((EditText) findViewById(R.id.password_login)).getText().toString());
+        params.put("username", usernameEditText.getText().toString());
+        params.put("password", passwordEditText.getText().toString());
 
         return new JSONObject(params);
     }
@@ -149,8 +154,8 @@ public class  LogIn  extends AppCompatActivity {
             }
         };
 
-        usernameEditText = (EditText)findViewById(R.id.username_login);
-        passwordEditText = (EditText)findViewById(R.id.password_login);
+        usernameEditText = (MaterialEditText)findViewById(R.id.username_login);
+        passwordEditText = (MaterialEditText)findViewById(R.id.password_login);
 
         usernameEditText.addTextChangedListener(textWatcher);
         passwordEditText.addTextChangedListener(textWatcher);
@@ -173,54 +178,6 @@ public class  LogIn  extends AppCompatActivity {
     public void spinnerStop (){
         spinner=(ProgressBar)findViewById(R.id.progressBar);
         spinner.setVisibility(View.GONE);
-    }
-
-    private void updateProfile(JSONObject response) {
-        try {
-            String username1 = response.get("user").toString();
-            //Boolean isBanned = response.get("is_banned").toString().equals("true");
-            Integer blitzCount = (Integer) response.get("blitzCount");
-            //String avatar = RequestURL.IP_ADDRESS + response.get("avatar").toString();
-            username=username1;
-            blitzNumber=blitzCount;
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void getProfileData() {
-
-        Response.Listener<JSONObject> listener = new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                updateProfile(response);
-            }
-        };
-
-        //Function to be executed in case of an error
-        Response.ErrorListener errorListener = new Response.ErrorListener() {
-
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.e("Error", error.toString());
-            }
-        };
-
-        JWTManager jwtManager = new JWTManager(getApplicationContext());
-        //Put everything in the request
-        MRequest mRequest = new MRequest(
-                RequestURL.PROFILE,
-                Request.Method.GET,
-                null, //Put the parameters of the request here (JSONObject format)
-                listener,
-                errorListener,
-                jwtManager
-        );
-
-        //Send the request to execute
-        RequestQueueSingleton.getInstance(this).addToRequestQueue(mRequest);
-
     }
 
 }

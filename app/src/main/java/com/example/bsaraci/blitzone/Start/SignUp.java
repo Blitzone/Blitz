@@ -1,6 +1,7 @@
 package com.example.bsaraci.blitzone.Start;
 
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -43,6 +44,14 @@ public class SignUp extends AppCompatActivity {
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.signup);
+        username = (EditText)findViewById(R.id.username_signup);
+        pass = (EditText)findViewById(R.id.password_signup);
+        pass1 = (EditText)findViewById(R.id.password_again_signup);
+        eMail = (EditText)findViewById(R.id.email);
+        username.setTypeface(Typeface.DEFAULT);
+        pass.setTypeface(Typeface.DEFAULT);
+        pass1.setTypeface(Typeface.DEFAULT);
+        eMail.setTypeface(Typeface.DEFAULT);
         signUpEnabled();
     }
 
@@ -132,10 +141,6 @@ public class SignUp extends AppCompatActivity {
 
     private boolean _signUpCheck()
     {
-        username = (EditText)findViewById(R.id.username_signup);
-        pass = (EditText)findViewById(R.id.password_signup);
-        pass1 = (EditText)findViewById(R.id.password_again_signup);
-        eMail = (EditText)findViewById(R.id.email);
 
         if(!pass.getText().toString().equals(pass1.getText().toString()))
         {
@@ -256,13 +261,8 @@ public class SignUp extends AppCompatActivity {
             }
 
         };
-        task.execute((Void[])null);
+        task.execute((Void[]) null);
 
     }
 
-    public void spinnerStop(){
-        spinner=(ProgressBar)findViewById(R.id.progressBar);
-        spinner.setVisibility(View.GONE);
-
-    }
 }

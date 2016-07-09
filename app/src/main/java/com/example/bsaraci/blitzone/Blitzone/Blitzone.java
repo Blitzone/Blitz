@@ -21,7 +21,6 @@ public class Blitzone extends AppCompatActivity
     private ViewPager viewPager;
     private BlitzoneViewPagerAdapter viewPagerAdapter;
     TextView toolbarTitle;
-    Typeface titleFont;
     CharSequence titles[]={"Daily","Best"};
     int numbOfTabs =2;
 
