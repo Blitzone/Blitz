@@ -12,12 +12,13 @@ import android.widget.TextView;
 import com.example.bsaraci.blitzone.R;
 import com.example.bsaraci.blitzone.Search.Search;
 import com.example.bsaraci.blitzone.Tabs.SlidingTabLayout;
+import com.gigamole.navigationtabstrip.NavigationTabStrip;
 
 public class Blitzone extends AppCompatActivity
 {
 
     Toolbar blitzoneToolbar;
-    private SlidingTabLayout tabLayout;
+    private NavigationTabStrip tabLayout;
     private ViewPager viewPager;
     private BlitzoneViewPagerAdapter viewPagerAdapter;
     TextView toolbarTitle;
@@ -32,21 +33,12 @@ public class Blitzone extends AppCompatActivity
         blitzoneToolbar = (Toolbar) findViewById(R.id.toolbar_of_blitzone);
         toolbarTitle = (TextView)findViewById(R.id.blitzone_toolbar_title);
 
-        tabLayout = (SlidingTabLayout) findViewById(R.id.tabs);
+        tabLayout = (NavigationTabStrip) findViewById(R.id.tabs);
         viewPager = (ViewPager) findViewById(R.id.viewpager);
 
         viewPagerAdapter = new BlitzoneViewPagerAdapter(getSupportFragmentManager(), titles, numbOfTabs);
         viewPager.setAdapter(viewPagerAdapter);
-
-        tabLayout.setDistributeEvenly(true); // To make the Tabs Fixed set this true, This makes the tabs Space Evenly in Available width
-
-        tabLayout.setCustomTabColorizer(new SlidingTabLayout.TabColorizer() {
-            @Override
-            public int getIndicatorColor(int position) {
-                return getResources().getColor(R.color.indicator);
-            }
-        });
-
+        tabLayout.setTitles("Daily", "Best");
         tabLayout.setViewPager(viewPager);
     }
 

@@ -34,5 +34,6 @@ dependencies {
     compile 'com.rengwuxian.materialedittext:library:2.1.4'
     compile 'com.theartofdev.edmodo:android-image-cropper:2.2.+'
     compile 'net.steamcrafted:materialiconlib:1.0.9'
+    compile 'com.github.devlight.navigationtabstrip:navigationtabstrip:1.0.2'
 
 }

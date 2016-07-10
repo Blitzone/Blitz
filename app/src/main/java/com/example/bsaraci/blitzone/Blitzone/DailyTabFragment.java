@@ -186,6 +186,7 @@ public class DailyTabFragment extends Fragment{
                 viewDataProvider.setLikeClicked(R.mipmap.ic_like_clicked);
                 viewDataProvider.setDislike(R.mipmap.ic_gray_dislike);
                 viewDataProvider.setDislikeClicked(R.mipmap.ic_dislike_clicked);
+                viewDataProvider.setBlitzesText("blitzes");
                 viewDataProviderList.add(viewDataProvider);
             }
 

@@ -13,6 +13,7 @@ public class ViewDataProvider {
     private int likeClicked;
     private int dislike;
     private int dislikeClicked;
+    private String blitzesText;
     private ArrayList <SingleViewModel> photoChapters;
 
     public ViewDataProvider(){
@@ -25,6 +26,14 @@ public class ViewDataProvider {
 
     public void setPhotoChapters(ArrayList<SingleViewModel> photoChapters) {
         this.photoChapters = photoChapters;
+    }
+
+    public String getBlitzesText() {
+        return blitzesText;
+    }
+
+    public void setBlitzesText(String blitzesText) {
+        this.blitzesText = blitzesText;
     }
 
     public User getUser() {

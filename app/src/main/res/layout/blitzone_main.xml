@@ -64,11 +64,19 @@
             </RelativeLayout>
         </android.support.v7.widget.Toolbar>
 
-        <com.example.bsaraci.blitzone.Tabs.SlidingTabLayout
+            <com.gigamole.navigationtabstrip.NavigationTabStrip
             android:id="@+id/tabs"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/white"
+            android:layout_height="30dp"
+            app:nts_color="@color/mint"
+            app:nts_size="12sp"
+            app:nts_factor="3"
+            app:nts_type="point"
+            app:nts_gravity="bottom"
+            app:nts_corners_radius="1.5dp"
+            app:nts_animation_duration="500"
+            app:nts_active_color="@color/mint"
+            app:nts_inactive_color="@color/gray"
             android:layout_below="@+id/toolbar_of_blitzone"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true" />

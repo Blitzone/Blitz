@@ -111,6 +111,7 @@ public class RecycleviewAdapter extends  RecyclerView.Adapter<RecyclerView.ViewH
             ((DailyViewHolder) holder).mDislike.setImageResource(viewDataProvider.getDislike());
             ((DailyViewHolder) holder).mDislikeClicked.setImageResource(viewDataProvider.getDislikeClicked());
             ((DailyViewHolder) holder).mPoints.setText(viewDataProvider.getUser().getBlitz().toString());
+            ((DailyViewHolder) holder).mBlitzesText.setText(viewDataProvider.getBlitzesText());
 
             ArrayList singleViewModels = viewDataProvider.getPhotoChapters();
 
@@ -451,6 +452,7 @@ public class RecycleviewAdapter extends  RecyclerView.Adapter<RecyclerView.ViewH
         public ImageButton mDislike;
         public ImageButton mDislikeClicked;
         public RecyclerView mRecyclerView;
+        public TextView mBlitzesText;
 
 
         public DailyViewHolder(View view) {
@@ -466,6 +468,7 @@ public class RecycleviewAdapter extends  RecyclerView.Adapter<RecyclerView.ViewH
             this.mDislike = (ImageButton) view.findViewById(R.id.dislike);
             this.mDislikeClicked = (ImageButton)view.findViewById(R.id.dislikeClicked);
             this.mRecyclerView = (RecyclerView) view.findViewById(R.id.chapterOfTheDay);
+            this.mBlitzesText = (TextView)view.findViewById(R.id.blitzesTextViewDaily);
 
             mBlitz.setOnClickListener(DailyViewHolder.this);
             mBlitzClicked.setOnClickListener(DailyViewHolder.this);
