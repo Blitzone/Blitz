@@ -113,6 +113,10 @@ public class BestTabFragment extends Fragment{
 
     public void getBestFollowingUsers(ArrayList<RowDataProvider> bestUserList){
 
+        if (getContext() == null){
+            return;
+        }
+
         //Adds a listener to the response. In this case the response of the server will trigger the method updateTopic
         Response.Listener<JSONObject> listener = new Response.Listener<JSONObject>() {
             @Override

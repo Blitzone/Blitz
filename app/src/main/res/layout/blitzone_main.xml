@@ -22,13 +22,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
 
-                <ImageButton
+                <net.steamcrafted.materialiconlib.MaterialIconView
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:id="@+id/search_from_blitzone"
-                    android:background="@mipmap/ic_mint_search_icon"
-                    android:onClick="searchFromBlitzoneButtonCallback"
-                    android:scaleType="center"/>
+                    app:materialIcon="magnify"
+                    app:materialIconColor="@color/mint"
+                    app:materialIconSize="25dp"
+                    android:scaleType="center"
+                    android:onClick="searchFromBlitzoneButtonCallback" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -43,13 +45,15 @@
                     android:layout_centerVertical="true"
                     android:layout_centerHorizontal="true" />
 
-                <ImageButton
+                <net.steamcrafted.materialiconlib.MaterialIconView
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:id="@+id/profile_from_blitzone"
-                    android:background="@mipmap/ic_mint_profile_icon"
-                    android:onClick="profileFromBlitzoneButtonCallback"
+                    app:materialIcon="account"
+                    app:materialIconColor="@color/mint"
+                    app:materialIconSize="25dp"
                     android:scaleType="center"
+                    android:onClick="profileFromBlitzoneButtonCallback"
                     android:layout_gravity="end"
                     android:layout_alignParentTop="true"
                     android:layout_alignParentRight="true"

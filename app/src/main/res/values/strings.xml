@@ -35,12 +35,12 @@
 
     <!-- PROFILE -->
     <string name="toolbar_title_profile"> </string>
-    <string name="points_profile">"115"</string>
-    <string name="likes_profile">353</string>
-    <string name="dislikes_profile">100</string>
-    <string name="followers_profile">1k</string>
-    <string name="textBelow_hlv">Test</string>
-    <string name="dayChapter_profile">Travel friend</string>
+    <string name="points_profile">""</string>
+    <string name="likes_profile">""</string>
+    <string name="dislikes_profile">""</string>
+    <string name="followers_profile">""</string>
+    <string name="textBelow_hlv">""</string>
+    <string name="dayChapter_profile">""</string>
     <!--*****************************************************************************-->
 
     <!-- NOTIFICATIONS -->

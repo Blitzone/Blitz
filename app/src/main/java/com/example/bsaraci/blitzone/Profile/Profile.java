@@ -141,6 +141,12 @@ public class Profile extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        getProfileData();
+    }
+
     private void startCropImageActivity(Uri imageUri) {
         CropImage.activity(imageUri)
                 .setGuidelines(CropImageView.Guidelines.ON)
@@ -271,6 +277,10 @@ public class Profile extends AppCompatActivity {
             Integer numFollowers = (Integer) response.get("followers");
             String avatar = RequestURL.IP_ADDRESS + response.get("avatar").toString();
 
+            Integer likes = response.getInt("likes");
+            Integer dislikes = response.getInt("dislikes");
+
+
             final ImageView imageView = (ImageView) this.findViewById(R.id.profile_picture);
 
             Glide.with(this)
@@ -292,6 +302,12 @@ public class Profile extends AppCompatActivity {
                             //never called
                         }
                     });
+
+            TextView likesTextView = (TextView)findViewById(R.id.number_of_likes);
+            TextView dislikesTextView = (TextView)findViewById(R.id.number_of_dislikes);
+
+            likesTextView.setText(likes.toString());
+            dislikesTextView.setText(dislikes.toString());
 
             TextView blitzCountView = (TextView) findViewById(R.id.number_of_blitz);
             blitzCountView.setText(blitzCount.toString());
@@ -414,7 +430,7 @@ public class Profile extends AppCompatActivity {
         MRequest mRequest = new MRequest(
                 RequestURL.GET_USER_CHAPTERS,
                 Request.Method.POST,
-                getPhotoChaptersFromTopicParams(topic.getId()), //Put the parameters of the request here (JSONObject format)
+                null, //Put the parameters of the request here (JSONObject format)
                 listener,
                 errorListener,
                 jwtManager
@@ -429,6 +445,7 @@ public class Profile extends AppCompatActivity {
 
             JSONArray photoChapterList = (JSONArray) response.get("userChapters");
             int photoChapterListSize = photoChapterList.length();
+
             for (int i = 0; i < photoChapterListSize; i++) {
                 JSONObject jsonPhotoChapter = (JSONObject) photoChapterList.getJSONObject(i);
                 Integer chapterId = (Integer) jsonPhotoChapter.get("chapter");
@@ -452,11 +469,6 @@ public class Profile extends AppCompatActivity {
         return new JSONObject(params);
     }
 
-    private JSONObject getPhotoChaptersFromTopicParams(Integer topicId) {
-        Map<String, String> params = new HashMap<String, String>();
-        params.put("topic", topicId.toString());
-        return new JSONObject(params);
-    }
 
     public void showProfilePhotoAlertDialogWithListview() {
         List<String> uploadOptions = new ArrayList<String>();

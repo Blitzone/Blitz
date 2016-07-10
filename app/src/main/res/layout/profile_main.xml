@@ -45,12 +45,14 @@
             android:layout_alignParentStart="true"
             android:layout_marginTop="8dp"/>
 
-        <ImageButton
+        <net.steamcrafted.materialiconlib.MaterialIconView
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:id="@+id/notifications_from_profile"
-            android:background="@mipmap/ic_mint_notifications"
             android:onClick="notificationsFromProfileButtonCallback"
+            app:materialIcon="newspaper"
+            app:materialIconColor="@color/mint"
+            app:materialIconSize="25dp"
             android:scaleType="center"
             android:layout_alignParentTop="true"
             android:layout_alignParentRight="true"
@@ -194,31 +196,41 @@
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true" />
 
-        <ImageButton
+        <net.steamcrafted.materialiconlib.MaterialIconView
             android:layout_width="45dp"
             android:layout_height="45dp"
             android:id="@+id/optionsButton"
-            android:background="@mipmap/ic_options_icon"
             android:onClick="optionsCallback"
             android:layout_alignParentTop="true"
             android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true" />
+            android:layout_alignParentEnd="true"
+            app:materialIcon="settings"
+            app:materialIconColor="@color/mint"
+            app:materialIconSize="30dp"
+            android:scaleType="center"
+            />
 
-        <ImageButton
+        <net.steamcrafted.materialiconlib.MaterialIconView
             android:layout_width="45dp"
             android:layout_height="45dp"
             android:id="@+id/shareButton"
-            android:background="@mipmap/ic_share_icon"
             android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
+            android:layout_alignParentStart="true"
+            app:materialIcon="share"
+            app:materialIconColor="@color/mint"
+            app:materialIconSize="30dp"
+            android:scaleType="center"/>
 
-        <ImageButton
+        <net.steamcrafted.materialiconlib.MaterialIconView
             android:layout_width="45dp"
             android:layout_height="45dp"
             android:id="@+id/photoButton"
-            android:background="@mipmap/ic_photo_button"
-            android:layout_centerHorizontal="true" />
+            android:layout_centerHorizontal="true"
+            app:materialIcon="plus"
+            app:materialIconColor="@color/mint"
+            app:materialIconSize="30dp"
+            android:scaleType="center"/>
     </RelativeLayout>
 
     <RelativeLayout
