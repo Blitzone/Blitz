@@ -53,7 +53,7 @@
         android:id="@+id/blitzIcon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@mipmap/ic_rounded_gray_blitz"
+        android:src="@mipmap/ic_gray_blitz"
         android:scaleType="center"
         android:layout_below="@+id/chapterOfTheDay"
         android:layout_centerHorizontal="true" />
@@ -117,7 +117,7 @@
         android:layout_alignParentEnd="true"
         />
 
-        <android.support.v7.widget.RecyclerView
+        <com.example.bsaraci.blitzone.Blitzone.CustomRecyclerView
             android:id="@+id/chapterOfTheDay"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

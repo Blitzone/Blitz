@@ -86,7 +86,7 @@ public class RecyclerowAdapter extends  RecyclerView.Adapter<RecyclerView.ViewHo
             ((RowViewHolder)holder).mUsername.setText(listDataProvider.getUser().getUsername());
         String pts = listDataProvider.getUser().getBlitz().toString();
             ((RowViewHolder)holder).mPoints.setText(pts);
-        if(listDataProvider.getUser().isFollowing()){
+        if(listDataProvider.getUser().is_blitzed()){
             ((RowViewHolder)holder).mBlitz.setImageResource(R.mipmap.ic_orange_blitz);
         }
         else{

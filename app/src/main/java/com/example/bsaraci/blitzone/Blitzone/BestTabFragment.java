@@ -159,6 +159,7 @@ public class BestTabFragment extends Fragment{
                 u.setUsername(jsonUser.getString("user"));
                 u.setBlitz(jsonUser.getInt("blitzCount"));
                 u.setProfilePictureUrl(RequestURL.IP_ADDRESS + jsonUser.getString("avatar"));
+                u.setIs_blitzed(jsonUser.getBoolean("is_blitzed"));
                 u.setPrimaryKey(jsonUser.getInt("pk"));
                 rowDataProvider.setUser(u);
                 rowDataProviderList.add(rowDataProvider);

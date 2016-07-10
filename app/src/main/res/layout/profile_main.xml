@@ -237,7 +237,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
-        <android.support.v7.widget.RecyclerView
+        <com.example.bsaraci.blitzone.Blitzone.CustomRecyclerView
             android:id="@+id/hlvProfile"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

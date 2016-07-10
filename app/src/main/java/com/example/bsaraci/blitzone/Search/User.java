@@ -36,11 +36,20 @@ public class User implements Comparable<User> {
     private boolean is_liked;                   //if the user likes a topic or not
     private boolean is_disliked;                //if the user dislikes a topic or not
     private Integer numFollowers;               //the number of followers
+    private boolean is_blitzed;                 //if the user is blitzed
 
 /**
     EMPTY CONSTRUCTOR
 */
     public User() {}
+
+    public boolean is_blitzed() {
+        return is_blitzed;
+    }
+
+    public void setIs_blitzed(boolean is_blitzed) {
+        this.is_blitzed = is_blitzed;
+    }
 
     public Integer getLikes() {
         return likes;

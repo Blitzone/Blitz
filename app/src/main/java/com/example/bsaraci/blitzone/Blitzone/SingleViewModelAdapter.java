@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.renderscript.Allocation;
 import android.renderscript.Element;
@@ -32,6 +33,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 
+import jp.wasabeef.blurry.Blurry;
+
 public class SingleViewModelAdapter extends RecyclerView.Adapter<SingleViewModelAdapter.SingleItemRowHolder> {
 
     private ArrayList<SingleViewModel> itemsList;
@@ -58,10 +61,6 @@ public class SingleViewModelAdapter extends RecyclerView.Adapter<SingleViewModel
         if(url!=null){
 
             loadWithGlide(mContext, url, holder.itemImage);
-            Bitmap bMap = BitmapFactory.decodeResource(this.mContext.getResources(), R.drawable.b);
-            Bitmap newBitmap = adjustOpacity(bMap, 255);
-            Bitmap blurredBitmap = blurRenderScript(mContext,newBitmap,25);
-            holder.transparentItemImage.setImageBitmap(blurredBitmap);
         }
 
         else{
@@ -73,6 +72,11 @@ public class SingleViewModelAdapter extends RecyclerView.Adapter<SingleViewModel
             @Override
             public void onItemClick(View v, int pos) {
                 if(v==holder.itemImage){
+                    Blurry.with(mContext)
+                            .radius(15)
+                            .color(Color.argb(66, 0, 128, 128))
+                            .async()
+                            .capture(v).into(holder.transparentItemImage);
                     holder.tvChapter.setVisibility(View.VISIBLE);
                     holder.transparentItemImage.setVisibility(View.VISIBLE);
                 }

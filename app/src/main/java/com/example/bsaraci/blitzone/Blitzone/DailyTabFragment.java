@@ -178,6 +178,7 @@ public class DailyTabFragment extends Fragment{
                 u.setDislikes(jsonUserTopic.getInt("dislikes"));
                 u.setIs_liked(jsonUserTopic.getBoolean("is_liked"));
                 u.setIs_disliked(jsonUserTopic.getBoolean("is_disliked"));
+                u.setIs_blitzed(jsonUserTopic.getBoolean("is_blitzed"));
                 viewDataProvider.setUser(u);
                 viewDataProvider.setPhotoChapters(singleViewModels);
                 viewDataProvider.setBlitz(R.mipmap.ic_gray_blitz);

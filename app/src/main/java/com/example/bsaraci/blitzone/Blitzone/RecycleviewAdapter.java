@@ -102,6 +102,7 @@ public class RecycleviewAdapter extends  RecyclerView.Adapter<RecyclerView.ViewH
 
             boolean isLiked = viewDataProvider.getUser().is_liked();
             boolean isDisliked = viewDataProvider.getUser().is_disliked();
+            boolean isBlitzed = viewDataProvider.getUser().is_blitzed();
 
             ((DailyViewHolder) holder).mUsername.setText(viewDataProvider.getUser().getUsername());
             ((DailyViewHolder) holder).mBlitz.setImageResource(viewDataProvider.getBlitz());
@@ -118,8 +119,15 @@ public class RecycleviewAdapter extends  RecyclerView.Adapter<RecyclerView.ViewH
             SingleViewModelAdapter singleViewModelAdapter = new SingleViewModelAdapter(context,singleViewModels);
 
             ((DailyViewHolder) holder).mRecyclerView.setHasFixedSize(true);
-            ((DailyViewHolder) holder).mRecyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
+            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
+            linearLayoutManager.canScrollVertically();
+            ((DailyViewHolder) holder).mRecyclerView.setLayoutManager(linearLayoutManager);
             ((DailyViewHolder) holder).mRecyclerView.setAdapter(singleViewModelAdapter);
+
+            if(isBlitzed){
+                ((DailyViewHolder) holder).mBlitz.setVisibility(View.GONE);
+                ((DailyViewHolder) holder).mBlitzClicked.setVisibility(View.VISIBLE);
+            }
 
             if(isLiked){
                 ((DailyViewHolder) holder).mLike.setVisibility(View.GONE);
@@ -149,10 +157,8 @@ public class RecycleviewAdapter extends  RecyclerView.Adapter<RecyclerView.ViewH
                 public void onItemClick(View v, int pos) {
                     if (v == ((DailyViewHolder) holder).mBlitz) {
                         v.setVisibility(View.GONE);
+                        sendBlitz(userPrimaryKey);
                         ((DailyViewHolder) holder).mBlitzClicked.setVisibility(View.VISIBLE);
-                    } else if (v == ((DailyViewHolder) holder).mBlitzClicked) {
-                        v.setVisibility(View.GONE);
-                        ((DailyViewHolder) holder).mBlitz.setVisibility(View.VISIBLE);
                     } else if (v == ((DailyViewHolder) holder).mLike) {
                         likeUserTopic(userPrimaryKey);
                         v.setVisibility(View.GONE);
@@ -414,6 +420,63 @@ public class RecycleviewAdapter extends  RecyclerView.Adapter<RecyclerView.ViewH
         RequestQueueSingleton.getInstance(context).addToRequestQueue(mRequest);   //Sends the request
     }
 
+    public JSONObject sendBlitzParams(Integer userPrimaryKey){
+        Map<String, Integer> params = new HashMap<>();        //Creates the HashMap
+        params.put("user", userPrimaryKey);                   //Puts username in key 'followedUser'
+        return new JSONObject(params);                        //Returns the params
+    }
+
+    public void sendBlitz (Integer userPrimaryKey){
+        //Adds a listener to the response. In this case it will alert user if the user is added or remove correctly.
+                Response.Listener<JSONObject> listener = new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+
+                //We use try and catch to handle JSONExceptions
+                try {
+
+                    //Enters if statusCode is 200
+                    if((int)response.get("statusCode")==200){
+                        Toast.makeText(context, "Blitz sent", Toast.LENGTH_SHORT).show(); //Alerts user
+                    }
+
+                    //Enters when status code !=200 (=400)
+                    else {
+                        Toast.makeText(context,"There was an error",Toast.LENGTH_SHORT).show(); //Alerts user
+                    }
+                }
+
+                //In case of an exception
+                catch (JSONException e){
+                    e.printStackTrace();
+
+                }
+            }
+        };
+
+        //Function to be executed in case of an error
+        Response.ErrorListener errorListener = new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("Error", error.toString());
+            }
+        };
+
+        JWTManager jwtManager = new JWTManager(context);  //Creates the JWTManager
+
+        //Put everything in the request
+        MRequest mRequest = new MRequest(
+                RequestURL.SEND_BLITZ,                      //The URL (/images/undislikeTopic/)
+                Request.Method.POST,                        //Type of method
+                sendBlitzParams(userPrimaryKey),            //Put the parameters of the request here (JSONObject format)
+                listener,                                   //The listener
+                errorListener,                              //The errorListener
+                jwtManager                                  //The JWTManager
+        );
+
+        RequestQueueSingleton.getInstance(context).addToRequestQueue(mRequest);   //Sends the request
+    }
 
     public void setLoaded() {
         loading = false;
@@ -451,7 +514,7 @@ public class RecycleviewAdapter extends  RecyclerView.Adapter<RecyclerView.ViewH
         public ImageButton mLikeClicked;
         public ImageButton mDislike;
         public ImageButton mDislikeClicked;
-        public RecyclerView mRecyclerView;
+        public CustomRecyclerView mRecyclerView;
         public TextView mBlitzesText;
 
 
@@ -467,7 +530,7 @@ public class RecycleviewAdapter extends  RecyclerView.Adapter<RecyclerView.ViewH
             this.mLikeClicked = (ImageButton) view.findViewById(R.id.likeClicked);
             this.mDislike = (ImageButton) view.findViewById(R.id.dislike);
             this.mDislikeClicked = (ImageButton)view.findViewById(R.id.dislikeClicked);
-            this.mRecyclerView = (RecyclerView) view.findViewById(R.id.chapterOfTheDay);
+            this.mRecyclerView = (CustomRecyclerView) view.findViewById(R.id.chapterOfTheDay);
             this.mBlitzesText = (TextView)view.findViewById(R.id.blitzesTextViewDaily);
 
             mBlitz.setOnClickListener(DailyViewHolder.this);

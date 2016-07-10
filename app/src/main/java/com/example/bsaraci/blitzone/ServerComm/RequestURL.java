@@ -28,6 +28,7 @@ public class RequestURL {
     public static final String UNLIKE_TOPIC             = IP_ADDRESS + "/images/unlikeTopic/";
     public static final String DISLIKE_TOPIC            = IP_ADDRESS + "/images/dislikeTopic/";
     public static final String UNDISLIKE_TOPIC          = IP_ADDRESS + "/images/undislikeTopic/";
+    public static final String SEND_BLITZ               = IP_ADDRESS + "/images/sendBlitz/";
 
     public static boolean _needsAuth(String url)
     {
@@ -53,6 +54,7 @@ public class RequestURL {
             case UNLIKE_TOPIC:          return true;
             case DISLIKE_TOPIC:         return true;
             case UNDISLIKE_TOPIC:       return true;
+            case SEND_BLITZ:            return true;
             default:                    return false;
         }
     }
