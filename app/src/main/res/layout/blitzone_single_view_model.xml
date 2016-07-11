@@ -10,7 +10,7 @@
     <ImageView
         android:id="@+id/photo"
         android:layout_width="350dp"
-        android:layout_height="390dp"
+        android:layout_height="400dp"
         android:layout_gravity="center_horizontal"
         android:scaleType="centerCrop"
         android:src="@color/lightGray"
@@ -20,7 +20,7 @@
     <ImageView
         android:id="@+id/transparentPhoto"
         android:layout_width="350dp"
-        android:layout_height="390dp"
+        android:layout_height="400dp"
         android:layout_gravity="center_horizontal"
         android:scaleType="centerCrop"
         android:src="@android:color/transparent"

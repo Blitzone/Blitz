@@ -158,9 +158,11 @@ public class RecycleviewAdapter extends  RecyclerView.Adapter<RecyclerView.ViewH
                 @Override
                 public void onItemClick(View v, int pos) {
                     if (v == ((DailyViewHolder) holder).mBlitz) {
+                        ((DailyViewHolder) holder).mBlitz.bringToFront();
+                        ((DailyViewHolder) holder).mBlitz.requestLayout();
                         v.setVisibility(View.GONE);
                         sendBlitz(userPrimaryKey);
-                        Animation scaleAndShake = AnimationUtils.loadAnimation(context, R.anim.scale_and_shake);
+                        Animation scaleAndShake = AnimationUtils.loadAnimation(context, R.anim.scale_translation_and_shake);
                         ((DailyViewHolder) holder).mBlitzClicked.bringToFront();
                         ((DailyViewHolder) holder).mBlitzClicked.requestLayout();
                         ((DailyViewHolder) holder).mBlitzClicked.startAnimation(scaleAndShake);
@@ -171,9 +173,11 @@ public class RecycleviewAdapter extends  RecyclerView.Adapter<RecyclerView.ViewH
                         ((DailyViewHolder) holder).mBlitz.setVisibility(View.VISIBLE);
                     }
                     else if (v == ((DailyViewHolder) holder).mLike) {
+                        ((DailyViewHolder) holder).mLike.bringToFront();
+                        ((DailyViewHolder) holder).mLike.requestLayout();
                         likeUserTopic(userPrimaryKey);
                         v.setVisibility(View.GONE);
-                        Animation scale = AnimationUtils.loadAnimation(context, R.anim.scale);
+                        Animation scale = AnimationUtils.loadAnimation(context, R.anim.scale_and_translation_left);
                         ((DailyViewHolder) holder).mLikeClicked.bringToFront();
                         ((DailyViewHolder) holder).mLikeClicked.requestLayout();
                         ((DailyViewHolder) holder).mLikeClicked.startAnimation(scale);
@@ -185,9 +189,11 @@ public class RecycleviewAdapter extends  RecyclerView.Adapter<RecyclerView.ViewH
                         ((DailyViewHolder) holder).mDislike.setVisibility(View.VISIBLE);
                         ((DailyViewHolder) holder).mLike.setVisibility(View.VISIBLE);
                     } else if (v == ((DailyViewHolder) holder).mDislike) {
+                        ((DailyViewHolder) holder).mDislike.bringToFront();
+                        ((DailyViewHolder) holder).mDislike.requestLayout();
                         dislikeUserTopic(userPrimaryKey);
                         v.setVisibility(View.GONE);
-                        Animation scale = AnimationUtils.loadAnimation(context, R.anim.scale);
+                        Animation scale = AnimationUtils.loadAnimation(context, R.anim.scale_and_translation_right);
                         ((DailyViewHolder) holder).mDislikeClicked.bringToFront();
                         ((DailyViewHolder) holder).mDislikeClicked.requestLayout();
                         ((DailyViewHolder) holder).mDislikeClicked.startAnimation(scale);
