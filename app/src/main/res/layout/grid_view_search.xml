@@ -135,22 +135,14 @@
         android:layout_height="match_parent"
         android:id="@+id/container">
 
-        <GridView
+        <android.support.v7.widget.RecyclerView
             android:id="@+id/gridView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:columnWidth="180dp"
-            android:gravity="center"
-            android:numColumns="2"
-            android:stretchMode="columnWidth"
-            android:verticalSpacing="2dp"
-            android:horizontalSpacing="2dp"
-            android:focusable="true"
-            android:clickable="true"
             android:listSelector="@android:color/transparent"
-            android:scrollbars="none"/>
-
+            android:scrollbars="vertical"/>
         <ImageView
+
             android:id="@+id/expandedImage"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

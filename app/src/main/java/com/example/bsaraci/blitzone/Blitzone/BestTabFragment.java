@@ -10,9 +10,12 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -22,6 +25,7 @@ import com.example.bsaraci.blitzone.ServerComm.JWTManager;
 import com.example.bsaraci.blitzone.ServerComm.MRequest;
 import com.example.bsaraci.blitzone.ServerComm.RequestQueueSingleton;
 import com.example.bsaraci.blitzone.ServerComm.RequestURL;
+import com.example.bsaraci.blitzone.Start.LogIn;
 import com.yalantis.phoenix.PullToRefreshView;
 
 import org.json.JSONArray;
@@ -44,6 +48,8 @@ public class BestTabFragment extends Fragment{
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.best_tab_content, container, false);
+
+
         recyclerView = (RecyclerView) v.findViewById(R.id.bestList);
         tvEmptyView = (TextView)v.findViewById(R.id.emptyView);
         handler = new Handler();
@@ -56,10 +62,16 @@ public class BestTabFragment extends Fragment{
                 mPullToRefreshView.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        rowDataProviderList= new ArrayList<>();
-                        adap.setList(rowDataProviderList);
-                        getBestFollowingUsers(rowDataProviderList);
-                        mPullToRefreshView.setRefreshing(false);
+                        if(LogIn.isNetworkStatusAvialable(getContext())){
+                            rowDataProviderList= new ArrayList<>();
+                            adap.setList(rowDataProviderList);
+                            getBestFollowingUsers(rowDataProviderList);
+                            mPullToRefreshView.setRefreshing(false);
+                        }
+                        else{
+                            Toast.makeText(getContext(), "Cannot refresh. No internet connection", Toast.LENGTH_SHORT).show();
+                            mPullToRefreshView.setRefreshing(false);
+                        }
                     }
                 }, 1000);
             }
@@ -91,6 +103,11 @@ public class BestTabFragment extends Fragment{
 
         return v;
 
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
     }
 
     public JSONObject getBestFollowingUsersParams(ArrayList<RowDataProvider> bestUserList){

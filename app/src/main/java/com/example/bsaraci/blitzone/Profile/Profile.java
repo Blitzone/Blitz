@@ -98,45 +98,51 @@ public class Profile extends AppCompatActivity {
         // TODO Auto-generated method stub
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == requestGallery && resultCode == RESULT_OK && null != data && data.getData() != null) {
-            Uri selectedImage = data.getData();
-            startCropImageActivity(selectedImage);
+        if(LogIn.isNetworkStatusAvialable(getApplicationContext())){
+
+            if (requestCode == requestGallery && resultCode == RESULT_OK && null != data && data.getData() != null) {
+                Uri selectedImage = data.getData();
+                startCropImageActivity(selectedImage);
+            }
+
+            else if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE && requestGallery == UPLOAD_PROFILE_IMAGE_FROM_GALLERY ) {
+                CropImage.ActivityResult result = CropImage.getActivityResult(data);
+                if (resultCode == RESULT_OK) {
+                    Uri resultUri = result.getUri();
+                    Bitmap photo = photoSaveFromGallery(resultUri);
+                    ImageView imageView1 = (ImageView) this.findViewById(R.id.profile_picture);
+                    dialog = ProgressDialog.show(Profile.this, "", "Uploading profile image ...", true);
+                    uploadPicture(photo, RequestURL.AVATAR, null);
+                    imageView1.setImageBitmap(photo);
+                } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                    Exception error = result.getError();
+                }
+
+
+            } else if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE && requestGallery == UPLOAD_CHAPTER_IMAGE_FROM_GALLERY) {
+                CropImage.ActivityResult result = CropImage.getActivityResult(data);
+                if (resultCode == RESULT_OK) {
+                    Uri resultUri = result.getUri();
+                    Bitmap photo = photoSaveFromGallery(resultUri);
+
+                    PhotoChapter photoChapter = topic.getPhotoChapterFromPosition(chapterClicked);
+                    photoChapter.setPhoto(photo);
+                    Integer chapterId = photoChapter.getChapterId();
+
+                    dialog = ProgressDialog.show(Profile.this, "", "Uploading chapter image ...", true);
+                    uploadPicture(photo, RequestURL.UPLOAD_USER_CHAPTER, getPhotoChapterFromChapterParams(chapterId));
+                    mAdapter = new ProfileRecyclerviewAdapter(topic, this);
+                    mAdapter.notifyDataSetChanged();
+                    mRecyclerView.setAdapter(mAdapter);
+                } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                    Exception error = result.getError();
+                }
+
+            }
+
         }
-
-        else if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE && requestGallery == UPLOAD_PROFILE_IMAGE_FROM_GALLERY ) {
-            CropImage.ActivityResult result = CropImage.getActivityResult(data);
-            if (resultCode == RESULT_OK) {
-                Uri resultUri = result.getUri();
-                Bitmap photo = photoSaveFromGallery(resultUri);
-                ImageView imageView1 = (ImageView) this.findViewById(R.id.profile_picture);
-                dialog = ProgressDialog.show(Profile.this, "", "Uploading profile image ...", true);
-                uploadPicture(photo, RequestURL.AVATAR, null);
-                imageView1.setImageBitmap(photo);
-            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
-                Exception error = result.getError();
-            }
-
-
-        } else if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE && requestGallery == UPLOAD_CHAPTER_IMAGE_FROM_GALLERY) {
-            CropImage.ActivityResult result = CropImage.getActivityResult(data);
-            if (resultCode == RESULT_OK) {
-                Uri resultUri = result.getUri();
-                Bitmap photo = photoSaveFromGallery(resultUri);
-
-                PhotoChapter photoChapter = topic.getPhotoChapterFromPosition(chapterClicked);
-                photoChapter.setPhoto(photo);
-                Integer chapterId = photoChapter.getChapterId();
-
-                dialog = ProgressDialog.show(Profile.this, "", "Uploading chapter image ...", true);
-                uploadPicture(photo, RequestURL.UPLOAD_USER_CHAPTER, getPhotoChapterFromChapterParams(chapterId));
-                mAdapter = new ProfileRecyclerviewAdapter(topic, this);
-                mAdapter.notifyDataSetChanged();
-                mRecyclerView.setAdapter(mAdapter);
-            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
-                Exception error = result.getError();
-            }
-
-
+        else{
+            Toast.makeText(getApplicationContext(), "Cannot upload. No internet connection", Toast.LENGTH_SHORT).show();
         }
 
     }

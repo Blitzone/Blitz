@@ -10,7 +10,7 @@
     <ImageView
         android:id="@+id/photo"
         android:layout_width="350dp"
-        android:layout_height="400dp"
+        android:layout_height="350dp"
         android:layout_gravity="center_horizontal"
         android:scaleType="centerCrop"
         android:src="@color/lightGray"
@@ -20,7 +20,7 @@
     <ImageView
         android:id="@+id/transparentPhoto"
         android:layout_width="350dp"
-        android:layout_height="400dp"
+        android:layout_height="350dp"
         android:layout_gravity="center_horizontal"
         android:scaleType="centerCrop"
         android:src="@android:color/transparent"
@@ -37,7 +37,7 @@
             android:padding="5dp"
             android:text="Sample chapterName"
             android:textColor="@color/white"
-            android:textStyle="bold"
+            android:textStyle="bold|italic"
             android:textSize="20sp"
             android:layout_centerVertical="true"
             android:layout_alignLeft="@+id/photo"

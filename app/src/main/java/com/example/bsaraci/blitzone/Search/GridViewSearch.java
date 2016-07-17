@@ -18,6 +18,8 @@ import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
@@ -37,6 +39,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
+import com.example.bsaraci.blitzone.Profile.RecyclerItemClickListener;
 import com.example.bsaraci.blitzone.R;
 import com.example.bsaraci.blitzone.ServerComm.JWTManager;
 import com.example.bsaraci.blitzone.ServerComm.MRequest;
@@ -66,8 +69,10 @@ public class GridViewSearch extends AppCompatActivity {
     private Button add;                             //Add button when the photo is in fullsize
     private Button remove;                          //Remove button when the photo is in fullsize
     private String uname;                           //The string of the username
+    RecyclerView gridView;
+    GridViewAdapter gridAdapter;
 
-/**
+    /**
     THIS METHOD IS TRIGGERED WHEN THE INTENT IS CREATED
 */
     protected void onCreate(Bundle savedInstanceState){
@@ -106,26 +111,40 @@ public class GridViewSearch extends AppCompatActivity {
     @param gridItems, the ArrayList that the adapter takes in its constructor
 */
     public void initiateGrid(final ArrayList<GridItem> gridItems){
-        GridView gridView = (GridView) findViewById(R.id.gridView);  //Affects this xml to the gridView
-        GridViewAdapter gridAdapter = new GridViewAdapter(this, R.layout.grid_view_item, gridItems);    //Creates the adapter
+        gridView = (RecyclerView)findViewById(R.id.gridView);
+        gridView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
+        int spacingInPixels =1;
+        gridView.addItemDecoration(new SpacesItemDecoration(spacingInPixels));
+        gridAdapter = new GridViewAdapter(this,gridItems);
         gridView.setAdapter(gridAdapter);   //Sets the adapter of the gridView
+        gridView.setHasFixedSize(true);
 
         //Sets an ItemClickListener for the gridView
-        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-                thumbView = v;
-                isFullsize = true;                                //Now we are in full size
-                String url = gridItems.get(position).getUrl();  //Sets the url of the picture
-                User u = gridItems.get(position).getUser();     //Sets the user who posted that picture
-                uname = u.getUsername();                          //Gets the username of the user u
-                usernameInToolbar.setText(uname);               //Sets the username of the username TextView when we are in full size
-                boolean followed = u.isFollowing();             //True if you follow User u. False if not
+        gridView.addOnItemTouchListener(
+                new RecyclerItemClickListener(this, gridView, new RecyclerItemClickListener.OnItemClickListener() {
+                    public void onItemClick(View view, int position) {
+                        thumbView = view;
+                        isFullsize = true;                                //Now we are in full size
+                        String url = gridItems.get(position).getUrl();  //Sets the url of the picture
+                        User u = gridItems.get(position).getUser();     //Sets the user who posted that picture
+                        uname = u.getUsername();                          //Gets the username of the user u
+                        usernameInToolbar.setText(uname);               //Sets the username of the username TextView when we are in full size
+                        boolean followed = u.isFollowing();             //True if you follow User u. False if not
 
-                //Triggers the method of animation
-                zoomImageFromThumb(points, blitz, add, remove, backFromGrid, gridViewFromFullsize, toolbarTitle, usernameInToolbar, v, url, followed);
-            }
-        });
-            }
+                        //Triggers the method of animation
+                        zoomImageFromThumb(points, blitz, add, remove, backFromGrid, gridViewFromFullsize, toolbarTitle, usernameInToolbar, view, url, followed);
+
+                    }
+
+                    @Override
+                    public void onItemLongClick(View view, int position) {
+
+                    }
+                })
+        );
+
+
+    }
 
 /**
     METHOD THAT ANIMATES THE PASSAGE FROM THUMBVIEW TO FULLSIZE
@@ -182,8 +201,7 @@ public class GridViewSearch extends AppCompatActivity {
         // bounds, since that's the origin for the positioning animation
         // properties (X, Y).
         thumbView.getGlobalVisibleRect(startBounds);
-        findViewById(R.id.container)
-                .getGlobalVisibleRect(finalBounds, globalOffset);
+        findViewById(R.id.container).getGlobalVisibleRect(finalBounds, globalOffset);
         startBounds.offset(-globalOffset.x, -globalOffset.y);
         finalBounds.offset(-globalOffset.x, -globalOffset.y);
 
@@ -302,7 +320,7 @@ public class GridViewSearch extends AppCompatActivity {
                         addUser.setVisibility(View.GONE);
                         removeUser.setVisibility(View.GONE);
                         expandedImageView.setVisibility(View.GONE);
-                        getGridPhotoChapters();
+                        /*getGridPhotoChapters();*/
                         mCurrentAnimator = null;
                     }
 
@@ -318,7 +336,7 @@ public class GridViewSearch extends AppCompatActivity {
                         addUser.setVisibility(View.GONE);
                         removeUser.setVisibility(View.GONE);
                         expandedImageView.setVisibility(View.GONE);
-                        getGridPhotoChapters();
+                        /*getGridPhotoChapters();*/
                         mCurrentAnimator = null;
                     }
                 });

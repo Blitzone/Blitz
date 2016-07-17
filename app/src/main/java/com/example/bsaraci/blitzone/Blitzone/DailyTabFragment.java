@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -24,6 +25,7 @@ import com.example.bsaraci.blitzone.ServerComm.JWTManager;
 import com.example.bsaraci.blitzone.ServerComm.MRequest;
 import com.example.bsaraci.blitzone.ServerComm.RequestQueueSingleton;
 import com.example.bsaraci.blitzone.ServerComm.RequestURL;
+import com.example.bsaraci.blitzone.Start.LogIn;
 import com.yalantis.phoenix.PullToRefreshView;
 
 import org.json.JSONArray;
@@ -59,10 +61,16 @@ public class DailyTabFragment extends Fragment{
                 mPullToRefreshView.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        viewDataProviderList= new ArrayList<>();
-                        adap.setList(viewDataProviderList);
-                        getDailyUsers(viewDataProviderList);
-                        mPullToRefreshView.setRefreshing(false);
+                        if(LogIn.isNetworkStatusAvialable(getContext())){
+                            viewDataProviderList= new ArrayList<>();
+                            adap.setList(viewDataProviderList);
+                            getDailyUsers(viewDataProviderList);
+                            mPullToRefreshView.setRefreshing(false);
+                        }
+                        else{
+                            Toast.makeText(getContext(), "Cannot refresh. No internet connection", Toast.LENGTH_SHORT).show();
+                            mPullToRefreshView.setRefreshing(false);
+                        }
                     }
                 }, 1000);
             }
@@ -209,6 +217,10 @@ public class DailyTabFragment extends Fragment{
             e.printStackTrace();
         }
 
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
     }
 
     @Override

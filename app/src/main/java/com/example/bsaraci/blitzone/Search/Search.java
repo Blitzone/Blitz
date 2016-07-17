@@ -28,11 +28,13 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -74,7 +76,6 @@ public class Search extends AppCompatActivity {
         setContentView(R.layout.search_main);
         initiateComponents();
         getTopic();
-
     }
 
 /**
@@ -360,7 +361,7 @@ public class Search extends AppCompatActivity {
         try {
 
             ArrayList<SearchModel> users=new ArrayList<>();                             //Creates a new ArrayList<SearchModel>
-            JSONArray searchUserList= searchUser.getJSONArray("userList");    //Takes the JSONArray from the response
+            JSONArray searchUserList= searchUser.getJSONArray("userList");              //Takes the JSONArray from the response
             int searchUserListSize = searchUserList.length();                           //Length of searchUserList
 
             //Enters in the loop if query is not empty

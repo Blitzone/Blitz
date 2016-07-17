@@ -158,52 +158,45 @@ public class RecycleviewAdapter extends  RecyclerView.Adapter<RecyclerView.ViewH
                 @Override
                 public void onItemClick(View v, int pos) {
                     if (v == ((DailyViewHolder) holder).mBlitz) {
-                        ((DailyViewHolder) holder).mBlitz.bringToFront();
-                        ((DailyViewHolder) holder).mBlitz.requestLayout();
                         v.setVisibility(View.GONE);
-                        sendBlitz(userPrimaryKey);
                         Animation scaleAndShake = AnimationUtils.loadAnimation(context, R.anim.scale_translation_and_shake);
                         ((DailyViewHolder) holder).mBlitzClicked.bringToFront();
-                        ((DailyViewHolder) holder).mBlitzClicked.requestLayout();
                         ((DailyViewHolder) holder).mBlitzClicked.startAnimation(scaleAndShake);
                         ((DailyViewHolder) holder).mBlitzClicked.setVisibility(View.VISIBLE);
-                    }
-                    else if (v == ((DailyViewHolder) holder).mBlitzClicked) {
-                        v.setVisibility(View.GONE);
-                        ((DailyViewHolder) holder).mBlitz.setVisibility(View.VISIBLE);
+                        sendBlitz(userPrimaryKey);
                     }
                     else if (v == ((DailyViewHolder) holder).mLike) {
-                        ((DailyViewHolder) holder).mLike.bringToFront();
-                        ((DailyViewHolder) holder).mLike.requestLayout();
-                        likeUserTopic(userPrimaryKey);
                         v.setVisibility(View.GONE);
-                        Animation scale = AnimationUtils.loadAnimation(context, R.anim.scale_and_translation_left);
+                        Animation scale = AnimationUtils.loadAnimation(context, R.anim.scale_and_translation_left_bottom);
                         ((DailyViewHolder) holder).mLikeClicked.bringToFront();
-                        ((DailyViewHolder) holder).mLikeClicked.requestLayout();
                         ((DailyViewHolder) holder).mLikeClicked.startAnimation(scale);
                         ((DailyViewHolder) holder).mDislike.setVisibility(View.GONE);
                         ((DailyViewHolder) holder).mLikeClicked.setVisibility(View.VISIBLE);
+                        likeUserTopic(userPrimaryKey);
                     } else if (v == ((DailyViewHolder) holder).mLikeClicked) {
-                        unlikeUserTopic(userPrimaryKey);
                         v.setVisibility(View.GONE);
+                        Animation scale = AnimationUtils.loadAnimation(context, R.anim.scale_and_translation_left_up);
+                        ((DailyViewHolder) holder).mLike.bringToFront();
+                        ((DailyViewHolder) holder).mLike.startAnimation(scale);
                         ((DailyViewHolder) holder).mDislike.setVisibility(View.VISIBLE);
                         ((DailyViewHolder) holder).mLike.setVisibility(View.VISIBLE);
+                        unlikeUserTopic(userPrimaryKey);
                     } else if (v == ((DailyViewHolder) holder).mDislike) {
-                        ((DailyViewHolder) holder).mDislike.bringToFront();
-                        ((DailyViewHolder) holder).mDislike.requestLayout();
-                        dislikeUserTopic(userPrimaryKey);
                         v.setVisibility(View.GONE);
-                        Animation scale = AnimationUtils.loadAnimation(context, R.anim.scale_and_translation_right);
+                        Animation scale = AnimationUtils.loadAnimation(context, R.anim.scale_and_translation_right_bottom);
                         ((DailyViewHolder) holder).mDislikeClicked.bringToFront();
-                        ((DailyViewHolder) holder).mDislikeClicked.requestLayout();
                         ((DailyViewHolder) holder).mDislikeClicked.startAnimation(scale);
                         ((DailyViewHolder) holder).mLike.setVisibility(View.GONE);
                         ((DailyViewHolder) holder).mDislikeClicked.setVisibility(View.VISIBLE);
+                        dislikeUserTopic(userPrimaryKey);
                     } else if (v == ((DailyViewHolder) holder).mDislikeClicked) {
-                        undislikeUserTopic(userPrimaryKey);
                         v.setVisibility(View.GONE);
+                        Animation scale = AnimationUtils.loadAnimation(context, R.anim.scale_and_translation_right_up);
+                        ((DailyViewHolder) holder).mDislike.bringToFront();
+                        ((DailyViewHolder) holder).mDislike.startAnimation(scale);
                         ((DailyViewHolder) holder).mLike.setVisibility(View.VISIBLE);
                         ((DailyViewHolder) holder).mDislike.setVisibility(View.VISIBLE);
+                        undislikeUserTopic(userPrimaryKey);
                     }
                 }
             });

@@ -5,13 +5,13 @@ import android.graphics.Typeface;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
 import android.support.v7.widget.Toolbar;
 import android.widget.TextView;
 
 import com.example.bsaraci.blitzone.R;
 import com.example.bsaraci.blitzone.Search.Search;
-import com.example.bsaraci.blitzone.Tabs.SlidingTabLayout;
 import com.gigamole.navigationtabstrip.NavigationTabStrip;
 
 public class Blitzone extends AppCompatActivity
@@ -40,8 +40,8 @@ public class Blitzone extends AppCompatActivity
         viewPager.setAdapter(viewPagerAdapter);
         tabLayout.setTitles("Daily", "Best");
         tabLayout.setViewPager(viewPager);
-    }
 
+    }
 
     public void searchFromBlitzoneButtonCallback(View view)
     {

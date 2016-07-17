@@ -1,7 +1,10 @@
 package com.example.bsaraci.blitzone.Start;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
@@ -49,16 +52,28 @@ public class  LogIn  extends AppCompatActivity {
         loginEnabled();
     }
 
+    public static boolean isNetworkStatusAvialable (Context context) {
+        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (connectivityManager != null)
+        {
+            NetworkInfo netInfos = connectivityManager.getActiveNetworkInfo();
+            if(netInfos != null)
+                if(netInfos.isConnected())
+                    return true;
+        }
+        return false;
+    }
+
     public void loginHomeButtonCallback(View view)
     {
+        if(isNetworkStatusAvialable (getApplicationContext())){
         spinnerTurning();
 
         final Intent intent = new Intent(this, Profile.class);
 
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-
-        //Build the request
+            //Build the request
 
             //Url
             //Function onResponse is executed after the server responds to the requests.
@@ -112,6 +127,10 @@ public class  LogIn  extends AppCompatActivity {
             //Send the request to execute
             RequestQueueSingleton.getInstance(this).addToRequestQueue(mRequest);
         }
+        else{
+            Toast.makeText(getApplicationContext(), "No internet connection", Toast.LENGTH_SHORT).show();
+        }
+    }
 
 
     private JSONObject getLoginParams()

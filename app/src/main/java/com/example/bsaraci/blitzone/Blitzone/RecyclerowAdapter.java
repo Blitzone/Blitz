@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -82,7 +83,7 @@ public class RecyclerowAdapter extends  RecyclerView.Adapter<RecyclerView.ViewHo
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder,final int position) {
         if (holder instanceof RowViewHolder) {
-            RowDataProvider listDataProvider = (RowDataProvider)list.get(position);
+            RowDataProvider listDataProvider = list.get(position);
             ((RowViewHolder)holder).mUsername.setText(listDataProvider.getUser().getUsername());
         String pts = listDataProvider.getUser().getBlitz().toString();
             ((RowViewHolder)holder).mPoints.setText(pts);

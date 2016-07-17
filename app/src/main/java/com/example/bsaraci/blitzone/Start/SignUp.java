@@ -58,6 +58,7 @@ public class SignUp extends AppCompatActivity {
 
     public void signupHomeButtonCallback(View view)
     {
+        if(LogIn.isNetworkStatusAvialable(getApplicationContext())){
         spinnerRotating();
         if(_signUpCheck()){
 
@@ -127,6 +128,10 @@ public class SignUp extends AppCompatActivity {
             //Send the request to execute
             RequestQueueSingleton.getInstance(this).addToRequestQueue(mRequest);
 
+        }
+        }
+        else{
+            Toast.makeText(getApplicationContext(), "No internet connection", Toast.LENGTH_SHORT).show();
         }
     }
 

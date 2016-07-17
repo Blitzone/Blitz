@@ -27,10 +27,10 @@
         android:layout_height="25dp"
         android:gravity="center_vertical"
         android:text="@string/name_blitzone_view_content"
-        android:textSize="17sp"
+        android:textSize="15sp"
         android:textColor="@color/boldGray"
-        android:layout_marginLeft="16dp"
-        android:layout_marginStart="16dp"
+        android:layout_marginLeft="1dp"
+        android:layout_marginStart="1dp"
         android:textStyle="bold"
         android:layout_alignTop="@+id/profile_picture"
         android:layout_toRightOf="@+id/profile_picture"
@@ -43,7 +43,7 @@
         android:gravity="center"
         android:text="@string/points_blitzone_view_content"
         android:textSize="12sp"
-        android:textColor="@color/gray"
+        android:textColor="@color/boldGray"
         android:textStyle="bold"
         android:layout_alignTop="@+id/profile_picture"
         android:layout_alignParentRight="true"
@@ -93,36 +93,33 @@
             android:id="@+id/chapterOfTheDay"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/profile_picture"
-            android:layout_alignRight="@+id/blitzesTextViewDaily"
-            android:layout_alignEnd="@+id/blitzesTextViewDaily" />
+            android:layout_marginTop="60dp"/>
 
     <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/dislike"
         android:background="@mipmap/ic_red_rounded_dislike"
-        android:layout_alignBottom="@+id/chapterOfTheDay"
+        android:alpha="0.70"
+        android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
+        android:layout_marginBottom="70dp"
         android:layout_marginRight="70dp"
-        android:layout_marginEnd="70dp"
-        android:layout_marginBottom="10dp"
-        android:alpha="0.70"/>
+        android:layout_marginEnd="70dp"/>
 
     <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/like"
         android:background="@mipmap/ic_mint_rounded_like"
-        android:layout_alignBottom="@+id/chapterOfTheDay"
+        android:alpha="0.70"
+        android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
+        android:layout_marginBottom="70dp"
         android:layout_marginLeft="70dp"
-        android:layout_marginStart="70dp"
-        android:layout_marginBottom="10dp"
-        android:alpha="0.70"
-        />
+        android:layout_marginStart="70dp"/>
 
     <ImageView
         android:id="@+id/blitzIcon"
@@ -130,10 +127,10 @@
         android:layout_height="wrap_content"
         android:src="@mipmap/ic_orange_rounded_blitz"
         android:scaleType="center"
-        android:layout_alignBottom="@+id/chapterOfTheDay"
+        android:alpha="0.70"
+        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="30dp"
-        android:alpha="0.70"/>
+        android:layout_marginBottom="90dp"/>
     <View
         android:layout_width="match_parent"
         android:layout_height="0.1dp"
@@ -149,7 +146,7 @@
         android:text="blitzes"
         android:id="@+id/blitzesTextViewDaily"
         android:textSize="12sp"
-        android:textColor="@color/mint"
+        android:textColor="@color/boldGray"
         android:textStyle="bold"
         android:gravity="center"
         android:layout_below="@+id/points"
