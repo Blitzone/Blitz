@@ -62,7 +62,7 @@ public class PhotoUploadRequest extends AsyncTask<Bitmap, Void, JSONObject> {
                         "Content-Type", "multipart/form-data;boundary=" + boundary);
                 if (RequestURL._needsAuth(this.urlAddress) && this.jwtManager._hasToken())
                 {
-                    httpUrlConnection.setRequestProperty("Authorization", "JWT " + jwtManager.getToken());
+                    httpUrlConnection.setRequestProperty("Authorization", "Token " + jwtManager.getToken());
                 }
 
                 DataOutputStream request = new DataOutputStream(
