@@ -37,7 +37,7 @@ public class MRequest extends JsonObjectRequest {
 
         if (RequestURL._needsAuth(url) && jwtManager._hasToken())
         {
-            headers.put("Authorization", "JWT " + jwtManager.getToken());
+            headers.put("Authorization", "Token " + jwtManager.getToken());
         }
 
     }

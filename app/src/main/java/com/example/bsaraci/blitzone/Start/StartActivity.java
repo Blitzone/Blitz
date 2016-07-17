@@ -26,6 +26,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.net.HttpURLConnection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -105,15 +106,12 @@ public class StartActivity extends Activity {
         Response.Listener<JSONObject> listener = new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                if (response.has("token")) {
-                    try {
-                        JWTManager jwtManager = new JWTManager(getApplicationContext());
-                        jwtManager.setToken(response.getString("token"));
-
-                        startActivity(profileIntent);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+                try {
+                    if (response.getInt("statusCode") == HttpURLConnection.HTTP_OK) {
+                            startActivity(profileIntent);
                     }
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
             }
         };
