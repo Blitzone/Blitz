@@ -18,6 +18,7 @@ import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
@@ -112,7 +113,7 @@ public class GridViewSearch extends AppCompatActivity {
 */
     public void initiateGrid(final ArrayList<GridItem> gridItems){
         gridView = (RecyclerView)findViewById(R.id.gridView);
-        gridView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
+        gridView.setLayoutManager(new StaggeredGridLayoutManager(2, GridLayoutManager.VERTICAL));
         int spacingInPixels =1;
         gridView.addItemDecoration(new SpacesItemDecoration(spacingInPixels));
         gridAdapter = new GridViewAdapter(this,gridItems);

@@ -156,8 +156,6 @@ public class Profile extends AppCompatActivity {
     private void startCropImageActivity(Uri imageUri) {
         CropImage.activity(imageUri)
                 .setGuidelines(CropImageView.Guidelines.ON)
-                .setMinCropResultSize(1200, 1200)
-                .setMaxCropResultSize(1200, 1200)
                 .setInitialCropWindowPaddingRatio(0)
                 .setAllowRotation(false)
                 .start(this);
