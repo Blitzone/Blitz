@@ -507,6 +507,8 @@ public class GridViewSearch extends AppCompatActivity {
 
         initiateComponents();                                                               //Initiates components of the GridViewSearch
         final ImageView expandedImageView = (ImageView) findViewById(R.id.expandedImage);   //Affects this xml file to expandedImageView
+        gridView.setVisibility(View.VISIBLE);
+        container.setBackgroundColor(Color.TRANSPARENT);
         thumbView.setAlpha(1f);                                                             //thumbView is now visible
         toolbarTitle.setAlpha(1f);                                                          //toolbarTitle is now visible
         backFromGrid.setAlpha(1f);                                                          //backFromGrid is now visible
@@ -518,7 +520,7 @@ public class GridViewSearch extends AppCompatActivity {
         remove.setVisibility(View.GONE);                                                    //remove is now invisible
         usernameInToolbar.setVisibility(View.GONE);                                         //username is now invisible
         isFullsize=false;                                                                   //We're not in full size anymore
-        getGridPhotoChapters();                                                             //Reinitialise the grid photos
+        /*getGridPhotoChapters();*/                                                         //Reinitialise the grid photos
     }
 
 /**
