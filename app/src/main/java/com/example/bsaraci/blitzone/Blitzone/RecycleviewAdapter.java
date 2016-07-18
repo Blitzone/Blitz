@@ -98,37 +98,22 @@ public class RecycleviewAdapter extends  RecyclerView.Adapter<RecyclerView.ViewH
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
         if (holder instanceof DailyViewHolder) {
 
-            ViewDataProvider viewDataProvider= list.get(position);
+            final ViewDataProvider viewDataProvider= list.get(position);
 
             String profilePictureUrl = viewDataProvider.getUser().getProfilePictureUrl();
 
-            boolean isLiked = viewDataProvider.getUser().is_liked();
-            boolean isDisliked = viewDataProvider.getUser().is_disliked();
-            boolean isBlitzed = viewDataProvider.getUser().is_blitzed();
-
-            ((DailyViewHolder) holder).mUsername.setText(viewDataProvider.getUser().getUsername());
-            ((DailyViewHolder) holder).mBlitz.setImageResource(viewDataProvider.getBlitz());
-            ((DailyViewHolder) holder).mBlitzClicked.setImageResource(viewDataProvider.getBlitzClicked());
-            ((DailyViewHolder) holder).mLike.setImageResource(viewDataProvider.getLike());
-            ((DailyViewHolder) holder).mLikeClicked.setImageResource(viewDataProvider.getLikeClicked());
-            ((DailyViewHolder) holder).mDislike.setImageResource(viewDataProvider.getDislike());
-            ((DailyViewHolder) holder).mDislikeClicked.setImageResource(viewDataProvider.getDislikeClicked());
-            ((DailyViewHolder) holder).mPoints.setText(viewDataProvider.getUser().getBlitz().toString());
-            ((DailyViewHolder) holder).mBlitzesText.setText(viewDataProvider.getBlitzesText());
-
-            ArrayList singleViewModels = viewDataProvider.getPhotoChapters();
-
-            SingleViewModelAdapter singleViewModelAdapter = new SingleViewModelAdapter(context,singleViewModels);
-
-            ((DailyViewHolder) holder).mRecyclerView.setHasFixedSize(true);
-            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
-            linearLayoutManager.canScrollVertically();
-            ((DailyViewHolder) holder).mRecyclerView.setLayoutManager(linearLayoutManager);
-            ((DailyViewHolder) holder).mRecyclerView.setAdapter(singleViewModelAdapter);
+            final boolean isLiked = viewDataProvider.getUser().is_liked();
+            final boolean isDisliked = viewDataProvider.getUser().is_disliked();
+            final boolean isBlitzed = viewDataProvider.getUser().is_blitzed();
 
             if(isBlitzed){
                 ((DailyViewHolder) holder).mBlitz.setVisibility(View.GONE);
                 ((DailyViewHolder) holder).mBlitzClicked.setVisibility(View.VISIBLE);
+            }
+
+            else if(!isBlitzed){
+                ((DailyViewHolder) holder).mBlitz.setVisibility(View.VISIBLE);
+                ((DailyViewHolder) holder).mBlitzClicked.setVisibility(View.GONE);
             }
 
             if(isLiked){
@@ -144,6 +129,28 @@ public class RecycleviewAdapter extends  RecyclerView.Adapter<RecyclerView.ViewH
                 ((DailyViewHolder) holder).mDislike.setVisibility(View.GONE);
                 ((DailyViewHolder) holder).mDislikeClicked.setVisibility(View.VISIBLE);
             }
+
+            else{
+                ((DailyViewHolder) holder).mLike.setVisibility(View.VISIBLE);
+                ((DailyViewHolder) holder).mLikeClicked.setVisibility(View.GONE);
+                ((DailyViewHolder) holder).mDislike.setVisibility(View.VISIBLE);
+                ((DailyViewHolder) holder).mDislikeClicked.setVisibility(View.GONE);
+            }
+
+
+            ((DailyViewHolder) holder).mUsername.setText(viewDataProvider.getUser().getUsername());
+            ((DailyViewHolder) holder).mPoints.setText(viewDataProvider.getUser().getBlitz().toString());
+            ((DailyViewHolder) holder).mBlitzesText.setText(viewDataProvider.getBlitzesText());
+
+            ArrayList singleViewModels = viewDataProvider.getPhotoChapters();
+
+            SingleViewModelAdapter singleViewModelAdapter = new SingleViewModelAdapter(context,singleViewModels);
+
+            ((DailyViewHolder) holder).mRecyclerView.setHasFixedSize(true);
+            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
+            linearLayoutManager.canScrollVertically();
+            ((DailyViewHolder) holder).mRecyclerView.setLayoutManager(linearLayoutManager);
+            ((DailyViewHolder) holder).mRecyclerView.setAdapter(singleViewModelAdapter);
 
             if(profilePictureUrl!=null){
                 viewDataProvider.getUser().loadPicture(context,profilePictureUrl,((DailyViewHolder) holder).mProfile);
@@ -164,6 +171,7 @@ public class RecycleviewAdapter extends  RecyclerView.Adapter<RecyclerView.ViewH
                         ((DailyViewHolder) holder).mBlitzClicked.startAnimation(scaleAndShake);
                         ((DailyViewHolder) holder).mBlitzClicked.setVisibility(View.VISIBLE);
                         sendBlitz(userPrimaryKey);
+                        viewDataProvider.getUser().setIs_blitzed(true);
                     }
                     else if (v == ((DailyViewHolder) holder).mLike) {
                         v.setVisibility(View.GONE);
@@ -172,6 +180,7 @@ public class RecycleviewAdapter extends  RecyclerView.Adapter<RecyclerView.ViewH
                         ((DailyViewHolder) holder).mLikeClicked.startAnimation(scale);
                         ((DailyViewHolder) holder).mDislike.setVisibility(View.GONE);
                         ((DailyViewHolder) holder).mLikeClicked.setVisibility(View.VISIBLE);
+                        viewDataProvider.getUser().setIs_liked(true);
                         likeUserTopic(userPrimaryKey);
                     } else if (v == ((DailyViewHolder) holder).mLikeClicked) {
                         v.setVisibility(View.GONE);
@@ -180,6 +189,7 @@ public class RecycleviewAdapter extends  RecyclerView.Adapter<RecyclerView.ViewH
                         ((DailyViewHolder) holder).mLike.startAnimation(scale);
                         ((DailyViewHolder) holder).mDislike.setVisibility(View.VISIBLE);
                         ((DailyViewHolder) holder).mLike.setVisibility(View.VISIBLE);
+                        viewDataProvider.getUser().setIs_liked(false);
                         unlikeUserTopic(userPrimaryKey);
                     } else if (v == ((DailyViewHolder) holder).mDislike) {
                         v.setVisibility(View.GONE);
@@ -188,6 +198,7 @@ public class RecycleviewAdapter extends  RecyclerView.Adapter<RecyclerView.ViewH
                         ((DailyViewHolder) holder).mDislikeClicked.startAnimation(scale);
                         ((DailyViewHolder) holder).mLike.setVisibility(View.GONE);
                         ((DailyViewHolder) holder).mDislikeClicked.setVisibility(View.VISIBLE);
+                        viewDataProvider.getUser().setIs_disliked(true);
                         dislikeUserTopic(userPrimaryKey);
                     } else if (v == ((DailyViewHolder) holder).mDislikeClicked) {
                         v.setVisibility(View.GONE);
@@ -196,6 +207,7 @@ public class RecycleviewAdapter extends  RecyclerView.Adapter<RecyclerView.ViewH
                         ((DailyViewHolder) holder).mDislike.startAnimation(scale);
                         ((DailyViewHolder) holder).mLike.setVisibility(View.VISIBLE);
                         ((DailyViewHolder) holder).mDislike.setVisibility(View.VISIBLE);
+                        viewDataProvider.getUser().setIs_disliked(false);
                         undislikeUserTopic(userPrimaryKey);
                     }
                 }

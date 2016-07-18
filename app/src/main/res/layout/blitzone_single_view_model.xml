@@ -30,6 +30,14 @@
             android:scaleType="fitCenter"
             android:src="@color/lightGray" />
 
+        <ImageView
+            android:id="@+id/transparentPhoto"
+            android:layout_width="match_parent"
+            android:layout_height="390dp"
+            android:scaleType="fitCenter"
+            android:src="@android:color/transparent"
+            android:visibility="invisible"/>
+
         <TextView
             android:id="@+id/chapterName"
             android:layout_width="330dp"
@@ -43,14 +51,6 @@
             android:visibility="invisible"
             android:layout_centerVertical="true"
             android:layout_centerHorizontal="true" />
-
-        <ImageView
-            android:id="@+id/transparentPhoto"
-            android:layout_width="match_parent"
-            android:layout_height="390dp"
-            android:scaleType="fitCenter"
-            android:src="@android:color/transparent"
-            android:visibility="invisible"/>
 
 
     </RelativeLayout>
