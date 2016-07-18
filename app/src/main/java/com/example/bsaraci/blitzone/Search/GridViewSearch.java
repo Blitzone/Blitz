@@ -4,7 +4,7 @@ package com.example.bsaraci.blitzone.Search;
 * chapter. When u click on a grid element it animates a fullsize image of this photo. This class updates the adapter of the grid
 * and also sends some request to the server like; taking chapter photos, follow or unfollow a user etc .
 **********************************************************************************************************************************
-* BUGS : WE DON'T HAVE ANY BUGS FOR THE MOMENT
+* BUGS : ADD OR REMOVE IS NOT UPDATING CORRECTLY
 **********************************************************************************************************************************
 * AMELIORATION : FIND A NEW WAY TO UPDATE THE ADD OR REMOVE BUTTON AFTER REOPENING THE FULLSIZE BECAUSE WE CALL EVERY TIME THE
                  METHOD getPhotoChapter()*/
@@ -13,6 +13,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
@@ -30,6 +31,7 @@ import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.android.volley.Request;
@@ -70,8 +72,10 @@ public class GridViewSearch extends AppCompatActivity {
     private Button add;                             //Add button when the photo is in fullsize
     private Button remove;                          //Remove button when the photo is in fullsize
     private String uname;                           //The string of the username
+    private RelativeLayout container;
     RecyclerView gridView;
     GridViewAdapter gridAdapter;
+    boolean followed;
 
     /**
     THIS METHOD IS TRIGGERED WHEN THE INTENT IS CREATED
@@ -81,7 +85,6 @@ public class GridViewSearch extends AppCompatActivity {
         setContentView(R.layout.grid_view_search);
         initiateComponents();       //Initiates the components of this intent
         getGridPhotoChapters();     //Triggers the method which sends the request to the server
-
     }
 
 /**
@@ -104,7 +107,8 @@ public class GridViewSearch extends AppCompatActivity {
         blitz = (ImageView) findViewById(R.id.blitzGridView);                               //Affects this xml element to the blitz
         add = (Button) findViewById(R.id.addGridView);                                      //Affects this xml element to the add button
         remove = (Button) findViewById(R.id.removeGridView);                                //Affects this xml element to the remove button
-        mShortAnimationDuration = getResources().getInteger(android.R.integer.config_shortAnimTime); //Sets the animation duration
+        container = (RelativeLayout) findViewById(R.id.container);
+        mShortAnimationDuration = getResources().getInteger(android.R.integer.config_mediumAnimTime); //Sets the animation duration
     }
 
 /**
@@ -113,7 +117,7 @@ public class GridViewSearch extends AppCompatActivity {
 */
     public void initiateGrid(final ArrayList<GridItem> gridItems){
         gridView = (RecyclerView)findViewById(R.id.gridView);
-        gridView.setLayoutManager(new StaggeredGridLayoutManager(2, GridLayoutManager.VERTICAL));
+        gridView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
         int spacingInPixels =1;
         gridView.addItemDecoration(new SpacesItemDecoration(spacingInPixels));
         gridAdapter = new GridViewAdapter(this,gridItems);
@@ -133,7 +137,7 @@ public class GridViewSearch extends AppCompatActivity {
                         boolean followed = u.isFollowing();             //True if you follow User u. False if not
 
                         //Triggers the method of animation
-                        zoomImageFromThumb(points, blitz, add, remove, backFromGrid, gridViewFromFullsize, toolbarTitle, usernameInToolbar, view, url, followed);
+                        zoomImageFromThumb(container,points, blitz, add, remove, backFromGrid, gridViewFromFullsize, toolbarTitle, usernameInToolbar, view, url, followed);
 
                     }
 
@@ -161,7 +165,7 @@ public class GridViewSearch extends AppCompatActivity {
     @param url, the url of the photo
     @param followed, boolean if is followed or not
 */
-    private void zoomImageFromThumb(final View pts, final View blz, final View addUser, final View removeUser, final View backFromGrid, final View backFromFullSize, final View title, final View username,final View thumbView, String url, boolean followed) {
+    private void zoomImageFromThumb(final View container,final View pts, final View blz, final View addUser, final View removeUser, final View backFromGrid, final View backFromFullSize, final View title, final View username,final View thumbView, String url, boolean followed) {
         // If there's an animation in progress, cancel it
         // immediately and proceed with this one.
         if (mCurrentAnimator != null) {
@@ -202,7 +206,7 @@ public class GridViewSearch extends AppCompatActivity {
         // bounds, since that's the origin for the positioning animation
         // properties (X, Y).
         thumbView.getGlobalVisibleRect(startBounds);
-        findViewById(R.id.container).getGlobalVisibleRect(finalBounds, globalOffset);
+        container.getGlobalVisibleRect(finalBounds, globalOffset);
         startBounds.offset(-globalOffset.x, -globalOffset.y);
         finalBounds.offset(-globalOffset.x, -globalOffset.y);
 
@@ -231,6 +235,8 @@ public class GridViewSearch extends AppCompatActivity {
         // Hide the thumbnail and other components and show the zoomed-in view. When the animation
         // begins, it will position the zoomed-in view in the place of the
         // thumbnail.
+        gridView.setVisibility(View.GONE);
+        container.setBackgroundColor(Color.WHITE);
         thumbView.setAlpha(0f);
         title.setAlpha(0f);
         backFromGrid.setAlpha(0f);
@@ -311,6 +317,8 @@ public class GridViewSearch extends AppCompatActivity {
                 set.addListener(new AnimatorListenerAdapter() {
                     @Override
                     public void onAnimationEnd(Animator animation) {
+                        gridView.setVisibility(View.VISIBLE);
+                        container.setBackgroundColor(Color.TRANSPARENT);
                         thumbView.setAlpha(1f);
                         title.setAlpha(1f);
                         backFromGrid.setAlpha(1f);
@@ -327,6 +335,8 @@ public class GridViewSearch extends AppCompatActivity {
 
                     @Override
                     public void onAnimationCancel(Animator animation) {
+                        gridView.setVisibility(View.VISIBLE);
+                        container.setBackgroundColor(Color.TRANSPARENT);
                         thumbView.setAlpha(1f);
                         title.setAlpha(1f);
                         backFromGrid.setAlpha(1f);
@@ -437,6 +447,8 @@ public class GridViewSearch extends AppCompatActivity {
         if(isFullsize){
 
             initiateComponents();                                                               //Initiates components of the GridViewSearch
+            gridView.setVisibility(View.VISIBLE);
+            container.setBackgroundColor(Color.TRANSPARENT);
             final ImageView expandedImageView = (ImageView) findViewById(R.id.expandedImage);   //Affects this xml file to expandedImageView
             thumbView.setAlpha(1f);                                                             //thumbView is now visible
             toolbarTitle.setAlpha(1f);                                                          //toolbarTitle is now visible
@@ -449,7 +461,7 @@ public class GridViewSearch extends AppCompatActivity {
             remove.setVisibility(View.GONE);                                                    //remove is now invisible
             usernameInToolbar.setVisibility(View.GONE);                                         //username is now invisible
             isFullsize=false;                                                                   //We're not in full size anymore
-            getGridPhotoChapters();                                                             //Reinitialise the grid photos
+            /*getGridPhotoChapters();*/                                                             //Reinitialise the grid photos
         }
 
         //Enters if it is not in full size
@@ -517,6 +529,7 @@ public class GridViewSearch extends AppCompatActivity {
 
         view.setVisibility(View.GONE);          //Sets the add button invisible
         getFollowUser(uname);                   //Send the request followUser to the server
+        getGridPhotoChapters();
         remove.setVisibility(View.VISIBLE);     //Sets the remove button visible
     }
 
@@ -528,6 +541,7 @@ public class GridViewSearch extends AppCompatActivity {
 
         view.setVisibility(View.GONE);          //Sets the remove button invisible
         getUnfollowUser(uname);                 //Sends the request unfollowUser to the server
+        getGridPhotoChapters();
         add.setVisibility(View.VISIBLE);        //Sets the add button visible
     }
 
