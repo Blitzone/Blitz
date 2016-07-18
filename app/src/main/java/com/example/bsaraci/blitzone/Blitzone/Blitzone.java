@@ -10,6 +10,7 @@ import android.view.View;
 import android.support.v7.widget.Toolbar;
 import android.widget.TextView;
 
+import com.example.bsaraci.blitzone.Profile.Profile;
 import com.example.bsaraci.blitzone.R;
 import com.example.bsaraci.blitzone.Search.Search;
 import com.gigamole.navigationtabstrip.NavigationTabStrip;
@@ -52,7 +53,9 @@ public class Blitzone extends AppCompatActivity
 
     public void profileFromBlitzoneButtonCallback(View view)
     {
-        finish();
+        Intent intent = new Intent(this, Profile.class);
+
+        startActivity(intent);
     }
 
 

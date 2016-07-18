@@ -228,9 +228,7 @@ public class Profile extends AppCompatActivity {
     }
 
     public void blitzoneFromProfileButtonCallback(View view) {
-        Intent intent = new Intent(this, Blitzone.class);
-
-        startActivity(intent);
+        finish();
     }
 
     public void notificationsFromProfileButtonCallback(View view) {
@@ -287,6 +285,7 @@ public class Profile extends AppCompatActivity {
 
             final ImageView imageView = (ImageView) this.findViewById(R.id.profile_picture);
 
+            if (imageView!=null){
             Glide.with(this)
                     .load(avatar)
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
@@ -306,6 +305,7 @@ public class Profile extends AppCompatActivity {
                             //never called
                         }
                     });
+            }
 
             TextView likesTextView = (TextView)findViewById(R.id.number_of_likes);
             TextView dislikesTextView = (TextView)findViewById(R.id.number_of_dislikes);

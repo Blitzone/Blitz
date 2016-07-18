@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.example.bsaraci.blitzone.Blitzone.Blitzone;
 import com.example.bsaraci.blitzone.Profile.Profile;
 import com.example.bsaraci.blitzone.Profile.Topic;
 import com.example.bsaraci.blitzone.R;
@@ -96,9 +97,9 @@ public class StartActivity extends Activity {
     }
 
     private void getToken (){
-        final Intent profileIntent = new Intent(this, Profile.class);
-        profileIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        profileIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        final Intent blitzoneIntent = new Intent(this, Blitzone.class);;
+        blitzoneIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        blitzoneIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         final Intent loginIntent = new Intent(this, LogIn.class);
         loginIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         loginIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -108,7 +109,7 @@ public class StartActivity extends Activity {
             public void onResponse(JSONObject response) {
                 try {
                     if (response.getInt("statusCode") == HttpURLConnection.HTTP_OK) {
-                            startActivity(profileIntent);
+                            startActivity(blitzoneIntent);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();

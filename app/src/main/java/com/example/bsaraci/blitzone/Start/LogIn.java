@@ -19,6 +19,7 @@ import com.android.volley.Response;
 import com.android.volley.Response.Listener;
 import com.android.volley.Response.ErrorListener;
 import com.android.volley.VolleyError;
+import com.example.bsaraci.blitzone.Blitzone.Blitzone;
 import com.example.bsaraci.blitzone.Profile.Profile;
 import com.example.bsaraci.blitzone.R;
 import com.example.bsaraci.blitzone.ServerComm.JWTManager;
@@ -69,7 +70,7 @@ public class  LogIn  extends AppCompatActivity {
         if(isNetworkStatusAvialable (getApplicationContext())){
         spinnerTurning();
 
-        final Intent intent = new Intent(this, Profile.class);
+        final Intent intent = new Intent(this, Blitzone.class);
 
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);

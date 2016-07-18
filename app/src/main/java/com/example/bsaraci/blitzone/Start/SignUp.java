@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.example.bsaraci.blitzone.Blitzone.Blitzone;
 import com.example.bsaraci.blitzone.Profile.Profile;
 import com.example.bsaraci.blitzone.R;
 import com.example.bsaraci.blitzone.ServerComm.JWTManager;
@@ -62,7 +63,7 @@ public class SignUp extends AppCompatActivity {
         spinnerRotating();
         if(_signUpCheck()){
 
-        final Intent intent = new Intent(this, Profile.class);
+            final Intent intent = new Intent(this, Blitzone.class);
 
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
