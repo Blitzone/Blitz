@@ -67,31 +67,9 @@ public class ActivityChangePassword extends AppCompatActivity {
                 @Override
                 public void onResponse(JSONObject response)
                 {
-                    try {
-                        if (response.get("statusCode").equals(HttpURLConnection.HTTP_OK))
-                        {
+                    Toast.makeText(ActivityChangePassword.this,"Password changed successfully",Toast.LENGTH_LONG).show();
+                    finish();
 
-                            try
-                            {
-                                JWTManager jwtManager = new JWTManager(getApplicationContext());
-                                jwtManager.setToken(response.getString("token"));
-                            }
-                            catch (JSONException e)
-                            {
-                                e.printStackTrace();
-                            }
-                            Toast.makeText(ActivityChangePassword.this,"Password changed successfully",Toast.LENGTH_LONG).show();
-                            finish();
-
-                        }
-                        else if (response.get("statusCode").equals(HttpURLConnection.HTTP_BAD_REQUEST))
-                        {
-                            Toast.makeText(getApplicationContext(), response.get("details").toString(), Toast.LENGTH_LONG).show();
-                        }
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
                 }
             };
 

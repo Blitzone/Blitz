@@ -38,8 +38,8 @@ public class Options extends AppCompatActivity{
         username = getIntent().getExtras().getString("username");
 
         mRecyclerView = (RecyclerView) findViewById(R.id.list);
-        mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mRecyclerView.setHasFixedSize(true);
         mRecyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
 
         //Your RecyclerView.Adapter

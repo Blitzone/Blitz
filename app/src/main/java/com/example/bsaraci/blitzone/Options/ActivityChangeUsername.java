@@ -64,30 +64,8 @@ public class ActivityChangeUsername extends AppCompatActivity {
                 @Override
                 public void onResponse(JSONObject response)
                 {
-                    try {
-                        if (response.get("statusCode").equals(HttpURLConnection.HTTP_OK))
-                        {
-
-                            try
-                            {
-                                JWTManager jwtManager = new JWTManager(getApplicationContext());
-                                jwtManager.setToken(response.getString("token"));
-                            }
-                            catch (JSONException e)
-                            {
-                                e.printStackTrace();
-                            }
-                                Toast.makeText(ActivityChangeUsername.this,"Username changed successfully",Toast.LENGTH_LONG).show();
-                                finish();
-                        }
-                        else if (response.get("statusCode").equals(HttpURLConnection.HTTP_CONFLICT))
-                        {
-                            Toast.makeText(getApplicationContext(), response.get("details").toString(), Toast.LENGTH_LONG).show();
-                        }
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
+                    Toast.makeText(ActivityChangeUsername.this,"Username changed successfully",Toast.LENGTH_LONG).show();
+                    finish();
                 }
             };
 

@@ -1,12 +1,14 @@
 package com.example.bsaraci.blitzone.Blitzone;
 
 import android.content.Context;
+import android.os.Parcelable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
@@ -45,6 +47,7 @@ public class RecycleviewAdapter extends  RecyclerView.Adapter<RecyclerView.ViewH
     private int lastVisibleItem, totalItemCount;
     private boolean loading;
     private OnLoadMoreListener onLoadMoreListener;
+    private Map<Integer, Parcelable> scrollStatePositionsMap = new HashMap<>();
 
     public RecycleviewAdapter(Context context,List<ViewDataProvider> list, RecyclerView recyclerView) {
         this.context = context;
@@ -148,9 +151,20 @@ public class RecycleviewAdapter extends  RecyclerView.Adapter<RecyclerView.ViewH
 
             ((DailyViewHolder) holder).mRecyclerView.setHasFixedSize(true);
             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
-            linearLayoutManager.canScrollVertically();
             ((DailyViewHolder) holder).mRecyclerView.setLayoutManager(linearLayoutManager);
             ((DailyViewHolder) holder).mRecyclerView.setAdapter(singleViewModelAdapter);
+            ((DailyViewHolder) holder).setPosition(position);
+
+            if (scrollStatePositionsMap.containsKey(position)) {
+                ((DailyViewHolder) holder).mRecyclerView.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+                    @Override
+                    public boolean onPreDraw() {
+                        ((DailyViewHolder) holder).mRecyclerView.getViewTreeObserver().removeOnPreDrawListener(this);
+                        ((DailyViewHolder) holder).mRecyclerView.getLayoutManager().onRestoreInstanceState(scrollStatePositionsMap.get(position));
+                        return false;
+                    }
+                });
+            }
 
             if(profilePictureUrl!=null){
                 viewDataProvider.getUser().loadPicture(context,profilePictureUrl,((DailyViewHolder) holder).mProfile);
@@ -233,15 +247,11 @@ public class RecycleviewAdapter extends  RecyclerView.Adapter<RecyclerView.ViewH
                 //We use try and catch to handle JSONExceptions
                 try {
 
-                    //Enters if statusCode is 200
-                    if((int)response.get("statusCode")==200){
-                        Toast.makeText(context, "Liked", Toast.LENGTH_SHORT).show(); //Alerts user
-                    }
-
-                    //Enters when status code !=200 (=400)
-                    else {
+                    //Enters if statusCode is 404
+                    if((int)response.get("statusCode")==404){
                         Toast.makeText(context,"There was an error",Toast.LENGTH_SHORT).show(); //Alerts user
                     }
+
                 }
 
                 //In case of an exception
@@ -291,13 +301,8 @@ public class RecycleviewAdapter extends  RecyclerView.Adapter<RecyclerView.ViewH
                 //We use try and catch to handle JSONExceptions
                 try {
 
-                    //Enters if statusCode is 200
-                    if((int)response.get("statusCode")==200){
-                        Toast.makeText(context, "Unliked", Toast.LENGTH_SHORT).show(); //Alerts user
-                    }
-
-                    //Enters when status code !=200 (=400)
-                    else {
+                    //Enters if statusCode is 404
+                    if((int)response.get("statusCode")==404){
                         Toast.makeText(context,"There was an error",Toast.LENGTH_SHORT).show(); //Alerts user
                     }
                 }
@@ -349,13 +354,8 @@ public class RecycleviewAdapter extends  RecyclerView.Adapter<RecyclerView.ViewH
                 //We use try and catch to handle JSONExceptions
                 try {
 
-                    //Enters if statusCode is 200
-                    if((int)response.get("statusCode")==200){
-                        Toast.makeText(context, "Disiked", Toast.LENGTH_SHORT).show(); //Alerts user
-                    }
-
-                    //Enters when status code !=200 (=400)
-                    else {
+                    //Enters if statusCode is 404
+                    if((int)response.get("statusCode")==404){
                         Toast.makeText(context,"There was an error",Toast.LENGTH_SHORT).show(); //Alerts user
                     }
                 }
@@ -407,13 +407,8 @@ public class RecycleviewAdapter extends  RecyclerView.Adapter<RecyclerView.ViewH
                 //We use try and catch to handle JSONExceptions
                 try {
 
-                    //Enters if statusCode is 200
-                    if((int)response.get("statusCode")==200){
-                        Toast.makeText(context, "Undisiked", Toast.LENGTH_SHORT).show(); //Alerts user
-                    }
-
-                    //Enters when status code !=200 (=400)
-                    else {
+                    //Enters if statusCode is 404
+                    if((int)response.get("statusCode")==404){
                         Toast.makeText(context,"There was an error",Toast.LENGTH_SHORT).show(); //Alerts user
                     }
                 }
@@ -465,13 +460,8 @@ public class RecycleviewAdapter extends  RecyclerView.Adapter<RecyclerView.ViewH
                 //We use try and catch to handle JSONExceptions
                 try {
 
-                    //Enters if statusCode is 200
-                    if((int)response.get("statusCode")==200){
-                        Toast.makeText(context, "Blitz sent", Toast.LENGTH_SHORT).show(); //Alerts user
-                    }
-
-                    //Enters when status code !=200 (=400)
-                    else {
+                    //Enters if statusCode is 409
+                    if((int)response.get("statusCode")==409){
                         Toast.makeText(context,"There was an error",Toast.LENGTH_SHORT).show(); //Alerts user
                     }
                 }
@@ -530,7 +520,7 @@ public class RecycleviewAdapter extends  RecyclerView.Adapter<RecyclerView.ViewH
         return list.get(position) != null ? VIEW_ITEM : VIEW_PROG;
     }
 
-    public static class DailyViewHolder extends RecyclerView.ViewHolder  implements View.OnClickListener  {
+    public class DailyViewHolder extends RecyclerView.ViewHolder  implements View.OnClickListener  {
 
         ItemClickListener itemClickListener;
         public View mView;
@@ -546,7 +536,12 @@ public class RecycleviewAdapter extends  RecyclerView.Adapter<RecyclerView.ViewH
         public ImageButton mDislikeClicked;
         public CustomRecyclerView mRecyclerView;
         public TextView mBlitzesText;
+        public int position;
 
+
+        public void setPosition(int position) {
+            this.position = position;
+        }
 
         public DailyViewHolder(View view) {
             super(view);
@@ -561,6 +556,22 @@ public class RecycleviewAdapter extends  RecyclerView.Adapter<RecyclerView.ViewH
             this.mDislike = (ImageButton) view.findViewById(R.id.dislike);
             this.mDislikeClicked = (ImageButton)view.findViewById(R.id.dislikeClicked);
             this.mRecyclerView = (CustomRecyclerView) view.findViewById(R.id.chapterOfTheDay);
+
+            mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                @Override
+                public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                    super.onScrolled(recyclerView, dx, dy);
+                }
+
+                @Override
+                public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                    super.onScrollStateChanged(recyclerView, newState);
+                    if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                        scrollStatePositionsMap.put(position, recyclerView.getLayoutManager().onSaveInstanceState());
+                    }
+                }
+            });
+
             this.mBlitzesText = (TextView)view.findViewById(R.id.blitzesTextViewDaily);
 
             mBlitz.setOnClickListener(DailyViewHolder.this);
