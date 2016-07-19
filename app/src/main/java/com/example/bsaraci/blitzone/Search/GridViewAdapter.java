@@ -16,9 +16,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+
+import com.example.bsaraci.blitzone.Blitzone.RowDataProvider;
 import com.example.bsaraci.blitzone.R;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class GridViewAdapter extends RecyclerView.Adapter<GridViewHolder>  {
 
@@ -33,6 +36,10 @@ public class GridViewAdapter extends RecyclerView.Adapter<GridViewHolder>  {
     public GridViewAdapter(Context context, ArrayList<GridItem> data) {
 
         this.context = context;
+        this.data = data;
+    }
+
+    public void setList( ArrayList<GridItem> data) {
         this.data = data;
     }
 

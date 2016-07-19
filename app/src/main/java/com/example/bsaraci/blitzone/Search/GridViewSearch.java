@@ -19,6 +19,7 @@ import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -48,6 +49,9 @@ import com.example.bsaraci.blitzone.ServerComm.JWTManager;
 import com.example.bsaraci.blitzone.ServerComm.MRequest;
 import com.example.bsaraci.blitzone.ServerComm.RequestQueueSingleton;
 import com.example.bsaraci.blitzone.ServerComm.RequestURL;
+import com.example.bsaraci.blitzone.Start.LogIn;
+import com.yalantis.phoenix.PullToRefreshView;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -78,6 +82,7 @@ public class GridViewSearch extends AppCompatActivity {
     ArrayList<String> pointsList = new ArrayList<>();
     ArrayList<Boolean> followed = new ArrayList<>();
     int globalPosition;
+    private PullToRefreshView mPullToRefreshView;
 
     /**
     THIS METHOD IS TRIGGERED WHEN THE INTENT IS CREATED
@@ -85,6 +90,25 @@ public class GridViewSearch extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.grid_view_search);
+
+        mPullToRefreshView = (PullToRefreshView) findViewById(R.id.pull_to_refresh);
+
+        mPullToRefreshView.setOnRefreshListener(new PullToRefreshView.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                mPullToRefreshView.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (LogIn.isNetworkStatusAvialable(getApplicationContext())) {
+                            mPullToRefreshView.setRefreshing(false);
+                        } else {
+                            Toast.makeText(getApplicationContext(), "Cannot refresh. No internet connection", Toast.LENGTH_SHORT).show();
+                            mPullToRefreshView.setRefreshing(false);
+                        }
+                    }
+                }, 1000);
+            }
+        });
         initiateComponents();       //Initiates the components of this intent
         getGridPhotoChapters();     //Triggers the method which sends the request to the server
     }
@@ -119,7 +143,9 @@ public class GridViewSearch extends AppCompatActivity {
 */
     public void initiateGrid(final ArrayList<GridItem> gridItems){
         gridView = (RecyclerView)findViewById(R.id.gridView);
-        gridView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
+        StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL);
+        staggeredGridLayoutManager.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_NONE);
+        gridView.setLayoutManager(staggeredGridLayoutManager);
         int spacingInPixels =1;
         gridView.addItemDecoration(new SpacesItemDecoration(spacingInPixels));
         gridAdapter = new GridViewAdapter(this,gridItems);

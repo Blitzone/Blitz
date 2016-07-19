@@ -301,7 +301,7 @@ public class Profile extends AppCompatActivity {
                         @Override
                         public void onLoadFailed(Exception e, Drawable errorDrawable) {
                             super.onLoadFailed(e, errorDrawable);
-                            Toast.makeText(Profile.this, "Error loading profile picture", Toast.LENGTH_SHORT).show();
+                            imageView.setImageResource(R.color.white);
                             //never called
                         }
                     });
