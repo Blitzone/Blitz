@@ -51,6 +51,13 @@ public class DailyTabFragment extends Fragment{
         View view = inflater.inflate(R.layout.daily_tab_content,container,false);
         recyclerView = (RecyclerView) view.findViewById(R.id.dailyList);
         tvEmptyView = (TextView)view.findViewById(R.id.emptyView);
+        TextView onTop = (TextView) getActivity().findViewById(R.id.blitzone_toolbar_title);
+        onTop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goTop();
+            }
+        });
         handler = new Handler();
 
         mPullToRefreshView = (PullToRefreshView)view.findViewById(R.id.pull_to_refresh);
@@ -101,6 +108,10 @@ public class DailyTabFragment extends Fragment{
 
         return view;
 
+    }
+
+    public void goTop(){
+        recyclerView.smoothScrollToPosition(0);
     }
 
     public JSONObject getDailyFollowingUsersParams(ArrayList<ViewDataProvider> dailyUserList){

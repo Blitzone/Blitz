@@ -19,13 +19,11 @@ public class BlitzoneViewPagerAdapter extends FragmentStatePagerAdapter {
     @Override
     public Fragment getItem(int position) {
         if(position==0){
-            DailyTabFragment dailyTabFragment = new DailyTabFragment();
-            return dailyTabFragment;
+            return new DailyTabFragment();
         }
 
         else{
-            BestTabFragment bestTabFragment = new BestTabFragment();
-            return bestTabFragment;
+            return new BestTabFragment();
         }
     }
 

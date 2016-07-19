@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,7 +36,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 
-public class BestTabFragment extends Fragment{
+public class BestTabFragment extends Fragment {
 
     private ArrayList<RowDataProvider> rowDataProviderList;
     RecyclerView recyclerView;
@@ -52,6 +53,13 @@ public class BestTabFragment extends Fragment{
 
         recyclerView = (RecyclerView) v.findViewById(R.id.bestList);
         tvEmptyView = (TextView)v.findViewById(R.id.emptyView);
+        TextView onTop1 = (TextView) getActivity().findViewById(R.id.blitzone_toolbar_title1);
+        onTop1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goTop1();
+            }
+        });
         handler = new Handler();
 
         mPullToRefreshView = (PullToRefreshView)v.findViewById(R.id.pull_to_refresh);
@@ -101,8 +109,14 @@ public class BestTabFragment extends Fragment{
 
         recyclerView.setAdapter(adap);
 
+
+
         return v;
 
+    }
+
+    public void goTop1(){
+        recyclerView.smoothScrollToPosition(0);
     }
 
     @Override
