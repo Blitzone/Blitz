@@ -97,7 +97,7 @@ public class StartActivity extends Activity {
     }
 
     private void getToken (){
-        final Intent blitzoneIntent = new Intent(this, Blitzone.class);;
+        final Intent blitzoneIntent = new Intent(this, Blitzone.class);
         blitzoneIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         blitzoneIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         final Intent loginIntent = new Intent(this, LogIn.class);

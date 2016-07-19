@@ -114,7 +114,7 @@ public class RecycleviewAdapter extends  RecyclerView.Adapter<RecyclerView.ViewH
                 ((DailyViewHolder) holder).mBlitzClicked.setVisibility(View.VISIBLE);
             }
 
-            else if(!isBlitzed){
+            else{
                 ((DailyViewHolder) holder).mBlitz.setVisibility(View.VISIBLE);
                 ((DailyViewHolder) holder).mBlitzClicked.setVisibility(View.GONE);
             }

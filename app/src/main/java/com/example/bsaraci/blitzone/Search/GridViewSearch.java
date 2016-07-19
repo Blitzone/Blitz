@@ -75,7 +75,9 @@ public class GridViewSearch extends AppCompatActivity {
     private RelativeLayout container;
     RecyclerView gridView;
     GridViewAdapter gridAdapter;
-    boolean followed;
+    ArrayList<String> pointsList = new ArrayList<>();
+    ArrayList<Boolean> followed = new ArrayList<>();
+    int globalPosition;
 
     /**
     THIS METHOD IS TRIGGERED WHEN THE INTENT IS CREATED
@@ -129,15 +131,24 @@ public class GridViewSearch extends AppCompatActivity {
                 new RecyclerItemClickListener(this, gridView, new RecyclerItemClickListener.OnItemClickListener() {
                     public void onItemClick(View view, int position) {
                         thumbView = view;
-                        isFullsize = true;                                //Now we are in full size
+                        isFullsize = true;                              //Now we are in full size
                         String url = gridItems.get(position).getUrl();  //Sets the url of the picture
                         User u = gridItems.get(position).getUser();     //Sets the user who posted that picture
-                        uname = u.getUsername();                          //Gets the username of the user u
+                        uname = u.getUsername();                        //Gets the username of the user u
                         usernameInToolbar.setText(uname);               //Sets the username of the username TextView when we are in full size
-                        boolean followed = u.isFollowing();             //True if you follow User u. False if not
+                        points.setText(pointsList.get(position));
+                        globalPosition=position;
+                        if(followed.get(position)){
+                            add.setVisibility(View.GONE);
+                            remove.setVisibility(View.VISIBLE);
+                        }
+                        else{
+                            add.setVisibility(View.VISIBLE);
+                            remove.setVisibility(View.GONE);
+                        }
 
                         //Triggers the method of animation
-                        zoomImageFromThumb(container,points, blitz, add, remove, backFromGrid, gridViewFromFullsize, toolbarTitle, usernameInToolbar, view, url, followed);
+                        zoomImageFromThumb(container,points, blitz, add, remove, backFromGrid, gridViewFromFullsize, toolbarTitle, usernameInToolbar, view, url);
 
                     }
 
@@ -163,9 +174,8 @@ public class GridViewSearch extends AppCompatActivity {
     @param username, username in toolbar
     @param thumbView, the grid square that holds the photo
     @param url, the url of the photo
-    @param followed, boolean if is followed or not
 */
-    private void zoomImageFromThumb(final View container,final View pts, final View blz, final View addUser, final View removeUser, final View backFromGrid, final View backFromFullSize, final View title, final View username,final View thumbView, String url, boolean followed) {
+    private void zoomImageFromThumb(final View container,final View pts, final View blz, final View addUser, final View removeUser, final View backFromGrid, final View backFromFullSize, final View title, final View username,final View thumbView, String url) {
         // If there's an animation in progress, cancel it
         // immediately and proceed with this one.
         if (mCurrentAnimator != null) {
@@ -244,14 +254,6 @@ public class GridViewSearch extends AppCompatActivity {
         username.setVisibility(View.VISIBLE);
         pts.setVisibility(View.VISIBLE);
         blz.setVisibility(View.VISIBLE);
-        if(followed){
-            addUser.setVisibility(View.GONE);
-            removeUser.setVisibility(View.VISIBLE);
-        }
-        else{
-            addUser.setVisibility(View.VISIBLE);
-            removeUser.setVisibility(View.GONE);
-        }
         expandedImageView.setVisibility(View.VISIBLE);
 
         // Set the pivot point for SCALE_X and SCALE_Y transformations
@@ -421,8 +423,9 @@ public class GridViewSearch extends AppCompatActivity {
                 u.setUsername(username);                                                        //Sets the username taken from the server
                 u.setBlitz(blitzCount);                                                         //Sets the blitzes taken from the server
                 String blz = blitzCount.toString();                                             //Convert blitzes to string
-                points.setText(blz);                                                            //Sets the text of points
+                pointsList.add(i, blz);                                                            //Sets the text of points
                 u.setFollowing(isFollowed);                                                     //Sets the following boolean on user taken from server
+                followed.add(i, u.isFollowing());
                 gridItem.setUrl(RequestURL.IP_ADDRESS + jsonPhotoChapter.getString("image"));   //Sets the image url taken from server
                 gridItem.setUser(u);                                                            //Sets an user for the gridItem
                 items.add(gridItem);                                                            //Adds the gridItem created
@@ -520,7 +523,7 @@ public class GridViewSearch extends AppCompatActivity {
         remove.setVisibility(View.GONE);                                                    //remove is now invisible
         usernameInToolbar.setVisibility(View.GONE);                                         //username is now invisible
         isFullsize=false;                                                                   //We're not in full size anymore
-        /*getGridPhotoChapters();*/                                                         //Reinitialise the grid photos
+        /*getGridPhotoChapters();*/                                                            //Reinitialise the grid photos
     }
 
 /**
@@ -529,9 +532,9 @@ public class GridViewSearch extends AppCompatActivity {
 */
     public void addCallback(View view){
 
+        followed.set(globalPosition,true);
         view.setVisibility(View.GONE);          //Sets the add button invisible
         getFollowUser(uname);                   //Send the request followUser to the server
-        getGridPhotoChapters();
         remove.setVisibility(View.VISIBLE);     //Sets the remove button visible
     }
 
@@ -541,9 +544,9 @@ public class GridViewSearch extends AppCompatActivity {
 */
     public void removeCallback(View view){
 
+        followed.set(globalPosition,false);
         view.setVisibility(View.GONE);          //Sets the remove button invisible
         getUnfollowUser(uname);                 //Sends the request unfollowUser to the server
-        getGridPhotoChapters();
         add.setVisibility(View.VISIBLE);        //Sets the add button visible
     }
 

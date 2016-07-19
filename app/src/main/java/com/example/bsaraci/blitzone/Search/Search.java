@@ -66,6 +66,7 @@ public class Search extends AppCompatActivity {
     private Boolean isVisible;                                              //True if chapters are visible. False if not
     private int chapterId1,chapterId2,chapterId3,chapterId4,chapterId5;     //Chapter Id's. Numbers taken from the server
     private int topicId;                                                    //The id of the topic
+    private boolean back;
 
 /**
     THIS METHOD IS TRIGGERED WHEN THE INTENT IS CREATED
@@ -273,7 +274,7 @@ public class Search extends AppCompatActivity {
                 dividerBackIcon.setVisibility(View.VISIBLE);  //Makes the divider back icon visble
                 rv.setVisibility(View.GONE);                  //Makes the rv invisible
                 isVisible = true;                             //TextViews are visible because this is true
-
+                back=true;
                 //noinspection ConstantConditions
                 initiateTextViews(isVisible);                 //Triggers this method
                 return true;
@@ -293,7 +294,7 @@ public class Search extends AppCompatActivity {
             @Override
             public boolean onQueryTextChange(String q) {
                 getSearchUserList(q);               //Gets the user list from the server
-                rv.setVisibility(View.VISIBLE);     //Sets the visibility of rv to visible
+                /*rv.setVisibility(View.VISIBLE);*/     //Sets the visibility of rv to visible
                 return false;
             }
         });
