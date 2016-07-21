@@ -112,7 +112,6 @@ public class BestTabFragment extends Fragment {
 
 
         return v;
-
     }
 
     public void goTop1(){

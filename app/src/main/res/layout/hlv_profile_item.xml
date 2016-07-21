@@ -27,7 +27,7 @@
             <ImageView
                 android:id="@+id/photo_chapter"
                 android:layout_width="match_parent"
-                android:layout_height="320dp"
+                android:layout_height="280dp"
                 android:src="@color/mint"
                 android:scaleType="fitCenter"
                 android:layout_below="@+id/progress1"
@@ -37,7 +37,7 @@
             <TextView
                 android:id="@+id/chapter"
                 android:layout_width="match_parent"
-                android:layout_height="30dp"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center|bottom"
                 android:gravity="center"
                 android:text="@string/textBelow_hlv"

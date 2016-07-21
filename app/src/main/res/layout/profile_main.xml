@@ -240,13 +240,14 @@
         <com.example.bsaraci.blitzone.Blitzone.CustomRecyclerView
             android:id="@+id/hlvProfile"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="370dp"
             android:background="@android:color/transparent"
             android:fadingEdgeLength="5dp"
             android:requiresFadingEdge="horizontal"
             android:layout_gravity="center"
             android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="5dp"/>
     </RelativeLayout>
 </LinearLayout>
